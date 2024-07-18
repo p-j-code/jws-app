@@ -1,30 +1,71 @@
 const colors = {
-  primary: '#CB6843', // Earthy Terracotta: Warmth and natural essence.
-  secondary: '#A08C6C', // Warm Beige: Subtle complement to the primary color.
-  background: '#FAFAFA', // Off-White: Clean, unobtrusive backdrop.
-  subtleBackground: '#F5F5DC', // Warm Beige: A gentle background for contrast.
-  text: '#333333', // Dark Slate: Maintained for readability and contrast.
-  border: '#CB6843', // Earthy Terracotta: Borders in primary color for consistency.
-  lightBorder: '#F5F5DC', // Warm Beige: Lighter shade for subtle borders.
-  highlight: '#CB6843', // Earthy Terracotta: Highlighting important elements.
-  interactive: '#F5F5DC', // Warm Beige: For clickable items or selected options.
-  disabled: '#D3D3D3', // Light Gray: Muted for non-active or clickable elements.
-  success: '#4CAF50', // Fresh Green: Retained for success, denotes positivity.
-  error: '#CD5C5C', // Soft Red: Approachable red for errors.
+  primary: {
+    light: '#FFF5EE', // Seashell
+    main: '#CD853F', // Peru
+    dark: '#8B4513', // Saddle Brown
+  },
+  secondary: {
+    light: '#F5DEB3', // Wheat
+    main: '#DEB887', // Burlywood
+    dark: '#A0522D', // Sienna
+  },
+  background: {
+    default: '#FAF0E6', // Linen
+    subtle: '#FFE4C4', // Bisque
+    interactive: '#FFDEAD', // Navajo White
+  },
+  text: {
+    primary: '#2F4F4F', // Dark Slate Gray
+    secondary: '#8B4513', // Saddle Brown
+    disabled: '#D3D3D3', // Light Gray
+  },
+  border: {
+    main: '#CD853F', // Peru
+    light: '#F5DEB3', // Wheat
+  },
+  status: {
+    success: '#32CD32', // Lime Green
+    error: '#FF6347', // Tomato
+  },
+  highlight: '#CD853F', // Peru
 };
 
 const typography = {
-  title: {
+  h1: {
+    fontSize: 32,
+    fontWeight: 'bold',
+  },
+  h2: {
+    fontSize: 28,
+    fontWeight: 'bold',
+  },
+  h3: {
     fontSize: 24,
     fontWeight: 'bold',
   },
-  body: {fontSize: 14, color: colors.secondary},
-  midTitle: {
+  h4: {
     fontSize: 20,
+    fontWeight: 'bold',
   },
-  subtitle: {
+  body1: {
     fontSize: 16,
-    color: colors.secondary,
+    color: colors.text.primary,
+  },
+  body2: {
+    fontSize: 14,
+    color: colors.text.secondary,
+  },
+  subtitle1: {
+    fontSize: 18,
+    color: colors.text.secondary,
+  },
+  subtitle2: {
+    fontSize: 16,
+    color: colors.text.secondary,
+  },
+  caption: {
+    fontSize: 12,
+    color: colors.text.secondary,
   },
 };
 
@@ -33,6 +74,14 @@ const spacing = {
   small: 8,
   medium: 16,
   large: 24,
+  xlarge: 32,
+  xxlarge: 40,
 };
 
-export {colors, typography, spacing};
+const theme = {
+  colors,
+  typography,
+  spacing,
+};
+
+export default theme;
