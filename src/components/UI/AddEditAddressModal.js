@@ -104,6 +104,7 @@ const AddEditAddressModal = ({visible, onClose, onSubmit, address}) => {
               onPress={onClose}
               size="sm"
               variant="secondary"
+              type="outline"
             />
             <Button title="Submit" onPress={handleSubmit} size="sm" />
           </View>

@@ -130,9 +130,9 @@ const styles = StyleSheet.create({
     borderColor: theme.colors.status.error,
   },
   errorText: {
+    ...theme.typography.caption,
     color: theme.colors.status.error,
     marginTop: theme.spacing.xsmall,
-    ...theme.typography.caption,
   },
 });
 

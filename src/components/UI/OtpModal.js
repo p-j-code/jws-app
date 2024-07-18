@@ -16,8 +16,26 @@ const OtpModal = ({visible, onClose, onSubmit, phoneNumber}) => {
             An OTP has been sent to {phoneNumber}
           </Text>
           <InputField label="OTP" value={otp} onChangeText={setOtp} />
-          <Button title="Submit OTP" onPress={() => onSubmit(otp)} />
-          <Button title="Cancel" onPress={onClose} />
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              width: '100%',
+            }}>
+            <Button
+              title="Cancel"
+              onPress={onClose}
+              size="sm"
+              variant="secondary"
+              type="outline"
+            />
+            <Button
+              title="Submit OTP"
+              onPress={() => onSubmit(otp)}
+              size="sm"
+            />
+          </View>
         </View>
       </View>
     </Modal>
@@ -32,7 +50,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent: {
-    width: '80%',
+    width: '90%',
     padding: theme.spacing.large,
     backgroundColor: 'white',
     borderRadius: theme.spacing.small,

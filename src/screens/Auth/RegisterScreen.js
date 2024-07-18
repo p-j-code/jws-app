@@ -18,6 +18,7 @@ import CustomModal from '../../components/common/CustomModal';
 import AddEditAddressModal from '../../components/UI/AddEditAddressModal';
 import AddressPreview from '../../components/UI/AddressPreview';
 import theme from '../../theme';
+import Title from '../../components/common/Title';
 
 const RegisterScreen = ({navigation}) => {
   const dispatch = useDispatch();
@@ -82,6 +83,7 @@ const RegisterScreen = ({navigation}) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <Title>Register</Title>
       {loading && (
         <ActivityIndicator size="large" color={theme.colors.primary.main} />
       )}
@@ -135,7 +137,7 @@ const RegisterScreen = ({navigation}) => {
             title="Add Address"
             onPress={() => setShowAddressModal(true)}
             size="sm"
-            variant="secondary"
+            type="outline"
           />
         )}
         {errors.address && (

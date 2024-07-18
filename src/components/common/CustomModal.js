@@ -31,6 +31,7 @@ const CustomModal = ({
               onPress={onClose}
               size="sm"
               variant="secondary"
+              type="outline"
             />
             <Button title={submitTitle} onPress={onSubmit} size="sm" />
           </View>
@@ -48,11 +49,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent: {
-    width: '80%',
+    width: '90%',
     padding: theme.spacing.large,
     backgroundColor: 'white',
     borderRadius: theme.spacing.small,
-    alignItems: 'center',
+
   },
   modalTitle: {
     ...theme.typography.h3,

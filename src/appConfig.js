@@ -14,8 +14,8 @@ import {Platform} from 'react-native';
 
 // Dev
 const appConfig = {
-  BASE_URL: 'https://reddi-api.vercel.app/api',
-  SERVER_URL: 'https://reddi-api.vercel.app/',
+  BASE_URL: 'https://jms-api-f9249b4e5d36.herokuapp.com/api/v1',
+  SERVER_URL: 'https://jms-api-f9249b4e5d36.herokuapp.com/',
 };
 
 // Prod

@@ -12,12 +12,7 @@ const AddressPreview = ({address, onEdit}) => {
         {address.addressLine1}, {address.addressLine2}, {address.city},
         {address.state}, {address.pinCode}
       </Text>
-      <Button
-        title="Edit Address"
-        onPress={onEdit}
-        size="sm"
-        variant="secondary"
-      />
+      <Button title="Edit Address" onPress={onEdit} size="sm" type="outline" />
     </View>
   );
 };
