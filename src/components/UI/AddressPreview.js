@@ -9,8 +9,8 @@ const AddressPreview = ({address, onEdit}) => {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>
-        {address.addressLine1}, {address.addressLine2}, {address.city},
-        {address.state}, {address.pinCode}
+        {address.line1}, {address.line2}, {address.city},{address.state},{' '}
+        {address.pinCode}
       </Text>
       <Button title="Edit Address" onPress={onEdit} size="sm" type="outline" />
     </View>

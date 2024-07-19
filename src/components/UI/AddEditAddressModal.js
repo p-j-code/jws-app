@@ -6,8 +6,8 @@ import theme from '../../theme';
 
 const AddEditAddressModal = ({visible, onClose, onSubmit, address}) => {
   const [formData, setFormData] = useState({
-    addressLine1: '',
-    addressLine2: '',
+    line1: '',
+    line2: '',
     city: '',
     state: '',
     pinCode: '',
@@ -28,8 +28,8 @@ const AddEditAddressModal = ({visible, onClose, onSubmit, address}) => {
     let valid = true;
     let errors = {};
 
-    if (!formData.addressLine1) {
-      errors.addressLine1 = 'Address Line 1 is required';
+    if (!formData.line1) {
+      errors.line1 = 'Address Line 1 is required';
       valid = false;
     }
     if (!formData.city) {
@@ -65,14 +65,14 @@ const AddEditAddressModal = ({visible, onClose, onSubmit, address}) => {
           <Text style={styles.modalTitle}>Add / Edit Address</Text>
           <InputField
             label="Address Line 1"
-            value={formData.addressLine1}
-            onChangeText={value => handleInputChange('addressLine1', value)}
-            error={errors.addressLine1}
+            value={formData.line1}
+            onChangeText={value => handleInputChange('line1', value)}
+            error={errors.line1}
           />
           <InputField
             label="Address Line 2"
-            value={formData.addressLine2}
-            onChangeText={value => handleInputChange('addressLine2', value)}
+            value={formData.line2}
+            onChangeText={value => handleInputChange('line2', value)}
           />
           <InputField
             label="City"

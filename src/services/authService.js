@@ -5,7 +5,7 @@ import {storeToken} from '../utils/storage';
 
 export const registerUser = async userData => {
   try {
-    const response = await api.post('/register', userData);
+    const response = await api.post('/user/register', userData);
     return response.data;
   } catch (error) {
     return {error: error.response ? error.response.data : error.message};
@@ -14,7 +14,7 @@ export const registerUser = async userData => {
 
 export const verifyOtp = async otpData => {
   try {
-    const response = await api.post('/verify-otp', otpData);
+    const response = await api.post('/user/verify-otp', otpData);
     const {authToken, refreshToken} = response.data;
     await storeToken(authToken);
     await storeToken(refreshToken, 'refreshToken');
@@ -26,7 +26,7 @@ export const verifyOtp = async otpData => {
 
 export const loginUser = async credentials => {
   try {
-    const response = await api.post('/login', credentials);
+    const response = await api.post('/user/login', credentials);
     const {authToken, refreshToken} = response.data;
     await storeToken(authToken);
     await storeToken(refreshToken, 'refreshToken');
@@ -38,7 +38,7 @@ export const loginUser = async credentials => {
 
 export const getUser = async () => {
   try {
-    const response = await api.get('/');
+    const response = await api.get('/user');
     return response.data;
   } catch (error) {
     return {error: error.response ? error.response.data : error.message};
@@ -47,7 +47,7 @@ export const getUser = async () => {
 
 export const changePassword = async passwords => {
   try {
-    const response = await api.post('/change-password', passwords);
+    const response = await api.post('/user/change-password', passwords);
     return response.data;
   } catch (error) {
     return {error: error.response ? error.response.data : error.message};
@@ -56,7 +56,7 @@ export const changePassword = async passwords => {
 
 export const updateProfile = async updateFields => {
   try {
-    const response = await api.put('/profile', updateFields);
+    const response = await api.put('/user/profile', updateFields);
     return response.data;
   } catch (error) {
     return {error: error.response ? error.response.data : error.message};
@@ -65,7 +65,7 @@ export const updateProfile = async updateFields => {
 
 export const refreshToken = async () => {
   try {
-    const response = await api.post('/token/refresh');
+    const response = await api.post('/user/token/refresh');
     const {authToken, refreshToken} = response.data;
     await storeToken(authToken);
     await storeToken(refreshToken, 'refreshToken');
@@ -77,7 +77,7 @@ export const refreshToken = async () => {
 
 export const requestOtpForPasswordReset = async phoneNumber => {
   try {
-    const response = await api.post('/forgot-password/request-otp', {
+    const response = await api.post('/user/forgot-password/request-otp', {
       phoneNumber,
     });
     return response.data;
@@ -88,7 +88,7 @@ export const requestOtpForPasswordReset = async phoneNumber => {
 
 export const resetPasswordWithOtp = async resetData => {
   try {
-    const response = await api.post('/forgot-password/reset', resetData);
+    const response = await api.post('/user/forgot-password/reset', resetData);
     return response.data;
   } catch (error) {
     return {error: error.response ? error.response.data : error.message};
@@ -97,7 +97,7 @@ export const resetPasswordWithOtp = async resetData => {
 
 export const requestAccountDelete = async () => {
   try {
-    const response = await api.post('/request-account-delete');
+    const response = await api.post('/user/request-account-delete');
     return response.data;
   } catch (error) {
     return {error: error.response ? error.response.data : error.message};
