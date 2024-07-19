@@ -90,6 +90,12 @@ const RegisterScreen = ({navigation}) => {
     setShowAddressModal(false);
   };
 
+  useEffect(() => {
+    if (error) {
+      setErrors({general: error});
+    }
+  }, [error]);
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Title>Register</Title>
@@ -121,7 +127,6 @@ const RegisterScreen = ({navigation}) => {
           handleInputChange('alternativePhoneNumber', value)
         }
       />
-
       <InputField
         label="GSTIN"
         value={formData.gstin}
