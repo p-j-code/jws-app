@@ -4,8 +4,9 @@ import InputField from '../common/InputField';
 import Button from '../common/Button';
 import theme from '../../theme';
 
-const AddEditAddressModal = ({visible, onClose, onSubmit, address}) => {
+const AddEditAddressModal = ({visible, onClose, onSubmit, address, title}) => {
   const [formData, setFormData] = useState({
+    label: '',
     line1: '',
     line2: '',
     city: '',
@@ -62,7 +63,14 @@ const AddEditAddressModal = ({visible, onClose, onSubmit, address}) => {
     <Modal visible={visible} transparent={true} animationType="slide">
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
-          <Text style={styles.modalTitle}>Add / Edit Address</Text>
+          <Text style={styles.modalTitle}>
+            {title ? `${title} Address` : 'Add / Edit Address'}
+          </Text>
+          <InputField
+            label="Label (e.g., Home, Business)"
+            value={formData.label}
+            onChangeText={value => handleInputChange('label', value)}
+          />
           <InputField
             label="Address Line 1"
             value={formData.line1}
@@ -92,13 +100,7 @@ const AddEditAddressModal = ({visible, onClose, onSubmit, address}) => {
             onChangeText={value => handleInputChange('pinCode', value)}
             error={errors.pinCode}
           />
-          <View
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              width: '100%',
-            }}>
+          <View style={styles.buttonContainer}>
             <Button
               title="Cancel"
               onPress={onClose}
@@ -106,7 +108,11 @@ const AddEditAddressModal = ({visible, onClose, onSubmit, address}) => {
               variant="secondary"
               type="outline"
             />
-            <Button title="Submit" onPress={handleSubmit} size="sm" />
+            <Button
+              title={title ? `${title} Address` : 'Submit'}
+              onPress={handleSubmit}
+              size="sm"
+            />
           </View>
         </View>
       </View>
@@ -131,6 +137,12 @@ const styles = StyleSheet.create({
   modalTitle: {
     ...theme.typography.h2,
     marginBottom: theme.spacing.medium,
+  },
+  buttonContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
   },
 });
 

@@ -8,8 +8,9 @@ const AddressPreview = ({address, onEdit}) => {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.label}>{address.label}</Text>
       <Text style={styles.text}>
-        {address.line1}, {address.line2}, {address.city},{address.state},{' '}
+        {address.line1}, {address.line2}, {address.city}, {address.state},{' '}
         {address.pinCode}
       </Text>
       <Button title="Edit Address" onPress={onEdit} size="sm" type="outline" />
@@ -19,7 +20,11 @@ const AddressPreview = ({address, onEdit}) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: theme.spacing.medium,
+    marginBottom: theme.spacing.xsmall,
+  },
+  label: {
+    ...theme.typography.h5,
+    marginBottom: theme.spacing.xsmall,
   },
   text: {
     ...theme.typography.body1,

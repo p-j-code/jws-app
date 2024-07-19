@@ -176,6 +176,7 @@ const RegisterScreen = ({navigation}) => {
         onClose={() => setShowAddressModal(false)}
         onSubmit={handleAddressSubmit}
         address={formData.address}
+        title={formData.address ? "Edit" : "Add"}
       />
     </ScrollView>
   );
