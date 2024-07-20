@@ -12,6 +12,15 @@ export const registerUser = async userData => {
   }
 };
 
+export const resendOtp = async phoneNumber => {
+  try {
+    const response = await api.post('/users/resend-otp', {phoneNumber});
+    return response.data;
+  } catch (error) {
+    return {error: error.response ? error.response.data : error.message};
+  }
+};
+
 export const verifyOtp = async otpData => {
   try {
     const response = await api.post('/user/verify-otp', otpData);

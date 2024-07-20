@@ -31,6 +31,9 @@ import {
   REQUEST_ACCOUNT_DELETE_REQUEST,
   REQUEST_ACCOUNT_DELETE_SUCCESS,
   REQUEST_ACCOUNT_DELETE_FAILURE,
+  RESEND_OTP_REQUEST,
+  RESEND_OTP_SUCCESS,
+  RESEND_OTP_FAILURE,
   LOGOUT_USER,
 } from '../actions/authActions';
 
@@ -47,6 +50,7 @@ const initialState = {
   otpPasswordResetMessage: null,
   passwordResetMessage: null,
   accountDeleteMessage: null,
+  resetOTPMessage: null,
 };
 
 const authReducer = (state = initialState, action) => {
@@ -61,6 +65,7 @@ const authReducer = (state = initialState, action) => {
     case REQUEST_OTP_FOR_PASSWORD_RESET_REQUEST:
     case RESET_PASSWORD_WITH_OTP_REQUEST:
     case REQUEST_ACCOUNT_DELETE_REQUEST:
+    case RESEND_OTP_REQUEST:
       return {...state, loading: true, error: null};
 
     case REGISTER_USER_SUCCESS:
@@ -119,6 +124,9 @@ const authReducer = (state = initialState, action) => {
     case REQUEST_ACCOUNT_DELETE_SUCCESS:
       return {...state, loading: false, accountDeleteMessage: action.payload};
 
+    case RESEND_OTP_SUCCESS:
+      return {...state, loading: false, resetOTPMessage: action.payload};
+
     case LOGOUT_USER:
       return initialState;
 
@@ -132,6 +140,7 @@ const authReducer = (state = initialState, action) => {
     case REQUEST_OTP_FOR_PASSWORD_RESET_FAILURE:
     case RESET_PASSWORD_WITH_OTP_FAILURE:
     case REQUEST_ACCOUNT_DELETE_FAILURE:
+    case RESEND_OTP_FAILURE:
       return {...state, loading: false, error: action.payload};
 
     default:

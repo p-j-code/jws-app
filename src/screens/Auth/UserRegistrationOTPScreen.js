@@ -1,10 +1,12 @@
 import React, {useState} from 'react';
-import {View, Text, TextInput, Button, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   updateProfileRequest,
   verifyOtpRequest,
 } from '../../store/actions/authActions';
+import InputField from '../../components/common/InputField';
+import Button from '../../components/common/Button';
 
 const UserRegistrationOTPScreen = ({navigation}) => {
   const dispatch = useDispatch();
@@ -27,7 +29,7 @@ const UserRegistrationOTPScreen = ({navigation}) => {
       <Text style={styles.title}>Enter OTP</Text>
       {editPhoneNumber ? (
         <>
-          <TextInput
+          <InputField
             style={styles.input}
             placeholder="New Phone Number"
             value={newPhoneNumber}
@@ -49,7 +51,7 @@ const UserRegistrationOTPScreen = ({navigation}) => {
           )}
         </>
       )}
-      <TextInput
+      <InputField
         style={styles.input}
         placeholder="OTP"
         keyboardType="numeric"

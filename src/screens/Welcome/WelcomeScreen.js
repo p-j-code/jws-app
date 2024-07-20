@@ -5,11 +5,9 @@ import {APP_NAME} from '../../utils/constants.js';
 
 const WelcomeScreen = () => {
   return (
-    <>
-      <View style={styles.container}>
-        <Text style={styles.welcomeText}>Welcome to {APP_NAME} App!</Text>
-      </View>
-    </>
+    <View style={styles.container}>
+      <Text style={styles.welcomeText}>Welcome to {APP_NAME} App!</Text>
+    </View>
   );
 };
 
@@ -19,11 +17,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingVertical: spacing.large,
+    backgroundColor: colors.background.default,
   },
-
   welcomeText: {
     ...typography.title,
-    color: colors.text,
+    color: colors.text.primary,
   },
 });
 

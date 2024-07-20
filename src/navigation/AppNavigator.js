@@ -5,22 +5,12 @@ import AuthStack from './stacks/AuthStack.js';
 import MainStack from './stacks/MainStack';
 import {navigationRef} from './helpers/navigationHelpers';
 import {getUserRequest} from '../store/actions/authActions';
-import {
-  USER_REGISTRATION_OTP_SCREEN,
-  ROOT_AUTH_STACK_NAME,
-} from './routeConfigurations/authRoutes';
-import { StyleSheet } from 'react-native';
+import {USER_REGISTRATION_OTP_SCREEN} from './routeConfigurations/authRoutes';
+import {StyleSheet} from 'react-native';
 
 const AppNavigator = () => {
   const dispatch = useDispatch();
-  const {
-    isAuthenticated,
-    authToken,
-    user,
-    loading,
-    error,
-    profileUpdateMessage,
-  } = useSelector(state => state.auth);
+  const {isAuthenticated, authToken, user} = useSelector(state => state.auth);
 
   useEffect(() => {
     if (authToken) {
@@ -29,6 +19,7 @@ const AppNavigator = () => {
   }, [authToken]);
 
   useEffect(() => {
+    console.log({user});
     if (user && !user.isOtpVerified) {
       navigationRef.current?.navigate(USER_REGISTRATION_OTP_SCREEN);
     }

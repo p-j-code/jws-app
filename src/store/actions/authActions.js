@@ -46,11 +46,30 @@ export const REQUEST_ACCOUNT_DELETE_REQUEST = 'REQUEST_ACCOUNT_DELETE_REQUEST';
 export const REQUEST_ACCOUNT_DELETE_SUCCESS = 'REQUEST_ACCOUNT_DELETE_SUCCESS';
 export const REQUEST_ACCOUNT_DELETE_FAILURE = 'REQUEST_ACCOUNT_DELETE_FAILURE';
 
+export const RESEND_OTP_REQUEST = 'RESEND_OTP_REQUEST';
+export const RESEND_OTP_SUCCESS = 'RESEND_OTP_SUCCESS';
+export const RESEND_OTP_FAILURE = 'RESEND_OTP_FAILURE';
+
 export const LOGOUT_USER = 'LOGOUT_USER';
 
 // Action creators
 export const logoutUser = () => ({
   type: LOGOUT_USER,
+});
+
+export const resendOtpRequest = phoneNumber => ({
+  type: RESEND_OTP_REQUEST,
+  payload: phoneNumber,
+});
+
+export const resendOtpSuccess = message => ({
+  type: RESEND_OTP_SUCCESS,
+  payload: message,
+});
+
+export const resendOtpFailure = error => ({
+  type: RESEND_OTP_FAILURE,
+  payload: error,
 });
 
 export const registerUserRequest = userData => ({

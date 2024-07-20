@@ -1,4 +1,4 @@
-const colors = {
+export const colors = {
   primary: {
     light: '#FFF5EE', // Seashell
     main: '#CD853F', // Peru
@@ -30,7 +30,7 @@ const colors = {
   highlight: '#CD853F', // Peru
 };
 
-const typography = {
+export const typography = {
   h1: {
     fontSize: 32,
     fontWeight: 'bold',
@@ -69,7 +69,7 @@ const typography = {
   },
 };
 
-const spacing = {
+export const spacing = {
   xsmall: 4,
   small: 8,
   medium: 16,
@@ -78,10 +78,17 @@ const spacing = {
   xxlarge: 40,
 };
 
+export const shape = {
+  borderRadius: 8,
+  borderRadiusSmall: 4,
+  borderRadiusLarge: 12,
+};
+
 const theme = {
   colors,
   typography,
   spacing,
+  shape,
 };
 
 export default theme;

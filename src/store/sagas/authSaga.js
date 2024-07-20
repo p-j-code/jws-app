@@ -36,6 +36,9 @@ import {
   resetPasswordWithOtpFailure,
   requestAccountDeleteSuccess,
   requestAccountDeleteFailure,
+  RESEND_OTP_REQUEST,
+  resendOtpSuccess,
+  resendOtpFailure,
 } from '../actions/authActions';
 
 function* registerUserSaga(action) {
@@ -48,6 +51,20 @@ function* registerUserSaga(action) {
     }
   } catch (error) {
     yield put(registerUserFailure(error.message));
+  }
+}
+
+function* resendOtpSaga(action) {
+  try {
+    const phoneNumber = action.payload;
+    const data = yield call(userService.resendOtp, phoneNumber);
+    if (data.error) {
+      yield put(resendOtpFailure(data.error));
+    } else {
+      yield put(resendOtpSuccess(data.message));
+    }
+  } catch (error) {
+    yield put(resendOtpFailure(error.message));
   }
 }
 
@@ -198,4 +215,5 @@ export default function* watchAuthSagas() {
   yield takeEvery(RESET_PASSWORD_WITH_OTP_REQUEST, resetPasswordWithOtpSaga);
   yield takeEvery(REQUEST_ACCOUNT_DELETE_REQUEST, requestAccountDeleteSaga);
   yield takeEvery(LOGOUT_USER, logoutSaga);
+  yield takeEvery(RESEND_OTP_REQUEST, resendOtpSaga);
 }
