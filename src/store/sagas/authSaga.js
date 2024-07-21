@@ -57,7 +57,7 @@ function* registerUserSaga(action) {
 function* resendOtpSaga(action) {
   try {
     const phoneNumber = action.payload;
-    const data = yield call(userService.resendOtp, phoneNumber);
+    const data = yield call(authService.resendOtp, phoneNumber);
     if (data.error) {
       yield put(resendOtpFailure(data.error));
     } else {
@@ -85,7 +85,7 @@ function* loginUserSaga(action) {
   try {
     const data = yield call(authService.loginUser, action.payload);
     if (data.error) {
-      yield put(loginUserFailure(data.error));
+      yield put(loginUserFailure(data.error, data.user));
     } else {
       yield put(loginUserSuccess(data));
     }
@@ -97,10 +97,11 @@ function* loginUserSaga(action) {
 function* getUserSaga() {
   try {
     const data = yield call(authService.getUser);
+
     if (data.error) {
-      yield put(getUserFailure(data.error));
+      yield put(getUserFailure(data.error, data.user));
     } else {
-      yield put(getUserSuccess(data));
+      yield put(getUserSuccess(data.user));
     }
   } catch (error) {
     yield put(getUserFailure(error.message));
@@ -123,10 +124,11 @@ function* changePasswordSaga(action) {
 function* updateProfileSaga(action) {
   try {
     const data = yield call(authService.updateProfile, action.payload);
+
     if (data.error) {
       yield put(updateProfileFailure(data.error));
     } else {
-      yield put(updateProfileSuccess(data.message));
+      yield put(updateProfileSuccess(data.message, data.user));
     }
   } catch (error) {
     yield put(updateProfileFailure(error.message));

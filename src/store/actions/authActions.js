@@ -50,7 +50,14 @@ export const RESEND_OTP_REQUEST = 'RESEND_OTP_REQUEST';
 export const RESEND_OTP_SUCCESS = 'RESEND_OTP_SUCCESS';
 export const RESEND_OTP_FAILURE = 'RESEND_OTP_FAILURE';
 
+export const SET_INITIAL_TOKEN = 'SET_INITIAL_TOKEN';
+
 export const LOGOUT_USER = 'LOGOUT_USER';
+
+export const setInitialToken = (authToken, refreshToken) => ({
+  type: SET_INITIAL_TOKEN,
+  payload: {authToken, refreshToken},
+});
 
 // Action creators
 export const logoutUser = () => ({
@@ -112,9 +119,9 @@ export const loginUserSuccess = tokens => ({
   payload: tokens,
 });
 
-export const loginUserFailure = error => ({
+export const loginUserFailure = (error, user) => ({
   type: LOGIN_USER_FAILURE,
-  payload: error,
+  payload: {error, user},
 });
 
 export const getUserRequest = () => ({
@@ -126,9 +133,9 @@ export const getUserSuccess = user => ({
   payload: user,
 });
 
-export const getUserFailure = error => ({
+export const getUserFailure = (error, user) => ({
   type: GET_USER_FAILURE,
-  payload: error,
+  payload: {error, user},
 });
 
 export const changePasswordRequest = passwords => ({
@@ -151,9 +158,9 @@ export const updateProfileRequest = updateFields => ({
   payload: updateFields,
 });
 
-export const updateProfileSuccess = message => ({
+export const updateProfileSuccess = (message, user) => ({
   type: UPDATE_PROFILE_SUCCESS,
-  payload: message,
+  payload: {message, user},
 });
 
 export const updateProfileFailure = error => ({

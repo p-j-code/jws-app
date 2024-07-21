@@ -1,5 +1,3 @@
-// src/store/reducers/authReducer.js
-
 import {
   REGISTER_USER_REQUEST,
   REGISTER_USER_SUCCESS,
@@ -35,6 +33,7 @@ import {
   RESEND_OTP_SUCCESS,
   RESEND_OTP_FAILURE,
   LOGOUT_USER,
+  SET_INITIAL_TOKEN,
 } from '../actions/authActions';
 
 const initialState = {
@@ -101,7 +100,12 @@ const authReducer = (state = initialState, action) => {
       return {...state, loading: false, passwordChangeMessage: action.payload};
 
     case UPDATE_PROFILE_SUCCESS:
-      return {...state, loading: false, profileUpdateMessage: action.payload};
+      return {
+        ...state,
+        loading: false,
+        profileUpdateMessage: action.payload.message,
+        user: action.payload.user,
+      };
 
     case REFRESH_TOKEN_SUCCESS:
       return {
@@ -130,10 +134,18 @@ const authReducer = (state = initialState, action) => {
     case LOGOUT_USER:
       return initialState;
 
-    case REGISTER_USER_FAILURE:
-    case VERIFY_OTP_FAILURE:
     case LOGIN_USER_FAILURE:
     case GET_USER_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload.error,
+        user: action.payload.user,
+      };
+
+    case REGISTER_USER_FAILURE:
+    case VERIFY_OTP_FAILURE:
+
     case CHANGE_PASSWORD_FAILURE:
     case UPDATE_PROFILE_FAILURE:
     case REFRESH_TOKEN_FAILURE:
@@ -142,6 +154,14 @@ const authReducer = (state = initialState, action) => {
     case REQUEST_ACCOUNT_DELETE_FAILURE:
     case RESEND_OTP_FAILURE:
       return {...state, loading: false, error: action.payload};
+
+    case SET_INITIAL_TOKEN:
+      return {
+        ...state,
+        authToken: action.payload.authToken,
+        refreshToken: action.payload.refreshToken,
+        // isAuthenticated: true,
+      };
 
     default:
       return state;

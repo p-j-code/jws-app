@@ -11,6 +11,7 @@ import {loginUserRequest} from '../../store/actions/authActions';
 import theme from '../../theme';
 import Button from '../../components/common/Button';
 import InputField from '../../components/common/InputField';
+import withAuth from '../../navigation/components/withAuth';
 
 const LoginScreen = ({navigation}) => {
   const dispatch = useDispatch();
@@ -132,4 +133,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default withAuth(LoginScreen);

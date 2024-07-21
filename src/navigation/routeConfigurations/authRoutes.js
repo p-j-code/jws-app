@@ -3,6 +3,7 @@ import RegisterScreen from '../../screens/Auth/RegisterScreen.js';
 import ForgotPasswordScreen from '../../screens/Auth/ForgotPasswordScreen.js';
 import ForgetPasswordOTPScreen from '../../screens/Auth/ForgetPasswordOTPScreen.js';
 import UserRegistrationOTPScreen from '../../screens/Auth/UserRegistrationOTPScreen.js';
+import AdminMessageScreen from '../../screens/Auth/AdminMessageScreen.js';
 
 export const ROOT_AUTH_STACK_NAME = 'AuthRoutes';
 // Screen name constants
@@ -11,6 +12,7 @@ export const REGISTER_SCREEN = 'Register';
 export const FORGOT_PASSWORD_SCREEN = 'ForgotPassword';
 export const FORGET_PASSWORD_OTP_SCREEN = 'ForgetPasswordOTP';
 export const USER_REGISTRATION_OTP_SCREEN = 'UserRegistrationOTP';
+export const ADMIN_MESSAGE_SCREEN = 'AdminMessageScreen';
 
 /**
  * Auth route configurations.
@@ -35,6 +37,10 @@ export const authRoutes = {
   },
   [USER_REGISTRATION_OTP_SCREEN]: {
     screen: UserRegistrationOTPScreen,
-    navigationOptions: {headerShown: true, title: 'Registration OTP'},
+    navigationOptions: {headerShown: false, title: 'Registration OTP'},
+  },
+  [ADMIN_MESSAGE_SCREEN]: {
+    screen: AdminMessageScreen,
+    navigationOptions: {headerShown: false},
   },
 };

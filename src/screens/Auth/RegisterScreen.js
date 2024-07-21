@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {
-  getUserRequest,
   registerUserRequest,
   verifyOtpRequest,
 } from '../../store/actions/authActions';
@@ -43,7 +42,7 @@ const mock = {
 const RegisterScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const {loading, user, error} = useSelector(state => state.auth);
+  const {loading, error} = useSelector(state => state.auth);
   const [formData, setFormData] = useState({
     email: '',
     name: '',
@@ -57,12 +56,6 @@ const RegisterScreen = () => {
   const [showOtpModal, setShowOtpModal] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showAddressModal, setShowAddressModal] = useState(false);
-
-  useEffect(() => {
-    if (user) {
-      setShowConfirmModal(true);
-    }
-  }, [user]);
 
   const handleInputChange = (name, value) => {
     setFormData({...formData, [name]: value});

@@ -14,7 +14,7 @@ export const registerUser = async userData => {
 
 export const resendOtp = async phoneNumber => {
   try {
-    const response = await api.post('/users/resend-otp', {phoneNumber});
+    const response = await api.post('/user/resend-otp', {phoneNumber});
     return response.data;
   } catch (error) {
     return {error: error.response ? error.response.data : error.message};
@@ -65,7 +65,7 @@ export const changePassword = async passwords => {
 
 export const updateProfile = async updateFields => {
   try {
-    const response = await api.put('/user/profile', updateFields);
+    const response = await api.put('/user/profile', {updateFields});
     return response.data;
   } catch (error) {
     return {error: error.response ? error.response.data : error.message};

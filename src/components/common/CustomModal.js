@@ -17,7 +17,7 @@ const CustomModal = ({
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
           <Text style={styles.modalTitle}>{title}</Text>
-          <Text style={styles.modalText}>{message}</Text>
+          {message && <Text style={styles.modalText}>{message}</Text>}
           {children}
           <View
             style={{
@@ -53,7 +53,6 @@ const styles = StyleSheet.create({
     padding: theme.spacing.large,
     backgroundColor: 'white',
     borderRadius: theme.spacing.small,
-
   },
   modalTitle: {
     ...theme.typography.h3,
