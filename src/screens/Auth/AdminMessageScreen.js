@@ -1,12 +1,24 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-import {useRoute} from '@react-navigation/native';
+import {View, Text, StyleSheet, ActivityIndicator} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
 import theme from '../../theme';
 import {STATUS_ERROR_CODES} from '../../utils/constants';
+import Button from '../../components/common/Button';
+import {logoutUser} from '../../store/actions/authActions';
+import {LOGIN_SCREEN} from '../../navigation/routeConfigurations/authRoutes';
 
-const AdminMessageScreen = () => {
-  const route = useRoute();
-  const {message, errorCode} = route.params;
+const AdminMessageScreen = ({navigation}) => {
+  const {
+    loading,
+    user = {},
+    error: errorCode,
+  } = useSelector(state => state.auth);
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(logoutUser());
+    navigation.navigate(LOGIN_SCREEN);
+  };
 
   const getMessageStyle = () => {
     switch (errorCode) {
@@ -30,29 +42,62 @@ const AdminMessageScreen = () => {
   const getDefaultMessage = () => {
     switch (errorCode) {
       case STATUS_ERROR_CODES.pending:
-        return 'Your profile is pending approval.';
+        return 'Your profile approval is pending. Please wait for the administrator to review your details.';
       case STATUS_ERROR_CODES.rejected:
-        return 'Your profile has been rejected.';
+        return 'Your profile has been rejected. Please contact support for further assistance.';
       case STATUS_ERROR_CODES.blocked:
-        return 'Your profile has been blocked.';
+        return 'Your profile has been blocked due to a violation of our terms of service.';
       case STATUS_ERROR_CODES['pending-deletion']:
-        return 'Your profile is pending deletion.';
+        return 'Your profile is pending deletion. Please contact support if this is a mistake.';
       default:
-        return message || 'An unknown error occurred.';
+        return (
+          user?.adminMessage ||
+          'An unknown error occurred. Please try again later.'
+        );
     }
   };
 
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color={theme.colors.primary.main} />
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
-      <Text style={getMessageStyle()}>{message || getDefaultMessage()}</Text>
+      <Text style={[styles.messageText, getMessageStyle()]}>
+        {user?.adminMessage || getDefaultMessage()}
+      </Text>
+
+      {user?.canUpdateProfile && <Button title="Update Profile" />}
+
+      <View style={styles.buttonContainer}>
+        <Button title="Logout" type="text" onPress={handleLogout} />
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     padding: theme.spacing.large,
     backgroundColor: theme.colors.background.default,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: theme.colors.background.default,
+  },
+  messageText: {
+    ...theme.typography.h4,
+    textAlign: 'center',
+    marginVertical: theme.spacing.medium,
   },
   errorText: {
     color: theme.colors.status.error,
@@ -74,6 +119,11 @@ const styles = StyleSheet.create({
   },
   defaultText: {
     color: theme.colors.text.primary,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: theme.spacing.medium,
   },
 });
 

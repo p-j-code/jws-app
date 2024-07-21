@@ -194,8 +194,8 @@ function* logoutSaga() {
   try {
     // yield call(authService.logoutUser);
     // yield put(clearOtpToken());
+    navigateToLogin();
     yield call(removeToken, true, true);
-    navigateToLogin;
   } catch (error) {
     console.log('Logout failed:', error);
     // Optionally handle any errors, such as network issues

@@ -13,7 +13,7 @@ import theme from '../../theme';
 
 const UserRegistrationOTPScreen = ({navigation}) => {
   const dispatch = useDispatch();
-  const {phoneNumber} = useSelector(state => state.auth.user);
+  const {phoneNumber, error: apiError} = useSelector(state => state.auth.user);
   const [otp, setOtp] = useState('');
   const [newPhoneNumber, setNewPhoneNumber] = useState(phoneNumber);
   const [modalPhoneNumber, setModalPhoneNumber] = useState(phoneNumber);
@@ -60,6 +60,10 @@ const UserRegistrationOTPScreen = ({navigation}) => {
         value={otp}
         onChangeText={setOtp}
       />
+
+      {apiError && (
+        <Text style={styles.errorText}>{apiError || 'An error occurred'}</Text>
+      )}
       <Button title="Verify OTP" onPress={handleOtpSubmit} />
       <Button title="Resend OTP" type="text" onPress={handleResendOtp} />
 
