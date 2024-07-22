@@ -6,8 +6,8 @@ import {navigationRef} from './helpers/navigationHelpers';
 import withAuth from './components/withAuth';
 import {useSelector} from 'react-redux';
 
-const AuthenticatedMainStack = withAuth(MainStack);
-const AuthenticatedAuthStack = withAuth(AuthStack);
+const AuthenticatedMainStack = MainStack;
+const AuthenticatedAuthStack = AuthStack;
 
 const AppNavigator = () => {
   const {isAuthenticated} = useSelector(state => state.auth);

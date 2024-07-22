@@ -22,6 +22,7 @@ import theme from '../../theme';
 import Title from '../../components/common/Title';
 import {useNavigation} from '@react-navigation/native';
 import {LOGIN_SCREEN} from '../../navigation/routeConfigurations/authRoutes';
+import withAuth from '../../navigation/components/withAuth';
 
 const mock = {
   address: {
@@ -249,4 +250,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RegisterScreen;
+export default withAuth(RegisterScreen);

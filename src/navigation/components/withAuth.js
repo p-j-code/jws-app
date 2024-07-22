@@ -8,7 +8,7 @@ import {
 import useAuth from '../hooks/useAuth';
 import {ActivityIndicator, View} from 'react-native';
 import {colors} from '../../theme';
-import { STATUS_ERROR_CODES } from '../../utils/constants';
+import {STATUS_ERROR_CODES} from '../../utils/constants';
 
 const withAuth = WrappedComponent => {
   return props => {
@@ -20,9 +20,11 @@ const withAuth = WrappedComponent => {
         if (!user.isOtpVerified) {
           navigation.navigate(USER_REGISTRATION_OTP_SCREEN);
         } else if (user.adminMessage) {
-          navigation.navigate(ADMIN_MESSAGE_SCREEN,{ message: user.adminMessage});
-        } else if (STATUS_ERROR_CODES[user.status]){
-          navigation.navigate(ADMIN_MESSAGE_SCREEN, {})
+          navigation.navigate(ADMIN_MESSAGE_SCREEN, {
+            message: user.adminMessage,
+          });
+        } else if (STATUS_ERROR_CODES[user.status]) {
+          navigation.navigate(ADMIN_MESSAGE_SCREEN, {});
         }
       }
     }, [loading, user, navigation]);

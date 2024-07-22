@@ -145,7 +145,6 @@ const authReducer = (state = initialState, action) => {
 
     case REGISTER_USER_FAILURE:
     case VERIFY_OTP_FAILURE:
-
     case CHANGE_PASSWORD_FAILURE:
     case UPDATE_PROFILE_FAILURE:
     case REFRESH_TOKEN_FAILURE:

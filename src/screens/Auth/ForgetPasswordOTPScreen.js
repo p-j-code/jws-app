@@ -1,16 +1,63 @@
-import React from 'react';
-import {View, Text, TextInput, Button, StyleSheet} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, Text, StyleSheet} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
+import InputField from '../../components/common/InputField';
+import Button from '../../components/common/Button';
+import {
+  requestOtpForPasswordResetRequest,
+  resetPasswordWithOtpRequest,
+} from '../../store/actions/authActions';
+import {LOGIN_SCREEN} from '../../navigation/routeConfigurations/authRoutes';
 
-const ForgetPasswordOTPScreen = ({navigation}) => {
+const ForgetPasswordOTPScreen = ({route, navigation}) => {
+  const {phoneNumber} = route.params;
+  const [otp, setOtp] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [error, setError] = useState('');
+  const dispatch = useDispatch();
+  const {error: resetError} = useSelector(state => state.auth);
+
+  const handleResetPassword = () => {
+    if (!otp || !newPassword) {
+      setError('OTP and new password are required.');
+      return;
+    }
+    setError('');
+    const resetData = {phoneNumber, otp, newPassword};
+    dispatch(resetPasswordWithOtpRequest(resetData));
+    // Navigate to login screen or show a success message
+    navigation.navigate(LOGIN_SCREEN); // Assuming you want to navigate back to login after reset
+  };
+
+  useEffect(() => {
+    setError('');
+  }, [otp, newPassword]);
+
+  useEffect(() => {
+    dispatch(requestOtpForPasswordResetRequest(phoneNumber));
+  }, []);
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Enter OTP</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="OTP"
+      <Text style={styles.title}>Reset Password</Text>
+      <InputField
+        label="OTP"
+        placeholder="Enter the OTP"
         keyboardType="numeric"
+        value={otp}
+        onChangeText={setOtp}
+        error={error}
       />
-      <Button title="Verify OTP" onPress={() => {}} />
+      <InputField
+        label="New Password"
+        placeholder="Enter your new password"
+        secureTextEntry
+        value={newPassword}
+        onChangeText={setNewPassword}
+        error={error}
+      />
+      {resetError ? <Text style={styles.error}>{resetError}</Text> : null}
+      <Button title="Reset Password" onPress={handleResetPassword} />
     </View>
   );
 };
@@ -26,12 +73,10 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     textAlign: 'center',
   },
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
+  error: {
+    color: 'red',
     marginBottom: 12,
-    padding: 10,
+    textAlign: 'center',
   },
 });
 

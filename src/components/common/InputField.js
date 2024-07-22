@@ -10,6 +10,7 @@ const InputField = ({
   error,
   variant = 'filled', // default variant
   placeholder,
+  ...restProps
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const animatedIsFocused = new Animated.Value(value ? 1 : 0);
@@ -64,6 +65,7 @@ const InputField = ({
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         placeholder={placeholder}
+        {...restProps}
       />
       {error && <Text style={styles.errorText}>{error}</Text>}
     </View>

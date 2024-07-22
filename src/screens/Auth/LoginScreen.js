@@ -63,7 +63,6 @@ const LoginScreen = ({navigation}) => {
         </Text>
       )}
       <InputField
-        style={styles.input}
         placeholder="Phone Number"
         value={formData.phoneNumber}
         onChangeText={value => handleInputChange('phoneNumber', value)}
@@ -72,7 +71,6 @@ const LoginScreen = ({navigation}) => {
         error={errors.phoneNumber}
       />
       <InputField
-        style={styles.input}
         placeholder="Password"
         value={formData.password}
         onChangeText={value => handleInputChange('password', value)}
@@ -108,14 +106,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginBottom: theme.spacing.large,
     textAlign: 'center',
-  },
-  input: {
-    height: 40,
-    borderColor: theme.colors.border.main,
-    borderWidth: 1,
-    marginBottom: theme.spacing.medium,
-    padding: theme.spacing.small,
-    borderRadius: theme.shape.borderRadius,
   },
   errorText: {
     color: theme.colors.status.error,
