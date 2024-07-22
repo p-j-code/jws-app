@@ -182,9 +182,12 @@ export const refreshTokenFailure = error => ({
   payload: error,
 });
 
-export const requestOtpForPasswordResetRequest = phoneNumber => ({
+export const requestOtpForPasswordResetRequest = (
+  phoneNumber,
+  successCallback,
+) => ({
   type: REQUEST_OTP_FOR_PASSWORD_RESET_REQUEST,
-  payload: phoneNumber,
+  payload: {phoneNumber, successCallback},
 });
 
 export const requestOtpForPasswordResetSuccess = message => ({
@@ -197,9 +200,9 @@ export const requestOtpForPasswordResetFailure = error => ({
   payload: error,
 });
 
-export const resetPasswordWithOtpRequest = resetData => ({
+export const resetPasswordWithOtpRequest = (resetData, successCallback) => ({
   type: RESET_PASSWORD_WITH_OTP_REQUEST,
-  payload: resetData,
+  payload: {resetData, successCallback},
 });
 
 export const resetPasswordWithOtpSuccess = message => ({

@@ -4,6 +4,7 @@ import React, {useEffect} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {clearMessage} from '../../store/actions/messageActions';
+import theme from '../../theme';
 
 const MessageBanner = () => {
   const dispatch = useDispatch();
@@ -18,6 +19,9 @@ const MessageBanner = () => {
       return () => clearTimeout(timer);
     }
   }, [message, dispatch]);
+
+  // const message = 'Testing with Hard Coded Message',
+  //   messageType = 'warning';
 
   if (!message) return null;
 
@@ -35,33 +39,40 @@ const MessageBanner = () => {
   };
 
   return (
-    <View style={[styles.banner, getBannerStyle()]}>
+    <View style={[styles.bannerContainer, getBannerStyle()]}>
       <Text style={styles.text}>{message}</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  banner: {
-    padding: 10,
-    borderRadius: 5,
-    marginBottom: 10,
+  bannerContainer: {
+    padding: theme.spacing.medium,
+    borderRadius: theme.shape.borderRadius,
+    marginBottom: theme.spacing.small,
+    position: 'absolute',
+    top: theme.spacing.large,
+    left: theme.spacing.large,
+    right: theme.spacing.large,
+    backgroundColor: 'rgba(0, 0, 0, 0.4)', // Semi-transparent background
+    zIndex: 1000, // Ensure the banner is above other elements
   },
   text: {
-    color: '#fff',
+    ...theme.typography.body1,
+    color: theme.colors.text.primary,
     textAlign: 'center',
   },
   success: {
-    backgroundColor: 'green',
+    backgroundColor: theme.colors.status.success,
   },
   warning: {
-    backgroundColor: 'orange',
+    backgroundColor: theme.colors.secondary.main,
   },
   error: {
-    backgroundColor: 'red',
+    backgroundColor: theme.colors.status.error,
   },
   default: {
-    backgroundColor: 'blue',
+    backgroundColor: theme.colors.highlight,
   },
 });
 

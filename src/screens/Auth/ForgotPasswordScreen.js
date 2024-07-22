@@ -47,19 +47,22 @@ const ForgotPasswordScreen = ({navigation}) => {
     }
 
     if (valid) {
-      dispatch(requestOtpForPasswordResetRequest(phoneNumber));
+      dispatch(
+        requestOtpForPasswordResetRequest(phoneNumber, () => {
+          setOtpModalVisible(true);
+        }),
+      );
     }
   };
 
-  useEffect(() => {
-    if (otpPasswordResetMessage && !requestError) {
-      setOtpModalVisible(true);
-    }
-  }, [otpPasswordResetMessage, requestError]);
-
   const handleOtpSubmit = otp => {
     const resetData = {phoneNumber, otp, newPassword};
-    dispatch(resetPasswordWithOtpRequest(resetData));
+    dispatch(
+      resetPasswordWithOtpRequest(resetData, () => {
+        setOtpModalVisible(false);
+        navigation.navigate(LOGIN_SCREEN);
+      }),
+    );
   };
 
   useEffect(() => {

@@ -165,16 +165,21 @@ function* refreshTokenSaga() {
   }
 }
 
+const message = 'Testing with Hard Coded Message',
+messageType = 'success';
+
 function* requestOtpForPasswordResetSaga(action) {
+  const {phoneNumber, successCallback} = action.payload;
   try {
     const data = yield call(
       authService.requestOtpForPasswordReset,
-      action.payload,
+      phoneNumber,
     );
     if (data.error) {
       yield put(requestOtpForPasswordResetFailure(data.error));
     } else {
       yield put(requestOtpForPasswordResetSuccess(data.message));
+      successCallback && successCallback();
       yield put(setMessage('OTP sent successfully', 'success'));
     }
   } catch (error) {
@@ -184,14 +189,15 @@ function* requestOtpForPasswordResetSaga(action) {
 }
 
 function* resetPasswordWithOtpSaga(action) {
+  const {resetData, successCallback} = action.payload;
   try {
-    const data = yield call(authService.resetPasswordWithOtp, action.payload);
+    const data = yield call(authService.resetPasswordWithOtp, resetData);
     if (data.error) {
       yield put(resetPasswordWithOtpFailure(data.error));
     } else {
       yield put(resetPasswordWithOtpSuccess(data.message));
       yield put(setMessage('Password reset successfully', 'success'));
-      navigateToLogin();
+      successCallback && successCallback();
     }
   } catch (error) {
     yield put(resetPasswordWithOtpFailure(error.message));

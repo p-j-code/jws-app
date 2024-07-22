@@ -14,12 +14,12 @@ const AppNavigator = () => {
 
   return (
     <NavigationContainer ref={navigationRef}>
-      <MessageBanner />
       {isAuthenticated ? (
         <AuthenticatedMainStack />
       ) : (
         <AuthenticatedAuthStack />
       )}
+      <MessageBanner />
     </NavigationContainer>
   );
 };
