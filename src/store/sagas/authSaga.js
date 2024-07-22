@@ -1,9 +1,9 @@
-// src/store/sagas/auth/index.js
+// src/store/sagas/authSaga.js
 
 import {call, put, takeEvery} from 'redux-saga/effects';
 import * as authService from '../../services/authService';
 import {navigateToLogin} from '../../navigation/helpers/navigationHelpers';
-import {removeToken} from '../../utils/storage.js';
+import {removeToken} from '../../utils/storage';
 import {
   REGISTER_USER_REQUEST,
   VERIFY_OTP_REQUEST,
@@ -40,6 +40,7 @@ import {
   resendOtpSuccess,
   resendOtpFailure,
 } from '../actions/authActions';
+import {setMessage} from '../actions/messageActions';
 
 function* registerUserSaga(action) {
   try {
@@ -48,9 +49,11 @@ function* registerUserSaga(action) {
       yield put(registerUserFailure(data.error));
     } else {
       yield put(registerUserSuccess(data));
+      yield put(setMessage('User registered successfully', 'success'));
     }
   } catch (error) {
     yield put(registerUserFailure(error.message));
+    yield put(setMessage(error.message, 'error'));
   }
 }
 
@@ -62,9 +65,11 @@ function* resendOtpSaga(action) {
       yield put(resendOtpFailure(data.error));
     } else {
       yield put(resendOtpSuccess(data.message));
+      yield put(setMessage('OTP resent successfully', 'success'));
     }
   } catch (error) {
     yield put(resendOtpFailure(error.message));
+    yield put(setMessage(error.message, 'error'));
   }
 }
 
@@ -75,9 +80,11 @@ function* verifyOtpSaga(action) {
       yield put(verifyOtpFailure(data.error));
     } else {
       yield put(verifyOtpSuccess(data.message));
+      yield put(setMessage('OTP verified successfully', 'success'));
     }
   } catch (error) {
     yield put(verifyOtpFailure(error.message));
+    yield put(setMessage(error.message, 'error'));
   }
 }
 
@@ -88,9 +95,11 @@ function* loginUserSaga(action) {
       yield put(loginUserFailure(data.error, data.user));
     } else {
       yield put(loginUserSuccess(data));
+      yield put(setMessage('Login successful', 'success'));
     }
   } catch (error) {
     yield put(loginUserFailure(error.message));
+    yield put(setMessage(error.message, 'error'));
   }
 }
 
@@ -102,9 +111,11 @@ function* getUserSaga() {
       yield put(getUserFailure(data.error, data.user));
     } else {
       yield put(getUserSuccess(data.user));
+      yield put(setMessage('User data fetched successfully', 'success'));
     }
   } catch (error) {
     yield put(getUserFailure(error.message));
+    yield put(setMessage(error.message, 'error'));
   }
 }
 
@@ -115,9 +126,11 @@ function* changePasswordSaga(action) {
       yield put(changePasswordFailure(data.error));
     } else {
       yield put(changePasswordSuccess(data.message));
+      yield put(setMessage('Password changed successfully', 'success'));
     }
   } catch (error) {
     yield put(changePasswordFailure(error.message));
+    yield put(setMessage(error.message, 'error'));
   }
 }
 
@@ -129,9 +142,11 @@ function* updateProfileSaga(action) {
       yield put(updateProfileFailure(data.error));
     } else {
       yield put(updateProfileSuccess(data.message, data.user));
+      yield put(setMessage('Profile updated successfully', 'success'));
     }
   } catch (error) {
     yield put(updateProfileFailure(error.message));
+    yield put(setMessage(error.message, 'error'));
   }
 }
 
@@ -142,9 +157,11 @@ function* refreshTokenSaga() {
       yield put(refreshTokenFailure(data.error));
     } else {
       yield put(refreshTokenSuccess(data));
+      yield put(setMessage('Token refreshed successfully', 'success'));
     }
   } catch (error) {
     yield put(refreshTokenFailure(error.message));
+    yield put(setMessage(error.message, 'error'));
   }
 }
 
@@ -158,9 +175,11 @@ function* requestOtpForPasswordResetSaga(action) {
       yield put(requestOtpForPasswordResetFailure(data.error));
     } else {
       yield put(requestOtpForPasswordResetSuccess(data.message));
+      yield put(setMessage('OTP sent successfully', 'success'));
     }
   } catch (error) {
     yield put(requestOtpForPasswordResetFailure(error.message));
+    yield put(setMessage(error.message, 'error'));
   }
 }
 
@@ -171,9 +190,12 @@ function* resetPasswordWithOtpSaga(action) {
       yield put(resetPasswordWithOtpFailure(data.error));
     } else {
       yield put(resetPasswordWithOtpSuccess(data.message));
+      yield put(setMessage('Password reset successfully', 'success'));
+      navigateToLogin();
     }
   } catch (error) {
     yield put(resetPasswordWithOtpFailure(error.message));
+    yield put(setMessage(error.message, 'error'));
   }
 }
 
@@ -184,21 +206,24 @@ function* requestAccountDeleteSaga() {
       yield put(requestAccountDeleteFailure(data.error));
     } else {
       yield put(requestAccountDeleteSuccess(data.message));
+      yield put(
+        setMessage('Account deletion requested successfully', 'success'),
+      );
     }
   } catch (error) {
     yield put(requestAccountDeleteFailure(error.message));
+    yield put(setMessage(error.message, 'error'));
   }
 }
 
 function* logoutSaga() {
   try {
-    // yield call(authService.logoutUser);
-    // yield put(clearOtpToken());
     navigateToLogin();
     yield call(removeToken, true, true);
+    yield put(setMessage('Logout successful', 'success'));
   } catch (error) {
     console.log('Logout failed:', error);
-    // Optionally handle any errors, such as network issues
+    yield put(setMessage('Logout failed', 'error'));
   }
 }
 

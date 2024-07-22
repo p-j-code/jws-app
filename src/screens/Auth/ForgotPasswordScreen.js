@@ -13,10 +13,16 @@ import OtpModal from '../../components/UI/OtpModal';
 const ForgotPasswordScreen = ({navigation}) => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [newPassword, setNewPassword] = useState('');
-  const [error, setError] = useState('');
+  const [phoneError, setPhoneError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
   const [otpModalVisible, setOtpModalVisible] = useState(false);
   const dispatch = useDispatch();
-  const {error: requestError} = useSelector(state => state.auth);
+  const {
+    loading,
+    error: requestError,
+    otpPasswordResetMessage,
+    otpVerificationError,
+  } = useSelector(state => state.auth);
 
   const validatePhoneNumber = phoneNumber => {
     const phoneRegex = /^[0-9]{10}$/; // Adjust this regex according to your requirements
@@ -24,29 +30,45 @@ const ForgotPasswordScreen = ({navigation}) => {
   };
 
   const handleSubmit = () => {
+    let valid = true;
+
     if (!validatePhoneNumber(phoneNumber)) {
-      setError('Please enter a valid phone number.');
-      return;
+      setPhoneError('Please enter a valid phone number.');
+      valid = false;
+    } else {
+      setPhoneError('');
     }
+
     if (!newPassword) {
-      setError('Please enter a new password.');
-      return;
+      setPasswordError('Please enter a new password.');
+      valid = false;
+    } else {
+      setPasswordError('');
     }
-    setError('');
-    dispatch(requestOtpForPasswordResetRequest(phoneNumber));
-    setOtpModalVisible(true);
+
+    if (valid) {
+      dispatch(requestOtpForPasswordResetRequest(phoneNumber));
+    }
   };
+
+  useEffect(() => {
+    if (otpPasswordResetMessage && !requestError) {
+      setOtpModalVisible(true);
+    }
+  }, [otpPasswordResetMessage, requestError]);
 
   const handleOtpSubmit = otp => {
     const resetData = {phoneNumber, otp, newPassword};
     dispatch(resetPasswordWithOtpRequest(resetData));
-    setOtpModalVisible(false);
-    navigation.navigate(LOGIN_SCREEN);
   };
 
   useEffect(() => {
-    setError('');
-  }, [phoneNumber, newPassword]);
+    setPhoneError('');
+  }, [phoneNumber]);
+
+  useEffect(() => {
+    setPasswordError('');
+  }, [newPassword]);
 
   return (
     <View style={styles.container}>
@@ -57,7 +79,7 @@ const ForgotPasswordScreen = ({navigation}) => {
         keyboardType="phone-pad"
         value={phoneNumber}
         onChangeText={setPhoneNumber}
-        error={error}
+        error={phoneError}
       />
       <InputField
         label="New Password"
@@ -65,10 +87,12 @@ const ForgotPasswordScreen = ({navigation}) => {
         secureTextEntry
         value={newPassword}
         onChangeText={setNewPassword}
-        error={error}
+        error={passwordError}
       />
-      {requestError ? <Text style={styles.error}>{requestError}</Text> : null}
-      <Button title="Send OTP" onPress={handleSubmit} />
+      {requestError ? (
+        <Text style={styles.error}>{requestError.message}</Text>
+      ) : null}
+      <Button title="Send OTP" onPress={handleSubmit} disabled={loading} />
       <Button
         title="Back to Login"
         onPress={() => navigation.navigate(LOGIN_SCREEN)}
@@ -80,6 +104,7 @@ const ForgotPasswordScreen = ({navigation}) => {
         onClose={() => setOtpModalVisible(false)}
         onSubmit={handleOtpSubmit}
         phoneNumber={phoneNumber}
+        error={otpVerificationError ? otpVerificationError.message : ''}
       />
     </View>
   );

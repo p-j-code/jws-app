@@ -3,8 +3,8 @@ import {NavigationContainer} from '@react-navigation/native';
 import AuthStack from './stacks/AuthStack';
 import MainStack from './stacks/MainStack';
 import {navigationRef} from './helpers/navigationHelpers';
-import withAuth from './components/withAuth';
 import {useSelector} from 'react-redux';
+import MessageBanner from '../components/UI/MessageBanner';
 
 const AuthenticatedMainStack = MainStack;
 const AuthenticatedAuthStack = AuthStack;
@@ -14,6 +14,7 @@ const AppNavigator = () => {
 
   return (
     <NavigationContainer ref={navigationRef}>
+      <MessageBanner />
       {isAuthenticated ? (
         <AuthenticatedMainStack />
       ) : (

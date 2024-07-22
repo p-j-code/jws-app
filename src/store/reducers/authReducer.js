@@ -1,3 +1,5 @@
+// src/store/reducers/authReducer.js
+
 import {
   REGISTER_USER_REQUEST,
   REGISTER_USER_SUCCESS,
@@ -44,6 +46,7 @@ const initialState = {
   isAuthenticated: false,
   error: null,
   otpVerificationMessage: null,
+  otpVerificationError: null, // Add this line
   passwordChangeMessage: null,
   profileUpdateMessage: null,
   otpPasswordResetMessage: null,
@@ -69,15 +72,6 @@ const authReducer = (state = initialState, action) => {
 
     case REGISTER_USER_SUCCESS:
       return {...state, loading: false, user: action.payload};
-
-    case VERIFY_OTP_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        authToken: action.payload.authToken,
-        refreshToken: action.payload.refreshToken,
-        otpVerificationMessage: 'OTP verified successfully',
-      };
 
     case LOGIN_USER_SUCCESS:
       return {
@@ -123,7 +117,23 @@ const authReducer = (state = initialState, action) => {
       };
 
     case RESET_PASSWORD_WITH_OTP_SUCCESS:
-      return {...state, loading: false, passwordResetMessage: action.payload};
+      return {
+        ...state,
+        loading: false,
+        passwordResetMessage: action.payload,
+        error: null,
+        otpVerificationError: null,
+      };
+
+    case VERIFY_OTP_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        authToken: action.payload.authToken,
+        refreshToken: action.payload.refreshToken,
+        otpVerificationMessage: 'OTP verified successfully',
+        otpVerificationError: null, // Clear the error
+      };
 
     case REQUEST_ACCOUNT_DELETE_SUCCESS:
       return {...state, loading: false, accountDeleteMessage: action.payload};
@@ -143,13 +153,20 @@ const authReducer = (state = initialState, action) => {
         user: action.payload.user,
       };
 
-    case REGISTER_USER_FAILURE:
     case VERIFY_OTP_FAILURE:
+    case RESET_PASSWORD_WITH_OTP_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+        otpVerificationError: action.payload, // Add this line
+      };
+
+    case REGISTER_USER_FAILURE:
     case CHANGE_PASSWORD_FAILURE:
     case UPDATE_PROFILE_FAILURE:
     case REFRESH_TOKEN_FAILURE:
     case REQUEST_OTP_FOR_PASSWORD_RESET_FAILURE:
-    case RESET_PASSWORD_WITH_OTP_FAILURE:
     case REQUEST_ACCOUNT_DELETE_FAILURE:
     case RESEND_OTP_FAILURE:
       return {...state, loading: false, error: action.payload};

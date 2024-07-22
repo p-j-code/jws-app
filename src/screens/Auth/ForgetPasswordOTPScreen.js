@@ -13,25 +13,43 @@ const ForgetPasswordOTPScreen = ({route, navigation}) => {
   const {phoneNumber} = route.params;
   const [otp, setOtp] = useState('');
   const [newPassword, setNewPassword] = useState('');
-  const [error, setError] = useState('');
+  const [otpError, setOtpError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
   const dispatch = useDispatch();
   const {error: resetError} = useSelector(state => state.auth);
 
   const handleResetPassword = () => {
-    if (!otp || !newPassword) {
-      setError('OTP and new password are required.');
-      return;
+    let valid = true;
+
+    if (!otp) {
+      setOtpError('OTP is required.');
+      valid = false;
+    } else {
+      setOtpError('');
     }
-    setError('');
-    const resetData = {phoneNumber, otp, newPassword};
-    dispatch(resetPasswordWithOtpRequest(resetData));
-    // Navigate to login screen or show a success message
-    navigation.navigate(LOGIN_SCREEN); // Assuming you want to navigate back to login after reset
+
+    if (!newPassword) {
+      setPasswordError('New password is required.');
+      valid = false;
+    } else {
+      setPasswordError('');
+    }
+
+    if (valid) {
+      const resetData = {phoneNumber, otp, newPassword};
+      dispatch(resetPasswordWithOtpRequest(resetData));
+      // Navigate to login screen or show a success message
+      navigation.navigate(LOGIN_SCREEN); // Assuming you want to navigate back to login after reset
+    }
   };
 
   useEffect(() => {
-    setError('');
-  }, [otp, newPassword]);
+    setOtpError('');
+  }, [otp]);
+
+  useEffect(() => {
+    setPasswordError('');
+  }, [newPassword]);
 
   useEffect(() => {
     dispatch(requestOtpForPasswordResetRequest(phoneNumber));
@@ -46,7 +64,7 @@ const ForgetPasswordOTPScreen = ({route, navigation}) => {
         keyboardType="numeric"
         value={otp}
         onChangeText={setOtp}
-        error={error}
+        error={otpError}
       />
       <InputField
         label="New Password"
@@ -54,7 +72,7 @@ const ForgetPasswordOTPScreen = ({route, navigation}) => {
         secureTextEntry
         value={newPassword}
         onChangeText={setNewPassword}
-        error={error}
+        error={passwordError}
       />
       {resetError ? <Text style={styles.error}>{resetError}</Text> : null}
       <Button title="Reset Password" onPress={handleResetPassword} />

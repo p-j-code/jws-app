@@ -4,7 +4,7 @@ import InputField from '../common/InputField';
 import Button from '../common/Button';
 import theme from '../../theme';
 
-const OtpModal = ({visible, onClose, onSubmit, phoneNumber}) => {
+const OtpModal = ({visible, onClose, onSubmit, phoneNumber, error}) => {
   const [otp, setOtp] = useState('');
 
   return (
@@ -16,6 +16,7 @@ const OtpModal = ({visible, onClose, onSubmit, phoneNumber}) => {
             An OTP has been sent to {phoneNumber}
           </Text>
           <InputField label="OTP" value={otp} onChangeText={setOtp} />
+          {error ? <Text style={styles.error}>{error}</Text> : null}
           <View
             style={{
               display: 'flex',
@@ -63,6 +64,11 @@ const styles = StyleSheet.create({
   modalText: {
     ...theme.typography.body1,
     marginBottom: theme.spacing.large,
+  },
+  error: {
+    color: 'red',
+    marginBottom: 12,
+    textAlign: 'center',
   },
 });
 
