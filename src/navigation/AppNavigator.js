@@ -6,19 +6,14 @@ import {navigationRef} from './helpers/navigationHelpers';
 import {useSelector} from 'react-redux';
 import MessageBanner from '../components/UI/MessageBanner';
 
-const AuthenticatedMainStack = MainStack;
-const AuthenticatedAuthStack = AuthStack;
-
 const AppNavigator = () => {
-  const {isAuthenticated} = useSelector(state => state.auth);
+  const {hasMainAccess} = useSelector(state => state.auth);
+
+  console.log({hasMainAccess});
 
   return (
     <NavigationContainer ref={navigationRef}>
-      {isAuthenticated ? (
-        <AuthenticatedMainStack />
-      ) : (
-        <AuthenticatedAuthStack />
-      )}
+      {hasMainAccess ? <MainStack /> : <AuthStack />}
       <MessageBanner />
     </NavigationContainer>
   );

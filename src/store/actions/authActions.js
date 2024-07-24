@@ -50,9 +50,16 @@ export const RESEND_OTP_REQUEST = 'RESEND_OTP_REQUEST';
 export const RESEND_OTP_SUCCESS = 'RESEND_OTP_SUCCESS';
 export const RESEND_OTP_FAILURE = 'RESEND_OTP_FAILURE';
 
+export const SET_MAIN_ACCESS = 'SET_MAIN_ACCESS';
+
 export const SET_INITIAL_TOKEN = 'SET_INITIAL_TOKEN';
 
 export const LOGOUT_USER = 'LOGOUT_USER';
+
+export const setMainAccess = hasAccess => ({
+  type: SET_MAIN_ACCESS,
+  payload: hasAccess,
+});
 
 export const setInitialToken = (authToken, refreshToken) => ({
   type: SET_INITIAL_TOKEN,
@@ -84,9 +91,9 @@ export const registerUserRequest = userData => ({
   payload: userData,
 });
 
-export const registerUserSuccess = user => ({
+export const registerUserSuccess = userData => ({
   type: REGISTER_USER_SUCCESS,
-  payload: user,
+  payload: userData,
 });
 
 export const registerUserFailure = error => ({
@@ -94,14 +101,14 @@ export const registerUserFailure = error => ({
   payload: error,
 });
 
-export const verifyOtpRequest = otpData => ({
+export const verifyOtpRequest = (otpData, successCallback) => ({
   type: VERIFY_OTP_REQUEST,
-  payload: otpData,
+  payload: {otpData, successCallback},
 });
 
-export const verifyOtpSuccess = tokens => ({
+export const verifyOtpSuccess = verifyData => ({
   type: VERIFY_OTP_SUCCESS,
-  payload: tokens,
+  payload: verifyData,
 });
 
 export const verifyOtpFailure = error => ({

@@ -8,14 +8,9 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {
-  registerUserRequest,
-  verifyOtpRequest,
-} from '../../store/actions/authActions';
+import {registerUserRequest} from '../../store/actions/authActions';
 import InputField from '../../components/common/InputField';
 import Button from '../../components/common/Button';
-import OtpModal from '../../components/UI/OtpModal';
-import CustomModal from '../../components/common/CustomModal';
 import AddEditAddressModal from '../../components/UI/AddEditAddressModal';
 import AddressPreview from '../../components/UI/AddressPreview';
 import theme from '../../theme';
@@ -26,6 +21,7 @@ import withAuth from '../../navigation/components/withAuth';
 
 const mock = {
   address: {
+    label: 'Home',
     line1: '123',
     line2: '123',
     city: '123',
@@ -37,7 +33,7 @@ const mock = {
   gstin: '22AAAAA0000A1Z5',
   name: 'Prem',
   password: '123',
-  phoneNumber: '1231231233',
+  phoneNumber: '1231231231',
 };
 
 const RegisterScreen = () => {
@@ -54,9 +50,11 @@ const RegisterScreen = () => {
     password: '',
   });
   const [errors, setErrors] = useState({});
-  const [showOtpModal, setShowOtpModal] = useState(false);
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showAddressModal, setShowAddressModal] = useState(false);
+
+  useEffect(() => {
+    setFormData(mock);
+  }, []);
 
   const handleInputChange = (name, value) => {
     setFormData({...formData, [name]: value});
@@ -80,18 +78,8 @@ const RegisterScreen = () => {
 
   const handleRegister = () => {
     if (validateForm()) {
-      setShowConfirmModal(true);
+      dispatch(registerUserRequest(formData));
     }
-  };
-
-  const handleOtpSubmit = otp => {
-    dispatch(verifyOtpRequest({phoneNumber: formData.phoneNumber, otp}));
-    setShowOtpModal(false);
-  };
-
-  const handleConfirmSubmit = () => {
-    setShowConfirmModal(false);
-    dispatch(registerUserRequest(formData));
   };
 
   const handleAddressSubmit = address => {
@@ -104,6 +92,12 @@ const RegisterScreen = () => {
       setErrors({general: error.error});
     }
   }, [error]);
+
+  // useEffect(() => {
+  //   if (isOtpRequested) {
+  //     navigation.navigate(USER_REGISTRATION_OTP_SCREEN, { phoneNumber: formData.phoneNumber });
+  //   }
+  // }, [isOtpRequested, navigation, formData.phoneNumber]);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -189,22 +183,6 @@ const RegisterScreen = () => {
         </Text>
       </TouchableOpacity>
 
-      <OtpModal
-        visible={showOtpModal}
-        onClose={() => setShowOtpModal(false)}
-        onSubmit={handleOtpSubmit}
-        phoneNumber={formData.phoneNumber}
-      />
-
-      <CustomModal
-        visible={showConfirmModal}
-        onClose={() => setShowConfirmModal(false)}
-        onSubmit={handleConfirmSubmit}
-        submitTitle="Send OTP"
-        title="Confirm Phone Number"
-        message={`Please confirm your phone number: ${formData.phoneNumber}`}
-      />
-
       <AddEditAddressModal
         visible={showAddressModal}
         onClose={() => setShowAddressModal(false)}
@@ -237,7 +215,8 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: theme.colors.status.error,
-    marginTop: theme.spacing.xsmall,
+    marginVertical: theme.spacing.small,
+    textAlign: 'center',
   },
   loginText: {
     color: theme.colors.primary.main,

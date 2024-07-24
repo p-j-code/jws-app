@@ -10,10 +10,13 @@ import InputField from '../../components/common/InputField';
 import Button from '../../components/common/Button';
 import CustomModal from '../../components/common/CustomModal';
 import theme from '../../theme';
+import withAuth from '../../navigation/components/withAuth';
+import {STATUS_ERROR_CODES} from '../../utils/constants';
 
-const UserRegistrationOTPScreen = ({navigation}) => {
+const UserRegistrationOTPScreen = ({checkAuth}) => {
   const dispatch = useDispatch();
-  const {phoneNumber, error: apiError} = useSelector(state => state.auth.user);
+  const {user, error: apiError} = useSelector(state => state.auth);
+  const phoneNumber = user?.phoneNumber;
   const [otp, setOtp] = useState('');
   const [newPhoneNumber, setNewPhoneNumber] = useState(phoneNumber);
   const [modalPhoneNumber, setModalPhoneNumber] = useState(phoneNumber);
@@ -37,11 +40,25 @@ const UserRegistrationOTPScreen = ({navigation}) => {
   };
 
   const handleOtpSubmit = () => {
-    dispatch(verifyOtpRequest({phoneNumber: newPhoneNumber, otp}));
+    dispatch(
+      verifyOtpRequest({phoneNumber: newPhoneNumber, otp}, async () => {
+        await checkAuth();
+      }),
+    );
   };
 
   const handleResendOtp = () => {
     dispatch(resendOtpRequest(newPhoneNumber));
+  };
+
+  const getAPIError = () => {
+    if (typeof apiError === 'string') {
+      const isHandledError =
+        Object.values(STATUS_ERROR_CODES).includes(apiError);
+      return isHandledError ? null : apiError;
+    }
+
+    return apiError?.message || apiError?.error;
   };
 
   return (
@@ -54,15 +71,16 @@ const UserRegistrationOTPScreen = ({navigation}) => {
         </TouchableOpacity>
       </View>
       <InputField
-        style={styles.input}
         placeholder="OTP"
         keyboardType="numeric"
         value={otp}
         onChangeText={setOtp}
       />
 
-      {apiError && (
-        <Text style={styles.errorText}>{apiError || 'An error occurred'}</Text>
+      {getAPIError() && (
+        <Text style={styles.errorText}>
+          {getAPIError() || 'An error occurred'}
+        </Text>
       )}
       <Button title="Verify OTP" onPress={handleOtpSubmit} />
       <Button title="Resend OTP" type="text" onPress={handleResendOtp} />
@@ -73,7 +91,6 @@ const UserRegistrationOTPScreen = ({navigation}) => {
         onSubmit={handlePhoneNumberUpdate}
         title="Update Phone Number">
         <InputField
-          style={styles.input}
           placeholder="New Phone Number"
           value={modalPhoneNumber}
           onChangeText={setModalPhoneNumber}
@@ -107,13 +124,11 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     fontSize: theme.typography.body1.fontSize,
   },
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 12,
-    padding: 10,
+  errorText: {
+    color: theme.colors.status.error,
+    marginVertical: theme.spacing.small,
+    textAlign: 'center',
   },
 });
 
-export default UserRegistrationOTPScreen;
+export default withAuth(UserRegistrationOTPScreen);

@@ -5,23 +5,21 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const useAuth = () => {
   const dispatch = useDispatch();
-  const {isAuthenticated, authToken, user, loading} = useSelector(
-    state => state.auth,
-  );
+  const {authToken, user, loading} = useSelector(state => state.auth);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
 
-  console.log({isAuthenticated, authToken, user, loading});
+  const checkAuth = async (hardCheck = false) => {
+    const storedAuthToken = await AsyncStorage.getItem('accessToken');
+    const storedRefreshToken = await AsyncStorage.getItem('refreshToken');
+    if (storedAuthToken && storedRefreshToken && (!user || hardCheck)) {
+      dispatch(setAuthToken(storedAuthToken, storedRefreshToken));
+      dispatch(getUserRequest());
+    } else {
+      setIsCheckingAuth(false);
+    }
+  };
+
   useEffect(() => {
-    const checkAuth = async () => {
-      const storedAuthToken = await AsyncStorage.getItem('accessToken');
-      const storedRefreshToken = await AsyncStorage.getItem('refreshToken');
-      if (storedAuthToken && storedRefreshToken) {
-        dispatch(setAuthToken(storedAuthToken, storedRefreshToken));
-        dispatch(getUserRequest());
-      } else {
-        setIsCheckingAuth(false);
-      }
-    };
     checkAuth();
   }, [dispatch]);
 
@@ -38,9 +36,9 @@ const useAuth = () => {
   }, [loading, isCheckingAuth]);
 
   return {
-    isAuthenticated,
     loading: loading || isCheckingAuth,
     user,
+    checkAuth,
   };
 };
 

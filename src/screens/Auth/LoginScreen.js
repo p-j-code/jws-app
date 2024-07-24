@@ -69,9 +69,11 @@ const LoginScreen = ({navigation}) => {
         keyboardType="phone-pad"
         autoCapitalize="none"
         error={errors.phoneNumber}
+        label={'Phone Number'}
       />
       <InputField
         placeholder="Password"
+        label="Password"
         value={formData.password}
         onChangeText={value => handleInputChange('password', value)}
         secureTextEntry

@@ -9,6 +9,7 @@ import {
   resetPasswordWithOtpRequest,
 } from '../../store/actions/authActions';
 import OtpModal from '../../components/UI/OtpModal';
+import theme from '../../theme';
 
 const ForgotPasswordScreen = ({navigation}) => {
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -117,7 +118,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    padding: 16,
+    padding: theme.spacing.large,
+    backgroundColor: theme.colors.background.default,
   },
   title: {
     fontSize: 24,

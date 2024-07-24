@@ -3,9 +3,16 @@
 import api from './api';
 import {storeToken} from '../utils/storage';
 
+const saveAuthTokens = async response => {
+  const {authToken, refreshToken} = response.data;
+  await storeToken(authToken);
+  await storeToken(refreshToken, 'refreshToken');
+};
+
 export const registerUser = async userData => {
   try {
     const response = await api.post('/user/register', userData);
+    await saveAuthTokens(response);
     return response.data;
   } catch (error) {
     return {error: error.response ? error.response.data : error.message};
@@ -24,9 +31,7 @@ export const resendOtp = async phoneNumber => {
 export const verifyOtp = async otpData => {
   try {
     const response = await api.post('/user/verify-otp', otpData);
-    const {authToken, refreshToken} = response.data;
-    await storeToken(authToken);
-    await storeToken(refreshToken, 'refreshToken');
+    await saveAuthTokens(response);
     return response.data;
   } catch (error) {
     return {error: error.response ? error.response.data : error.message};
@@ -36,9 +41,7 @@ export const verifyOtp = async otpData => {
 export const loginUser = async credentials => {
   try {
     const response = await api.post('/user/login', credentials);
-    const {authToken, refreshToken} = response.data;
-    await storeToken(authToken);
-    await storeToken(refreshToken, 'refreshToken');
+    await saveAuthTokens(response);
     return response.data;
   } catch (error) {
     return {error: error.response ? error.response.data : error.message};
@@ -75,9 +78,7 @@ export const updateProfile = async updateFields => {
 export const refreshToken = async () => {
   try {
     const response = await api.post('/user/token/refresh');
-    const {authToken, refreshToken} = response.data;
-    await storeToken(authToken);
-    await storeToken(refreshToken, 'refreshToken');
+    await saveAuthTokens(response);
     return {authToken, refreshToken};
   } catch (error) {
     return {error: error.response ? error.response.data : error.message};

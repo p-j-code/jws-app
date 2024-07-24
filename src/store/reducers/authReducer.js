@@ -36,6 +36,7 @@ import {
   RESEND_OTP_FAILURE,
   LOGOUT_USER,
   SET_INITIAL_TOKEN,
+  SET_MAIN_ACCESS,
 } from '../actions/authActions';
 
 const initialState = {
@@ -53,6 +54,7 @@ const initialState = {
   passwordResetMessage: null,
   accountDeleteMessage: null,
   resetOTPMessage: null,
+  hasMainAccess: false,
 };
 
 const authReducer = (state = initialState, action) => {
@@ -71,14 +73,13 @@ const authReducer = (state = initialState, action) => {
       return {...state, loading: true, error: null};
 
     case REGISTER_USER_SUCCESS:
-      return {...state, loading: false, user: action.payload};
-
     case LOGIN_USER_SUCCESS:
       return {
         ...state,
         loading: false,
         authToken: action.payload.authToken,
         refreshToken: action.payload.refreshToken,
+        user: action.payload.user,
         isAuthenticated: true,
       };
 
@@ -131,8 +132,10 @@ const authReducer = (state = initialState, action) => {
         loading: false,
         authToken: action.payload.authToken,
         refreshToken: action.payload.refreshToken,
-        otpVerificationMessage: 'OTP verified successfully',
+        otpVerificationMessage: action.payload.message,
+        user: action.payload.user,
         otpVerificationError: null, // Clear the error
+        isAuthenticated: true,
       };
 
     case REQUEST_ACCOUNT_DELETE_SUCCESS:
@@ -174,9 +177,15 @@ const authReducer = (state = initialState, action) => {
     case SET_INITIAL_TOKEN:
       return {
         ...state,
-        authToken: action.payload.authToken,
-        refreshToken: action.payload.refreshToken,
-        // isAuthenticated: true,
+        authToken: action.payload?.authToken,
+        refreshToken: action.payload?.refreshToken,
+        isAuthenticated: true,
+      };
+
+    case SET_MAIN_ACCESS:
+      return {
+        ...state,
+        hasMainAccess: action.payload,
       };
 
     default:

@@ -48,8 +48,9 @@ function* registerUserSaga(action) {
     if (data.error) {
       yield put(registerUserFailure(data.error));
     } else {
+      console.log('registerUserSaga', {data});
       yield put(registerUserSuccess(data));
-      yield put(setMessage('User registered successfully', 'success'));
+      yield put(setMessage(data.message, 'success'));
     }
   } catch (error) {
     yield put(registerUserFailure(error.message));
@@ -75,11 +76,13 @@ function* resendOtpSaga(action) {
 
 function* verifyOtpSaga(action) {
   try {
-    const data = yield call(authService.verifyOtp, action.payload);
+    const {otpData, successCallback} = action.payload;
+    const data = yield call(authService.verifyOtp, otpData);
     if (data.error) {
       yield put(verifyOtpFailure(data.error));
     } else {
-      yield put(verifyOtpSuccess(data.message));
+      yield put(verifyOtpSuccess(data));
+      successCallback && successCallback();
       yield put(setMessage('OTP verified successfully', 'success'));
     }
   } catch (error) {
@@ -111,7 +114,6 @@ function* getUserSaga() {
       yield put(getUserFailure(data.error, data.user));
     } else {
       yield put(getUserSuccess(data.user));
-      yield put(setMessage('User data fetched successfully', 'success'));
     }
   } catch (error) {
     yield put(getUserFailure(error.message));
@@ -164,9 +166,6 @@ function* refreshTokenSaga() {
     yield put(setMessage(error.message, 'error'));
   }
 }
-
-const message = 'Testing with Hard Coded Message',
-messageType = 'success';
 
 function* requestOtpForPasswordResetSaga(action) {
   const {phoneNumber, successCallback} = action.payload;
