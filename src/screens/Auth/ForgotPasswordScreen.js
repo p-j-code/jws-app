@@ -21,7 +21,6 @@ const ForgotPasswordScreen = ({navigation}) => {
   const {
     loading,
     error: requestError,
-    otpPasswordResetMessage,
     otpVerificationError,
   } = useSelector(state => state.auth);
 
