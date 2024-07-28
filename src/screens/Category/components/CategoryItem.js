@@ -21,7 +21,7 @@ const ProductGroup = ({parentCategories, products}) => {
     <View style={styles.container}>
       <Text style={styles.header}>{categoryPath}</Text>
       <FlatList
-        data={[...products, ...products, ...products]}
+        data={[...products]}
         keyExtractor={item => item._id}
         horizontal
         showsHorizontalScrollIndicator={false}

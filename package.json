@@ -26,6 +26,7 @@
     "date-fns": "latest",
     "i18next": "latest",
     "intl-pluralrules": "latest",
+    "lodash.debounce": "^4.0.8",
     "react": "^18.3.1",
     "react-hook-form": "latest",
     "react-i18next": "latest",

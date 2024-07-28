@@ -1,3 +1,4 @@
+// src/theme/index.js
 export const colors = {
   primary: {
     light: '#FFF5EE', // Seashell
@@ -92,6 +93,16 @@ const theme = {
   typography,
   spacing,
   shape,
+  header: {
+    style: {
+      backgroundColor: colors.primary.main,
+    },
+    tintColor: colors.text.primary,
+    titleStyle: {
+      fontWeight: typography.h2.fontWeight,
+      fontSize: typography.h2.fontSize,
+    },
+  },
 };
 
 export default theme;

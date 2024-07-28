@@ -31,9 +31,9 @@ const CategoryList = () => {
 
   return (
     <ScrollView style={styles.container}>
-      {Object.keys(products).map(key => (
+      {Object.keys(products).map((key, idx) => (
         <ProductGroup
-          key={key}
+          key={key + idx}
           parentCategories={products[key].parentCategories}
           products={products[key].products}
         />
