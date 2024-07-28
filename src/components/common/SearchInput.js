@@ -4,14 +4,20 @@ import InputField from './InputField';
 import {debounce} from 'lodash';
 import theme from '../../theme';
 
-const SearchInput = ({label, onSearch, variant = 'filled', placeholder}) => {
-  const [query, setQuery] = useState('');
+const SearchInput = ({
+  label,
+  onSearch,
+  variant = 'filled',
+  placeholder,
+  value,
+}) => {
+  const [query, setQuery] = useState(value);
 
   const debouncedSearch = useCallback(
     debounce(query => {
       onSearch(query);
     }, 300),
-    [],
+    [onSearch],
   );
 
   useEffect(() => {
@@ -20,6 +26,10 @@ const SearchInput = ({label, onSearch, variant = 'filled', placeholder}) => {
       debouncedSearch.cancel();
     };
   }, [query, debouncedSearch]);
+
+  useEffect(() => {
+    setQuery(value);
+  }, [value]);
 
   return (
     <View style={styles.container}>
