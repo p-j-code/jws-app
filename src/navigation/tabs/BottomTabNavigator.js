@@ -1,7 +1,7 @@
 // src/navigation/tabs/BottomTabNavigator.js
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import HomeScreen from '../../screens/HomeScreen';
+import HomeScreen from '../../screens/Home/HomeScreen';
 import ProfileScreen from '../../screens/Profile/ProfileScreen';
 import OrdersScreen from '../../screens/Orders/OrdersScreen';
 import CartScreen from '../../screens/Cart/CartScreen';
@@ -42,11 +42,13 @@ const BottomTabNavigator = () => {
           return <Ionicons name={iconName} size={size} color={color} />;
         },
         tabBarActiveTintColor: theme.colors.primary.main,
-        tabBarInactiveTintColor: theme.colors.text.disabled,
+        tabBarInactiveTintColor: theme.colors.secondary.main,
         tabBarStyle: {
           backgroundColor: theme.colors.background.default,
           paddingBottom: theme.spacing.small,
-          height: 60,
+          paddingTop: theme.spacing.small,
+
+          height: 65,
         },
         tabBarLabelStyle: {
           fontSize: theme.typography.caption.fontSize,
