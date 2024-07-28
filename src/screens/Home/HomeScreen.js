@@ -4,7 +4,6 @@ import {useDispatch, useSelector} from 'react-redux';
 import {getAllProductsRequest} from '../../store/actions/productActions';
 import ProductGroup from './components/ProductGroup';
 import theme from '../../theme';
-import {PRODUCT_REDUCER_KEY} from '../../store/reducers';
 
 const HomeScreen = () => {
   const dispatch = useDispatch();

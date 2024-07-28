@@ -33,6 +33,7 @@
     "react-native-device-info": "latest",
     "react-native-image-picker": "latest",
     "react-native-keyboard-aware-scroll-view": "latest",
+    "react-native-linear-gradient": "^2.8.3",
     "react-native-multiple-select": "latest",
     "react-native-pager-view": "latest",
     "react-native-push-notification": "latest",

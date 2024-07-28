@@ -8,6 +8,7 @@ import CartScreen from '../../screens/Cart/CartScreen';
 import ContactScreen from '../../screens/Contact/ContactScreen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import theme from '../../theme';
+import {APP_NAME} from '../../utils/constants';
 
 const Tab = createBottomTabNavigator();
 
@@ -19,7 +20,7 @@ const BottomTabNavigator = () => {
           let iconName;
 
           switch (route.name) {
-            case 'Home':
+            case APP_NAME:
               iconName = focused ? 'home' : 'home-outline';
               break;
             case 'Profile':
@@ -56,9 +57,9 @@ const BottomTabNavigator = () => {
         },
       })}>
       <Tab.Screen
-        name="Home"
+        name={APP_NAME}
         component={HomeScreen}
-        options={{tabBarLabel: 'Home'}}
+        options={{tabBarLabel: APP_NAME}}
       />
       <Tab.Screen
         name="Profile"

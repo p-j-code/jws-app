@@ -28,6 +28,9 @@ export const colors = {
     error: '#FF6347', // Tomato
   },
   highlight: '#CD853F', // Peru
+  gradient: {
+    overlay: ['#FFF5EE', 'rgba(255, 245, 238, 0.1)'],
+  },
 };
 
 export const typography = {
