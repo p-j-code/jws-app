@@ -47,7 +47,6 @@ const SearchInput = ({
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    marginBottom: theme.spacing.medium,
   },
 });
 
