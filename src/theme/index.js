@@ -30,7 +30,7 @@ export const colors = {
   },
   highlight: '#CD853F', // Peru
   gradient: {
-    overlay: ['#FFF5EE', 'rgba(255, 245, 238, 0.1)'],
+    overlay: ['#8B4513', 'rgba(255, 245, 238, 0.1)'],
   },
 };
 
@@ -95,12 +95,12 @@ const theme = {
   shape,
   header: {
     style: {
-      backgroundColor: colors.primary.main,
+      backgroundColor: colors.background.subtle,
     },
     tintColor: colors.text.primary,
     titleStyle: {
-      fontWeight: typography.h2.fontWeight,
-      fontSize: typography.h2.fontSize,
+      fontWeight: typography.h3.fontWeight,
+      fontSize: typography.h3.fontSize,
     },
   },
 };

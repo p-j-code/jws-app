@@ -14,6 +14,7 @@ import theme from '../../../theme';
 import {
   PRODUCT_DETAILS_SCREEN,
   PRODUCT_LISTING_SCREEN,
+  ROOT_PRODUCT_STACK_NAME,
 } from '../../../navigation/routeConfigurations/productRoutes';
 
 const {width} = Dimensions.get('window');
@@ -29,11 +30,17 @@ const ProductGroup = ({parentCategories, products}) => {
     .join(' > ');
 
   const handleCategoryPress = category => {
-    navigation.navigate(PRODUCT_LISTING_SCREEN, {category});
+    navigation.navigate(ROOT_PRODUCT_STACK_NAME, {
+      screen: PRODUCT_LISTING_SCREEN,
+      params: {category},
+    });
   };
 
   const handleProductPress = product => {
-    navigation.navigate(PRODUCT_DETAILS_SCREEN, {product});
+    navigation.navigate(ROOT_PRODUCT_STACK_NAME, {
+      screen: PRODUCT_DETAILS_SCREEN,
+      params: {product},
+    });
   };
 
   return (
@@ -145,7 +152,7 @@ const styles = StyleSheet.create({
   },
   productDetail: {
     ...theme.typography.caption,
-    color: theme.colors.text.secondary,
+    color: theme.colors.background.default,
   },
 });
 

@@ -1,14 +1,18 @@
 import React, {useEffect, useState, useCallback} from 'react';
 import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {getAllProductsRequest} from '../../store/actions/productActions';
+import {getProductsGroupedByCategoriesRequest} from '../../store/actions/productActions';
 import ProductGroup from './components/CategoryItem';
 import SearchInput from '../../components/common/SearchInput';
 import theme from '../../theme';
 
 const CategoryList = () => {
   const dispatch = useDispatch();
-  const {products, loading, error} = useSelector(state => state.product);
+  const {
+    groupedProducts: products,
+    loading,
+    error,
+  } = useSelector(state => state.product);
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleSearch = useCallback(query => {
@@ -17,11 +21,13 @@ const CategoryList = () => {
 
   useEffect(() => {
     dispatch(
-      getAllProductsRequest({
+      getProductsGroupedByCategoriesRequest({
         groupByParentCategories: true,
         search: searchQuery,
       }),
     );
+
+    console.log(JSON.stringify({products}));
   }, [dispatch, searchQuery]);
 
   return (

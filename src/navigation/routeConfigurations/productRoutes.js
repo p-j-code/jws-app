@@ -14,7 +14,7 @@ export const CATEGORY_LISTING_SCREEN = 'CategoryListing';
 export const productRoutes = {
   [PRODUCT_LISTING_SCREEN]: {
     screen: ProductListingScreen,
-    navigationOptions: {headerShown: false},
+    navigationOptions: {headerShown: true, title: 'Products'},
   },
   [PRODUCT_DETAILS_SCREEN]: {
     screen: ProductDetailsScreen,
