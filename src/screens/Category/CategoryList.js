@@ -9,15 +9,20 @@ import theme from '../../theme';
 const CategoryList = () => {
   const dispatch = useDispatch();
   const {products, loading, error} = useSelector(state => state.product);
-  const [query, setQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
 
-  const handleSearch = useCallback(searchQuery => {
-    setQuery(searchQuery);
+  const handleSearch = useCallback(query => {
+    setSearchQuery(query);
   }, []);
 
   useEffect(() => {
-    dispatch(getAllProductsRequest({groupByParentCategories: true, query}));
-  }, [dispatch, query]);
+    dispatch(
+      getAllProductsRequest({
+        groupByParentCategories: true,
+        search: searchQuery,
+      }),
+    );
+  }, [dispatch, searchQuery]);
 
   return (
     <View style={styles.container}>
@@ -25,7 +30,7 @@ const CategoryList = () => {
         variant="outlined"
         onSearch={handleSearch}
         placeholder="Type to search..."
-        value={query}
+        value={searchQuery}
       />
       <ScrollView>
         {loading ? (
