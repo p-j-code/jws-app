@@ -4,6 +4,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {getAllProductsRequest} from '../../store/actions/productActions';
 import theme from '../../theme';
 import ProductItem from './components/ProductItem';
+import withScreenshotProtection from '../../HOC/withScreenshotProtection.js';
 
 const ProductListingScreen = ({route}) => {
   const {category} = route.params;
@@ -32,4 +33,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProductListingScreen;
+export default withScreenshotProtection(ProductListingScreen);

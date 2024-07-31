@@ -65,7 +65,8 @@ android {
 }
 
 dependencies {
-    implementation("com.facebook.react:react-android")
+    implementation "com.facebook.react:react-android"
+    implementation project(':react-native-screenshot-prevent') // Add this line
 
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")

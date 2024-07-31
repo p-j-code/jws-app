@@ -43,6 +43,7 @@
     "react-native-reanimated": "^3.14.0",
     "react-native-reanimated-carousel": "^3.5.1",
     "react-native-screens": "^3.32.0",
+    "react-native-screenshot-prevent": "^1.2.1",
     "react-native-star-rating": "^1.1.0",
     "react-native-tab-view": "^3.5.2",
     "react-native-vector-icons": "^10.1.0",
