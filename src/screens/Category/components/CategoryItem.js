@@ -39,7 +39,7 @@ const ProductGroup = ({parentCategories, products}) => {
   const handleProductPress = product => {
     navigation.navigate(ROOT_PRODUCT_STACK_NAME, {
       screen: PRODUCT_DETAILS_SCREEN,
-      params: {product},
+      params: {productId: product._id},
     });
   };
 
