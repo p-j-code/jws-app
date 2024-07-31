@@ -1,5 +1,8 @@
 import React, {useEffect} from 'react';
-import RNPreventScreenshot from 'react-native-screenshot-prevent';
+import {Alert} from 'react-native';
+import RNPreventScreenshot, {
+  addListener,
+} from 'react-native-screenshot-prevent';
 
 const withScreenshotProtection = WrappedComponent => {
   return props => {
@@ -12,6 +15,15 @@ const withScreenshotProtection = WrappedComponent => {
         RNPreventScreenshot.enableSecureView();
       }
 
+      // Add listener for screenshot events
+      const subscription = addListener(() => {
+        Alert.alert(
+          'Warning',
+          'You have taken a screenshot of the app. This is prohibited due to security reasons.',
+          [{text: 'I understand'}],
+        );
+      });
+
       return () => {
         // Disable screenshot prevention
         RNPreventScreenshot.enabled(false);
@@ -20,6 +32,9 @@ const withScreenshotProtection = WrappedComponent => {
         if (!__DEV__) {
           RNPreventScreenshot.disableSecureView();
         }
+
+        // Remove the listener
+        subscription.remove();
       };
     }, []);
 
