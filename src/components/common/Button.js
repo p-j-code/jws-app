@@ -74,6 +74,9 @@ const styles = StyleSheet.create({
   errorOutline: {
     borderColor: theme.colors.status.error,
   },
+  xsm: {
+    padding: theme.spacing.xsmall,
+  },
   sm: {
     padding: theme.spacing.small,
   },

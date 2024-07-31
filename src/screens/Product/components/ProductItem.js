@@ -1,14 +1,16 @@
-import React, {useCallback} from 'react';
+import React, {useState, useCallback} from 'react';
 import {View, Text, StyleSheet, Image, Dimensions} from 'react-native';
 import Video from 'react-native-video';
 import Carousel from 'react-native-reanimated-carousel';
-import Slider from '@react-native-community/slider';
 import Button from '../../../components/common/Button';
 import theme from '../../../theme';
 
-const {width, height} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
+const squareSize = width * 0.4;
 
 const ProductItem = ({item}) => {
+  const [activeSlide, setActiveSlide] = useState(0);
+
   const renderMedia = useCallback(({item: mediaItem}) => {
     return mediaItem.type === 'image' ? (
       <Image
@@ -28,29 +30,59 @@ const ProductItem = ({item}) => {
     ) : null;
   }, []);
 
+  const renderIndicator = () => {
+    if (item.media.length > 1) {
+      return (
+        <View style={styles.indicatorContainer}>
+          {item.media.map((_, index) => (
+            <View
+              key={index}
+              style={[
+                styles.indicator,
+                activeSlide === index && styles.activeIndicator,
+              ]}
+            />
+          ))}
+        </View>
+      );
+    }
+    return null;
+  };
+
   return (
     <View style={styles.productContainer}>
       <View style={styles.mediaContainer}>
         <Carousel
-          width={width * 0.4}
-          height={height * 0.3}
+          width={squareSize}
+          height={squareSize}
           data={item.media}
           renderItem={renderMedia}
-          loop
+          loop={item.media.length > 1}
+          onSnapToItem={index => setActiveSlide(index)}
         />
+        {renderIndicator()}
       </View>
       <View style={styles.detailsContainer}>
-        <Text style={styles.productName}>{item.name || 'No Name'}</Text>
-        <Text style={styles.productNarration}>
-          {item.narration || 'No Narration'}
-        </Text>
+        {item.name && (
+          <Text style={styles.productName}>{item.name || 'No Name'}</Text>
+        )}
+        {item.narration && (
+          <Text style={styles.productNarration}>
+            {item.narration || 'No Narration'}
+          </Text>
+        )}
         <Text style={styles.productDetail}>
-          Gross: {item.grossWeight || 'N/A'}, Net: {item.netWeight || 'N/A'}
+          Gross: {item.grossWeight || 'N/A'}
         </Text>
+        <Text style={styles.productDetail}>Net: {item.netWeight || 'N/A'}</Text>
         {item.isStone && (
           <Text style={styles.productDetail}>
-            Stone: {item.stoneWeight || 'N/A'}, Charges:{' '}
-            {item.stoneCharges || 'N/A'}
+            Stone: {item.stoneWeight || 'N/A'}
+          </Text>
+        )}
+        {item.isStone && (
+          <Text style={styles.productDetail}>
+            Charges: {item.stoneCharges || 'N/A'}
           </Text>
         )}
         <View style={styles.cartControls}>
@@ -58,7 +90,7 @@ const ProductItem = ({item}) => {
             title="-"
             onPress={() => console.log('Decrease quantity')}
             variant="primary"
-            size="sm"
+            size="xsm"
             type="contained"
             style={styles.cartButton}
           />
@@ -67,18 +99,11 @@ const ProductItem = ({item}) => {
             title="+"
             onPress={() => console.log('Increase quantity')}
             variant="primary"
-            size="sm"
+            size="xsm"
             type="contained"
             style={styles.cartButton}
           />
         </View>
-        <Slider
-          style={styles.slider}
-          minimumValue={1}
-          maximumValue={item.stock || 1}
-          step={1}
-          value={1}
-        />
       </View>
     </View>
   );
@@ -87,16 +112,32 @@ const ProductItem = ({item}) => {
 const styles = StyleSheet.create({
   productContainer: {
     flexDirection: 'row',
-    marginBottom: theme.spacing.large,
+    paddingVertical: theme.spacing.medium,
+    borderBottomColor: theme.colors.border.main,
+    borderBottomWidth: 0.5,
   },
   mediaContainer: {
-    width: width * 0.4,
+    width: squareSize,
     marginRight: theme.spacing.medium,
   },
   media: {
     width: '100%',
-    height: height * 0.3,
-    marginBottom: theme.spacing.small,
+    height: '100%',
+  },
+  indicatorContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: theme.spacing.xsmall,
+  },
+  indicator: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: theme.colors.text.disabled,
+    marginHorizontal: 2,
+  },
+  activeIndicator: {
+    backgroundColor: theme.colors.primary.main,
   },
   detailsContainer: {
     flex: 1,
@@ -104,7 +145,7 @@ const styles = StyleSheet.create({
   },
   productName: {
     ...theme.typography.h4,
-    marginBottom: theme.spacing.small,
+    marginBottom: theme.spacing.xsmall,
   },
   productNarration: {
     ...theme.typography.body2,
@@ -112,24 +153,22 @@ const styles = StyleSheet.create({
   },
   productDetail: {
     ...theme.typography.body1,
-    marginBottom: theme.spacing.small,
+    fontSize: theme.typography.body2.fontSize,
+    marginBottom: theme.spacing.xsmall,
   },
   cartControls: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: theme.spacing.medium,
+    marginTop: theme.spacing.small,
     justifyContent: 'space-between',
   },
   cartButton: {
     flex: 1,
-    marginHorizontal: theme.spacing.small,
+    marginHorizontal: theme.spacing.xsmall,
   },
   quantityLabel: {
     ...theme.typography.body1,
     marginHorizontal: theme.spacing.small,
-  },
-  slider: {
-    marginTop: theme.spacing.small,
   },
 });
 

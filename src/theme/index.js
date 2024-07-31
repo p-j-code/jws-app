@@ -11,7 +11,7 @@ export const colors = {
     dark: '#A0522D', // Sienna
   },
   background: {
-    default: '#FAF0E6', // Linen
+    default: '#FFF', // Linen
     subtle: '#FFE4C4', // Bisque
     interactive: '#FFDEAD', // Navajo White
   },
