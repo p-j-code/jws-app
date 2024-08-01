@@ -29,6 +29,7 @@ const Button = ({
           type === 'contained' && styles.containedText,
           type === 'outline' && styles[`${variant}OutlineText`],
           type === 'text' && styles[`${variant}TextText`],
+          size === 'xsm' && styles.xsmText,
         ]}>
         {title}
       </Text>
@@ -127,6 +128,9 @@ const styles = StyleSheet.create({
   },
   errorTextText: {
     color: theme.colors.status.error,
+  },
+  xsmText: {
+    ...theme.typography.body1,
   },
   left: {
     textAlign: 'left',

@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  Dimensions,
   TextInput,
   TouchableOpacity,
 } from 'react-native';
@@ -28,13 +27,16 @@ const getClosestSnapValue = (value, snapValues) => {
 };
 
 const QuantityControl = ({
-  quantity,
+  quantity = 10,
   onIncrement,
   onDecrement,
   onSliderChange,
   max = 100,
   labelsCount = 5,
   snapThreshold = 5, // Threshold for snapping
+  showSlider = true,
+  size = 'sm',
+  style,
 }) => {
   const [snapValues, setSnapValues] = useState([]);
   const [sliderWidth, setSliderWidth] = useState(0);
@@ -45,8 +47,8 @@ const QuantityControl = ({
   }, [max, labelsCount]);
 
   const handleSliderChangeComplete = value => {
-    // const snappedValue = getClosestSnapValue(value, snapValues);
-    onSliderChange(value);
+    const snappedValue = getClosestSnapValue(value, snapValues);
+    onSliderChange(snappedValue);
   };
 
   const handleInputChange = value => {
@@ -57,41 +59,46 @@ const QuantityControl = ({
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.labelsContainer}>
-        {snapValues.map((value, index) => (
-          <Text
-            key={index}
-            style={[
-              styles.label,
-              {
-                left:
-                  (sliderWidth - 20) * (index / (snapValues.length - 1)) + 10, // Adjusting the position to fit within the slider's width
-              },
-            ]}>
-            {value}
-          </Text>
-        ))}
-      </View>
-      <View
-        onLayout={event => {
-          const {width} = event.nativeEvent.layout;
-          setSliderWidth(width);
-        }}
-        style={styles.sliderContainer}>
-        <Slider
-          style={styles.slider}
-          minimumValue={0}
-          maximumValue={max}
-          step={1} // Keep it 1 for smooth sliding
-          value={quantity}
-          onSlidingComplete={handleSliderChangeComplete}
-          onValueChange={onSliderChange} // Keep updating value as it changes
-          minimumTrackTintColor={theme.colors.primary.main}
-          maximumTrackTintColor={theme.colors.background.subtle}
-          thumbTintColor={theme.colors.primary.main}
-        />
-      </View>
+    <View style={[styles.container, style]}>
+      {showSlider && (
+        <>
+          <View style={styles.labelsContainer}>
+            {snapValues.map((value, index) => (
+              <Text
+                key={index}
+                style={[
+                  styles.label,
+                  {
+                    left:
+                      (sliderWidth - 20) * (index / (snapValues.length - 1)) +
+                      10, // Adjusting the position to fit within the slider's width
+                  },
+                ]}>
+                {value}
+              </Text>
+            ))}
+          </View>
+          <View
+            onLayout={event => {
+              const {width} = event.nativeEvent.layout;
+              setSliderWidth(width);
+            }}
+            style={styles.sliderContainer}>
+            <Slider
+              style={styles.slider}
+              minimumValue={0}
+              maximumValue={max}
+              step={1} // Keep it 1 for smooth sliding
+              value={quantity}
+              onSlidingComplete={handleSliderChangeComplete}
+              onValueChange={onSliderChange} // Keep updating value as it changes
+              minimumTrackTintColor={theme.colors.primary.main}
+              maximumTrackTintColor={theme.colors.background.subtle}
+              thumbTintColor={theme.colors.primary.main}
+            />
+          </View>
+        </>
+      )}
       <View style={styles.buttonContainer}>
         {quantity > 0 ? (
           <>
@@ -99,7 +106,7 @@ const QuantityControl = ({
               title="-"
               onPress={onDecrement}
               variant="primary"
-              size="sm"
+              size={size}
               type="contained"
               style={styles.button}
             />
@@ -107,7 +114,10 @@ const QuantityControl = ({
               onPress={() => setIsInputFocused(true)}
               style={styles.inputWrapper}>
               <TextInput
-                style={styles.quantityInput}
+                style={[
+                  styles.quantityInput,
+                  size === 'xsm' && styles.xsmQuantityInput,
+                ]}
                 value={String(quantity)}
                 onChangeText={handleInputChange}
                 keyboardType="numeric"
@@ -119,7 +129,7 @@ const QuantityControl = ({
               title="+"
               onPress={onIncrement}
               variant="primary"
-              size="sm"
+              size={size}
               type="contained"
               style={styles.button}
             />
@@ -129,7 +139,7 @@ const QuantityControl = ({
             title="Add To Cart"
             onPress={onIncrement}
             variant="primary"
-            size="sm"
+            size={size}
             type="contained"
             style={styles.button}
           />
@@ -144,8 +154,6 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'column',
     alignItems: 'center',
-    paddingHorizontal: theme.spacing.medium,
-    paddingVertical: theme.spacing.small,
     backgroundColor: theme.colors.background.default,
   },
   labelsContainer: {
@@ -189,9 +197,15 @@ const styles = StyleSheet.create({
   },
   quantityInput: {
     paddingHorizontal: theme.spacing.medium,
+    paddingVertical: theme.spacing.small, // Add default vertical padding
     textAlign: 'center',
     fontSize: theme.typography.h4.fontSize,
     color: theme.colors.primary.main,
+  },
+  xsmQuantityInput: {
+    fontSize: theme.typography.body1.fontSize,
+    paddingHorizontal: theme.spacing.small,
+    paddingVertical: theme.spacing.xsmall, // Reduce vertical padding for xsm
   },
 });
 

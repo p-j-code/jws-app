@@ -11,6 +11,7 @@ import Carousel from '../../../components/common/Carousel'; // Import the custom
 import Button from '../../../components/common/Button';
 import theme from '../../../theme';
 import {PRODUCT_DETAILS_SCREEN} from '../../../navigation/routeConfigurations/productRoutes';
+import QuantityControl from '../../../components/UI/QuantityControl';
 
 const {width} = Dimensions.get('window');
 const squareSize = width * 0.4;
@@ -58,23 +59,7 @@ const ProductItem = ({item}) => {
             </Text>
           )}
           <View style={styles.cartControls}>
-            <Button
-              title="-"
-              onPress={() => console.log('Decrease quantity')}
-              variant="primary"
-              size="xsm"
-              type="contained"
-              style={styles.cartButton}
-            />
-            <Text style={styles.quantityLabel}>1</Text>
-            <Button
-              title="+"
-              onPress={() => console.log('Increase quantity')}
-              variant="primary"
-              size="xsm"
-              type="contained"
-              style={styles.cartButton}
-            />
+            <QuantityControl showSlider={false} size="xsm" />
           </View>
         </View>
       </View>
@@ -88,6 +73,7 @@ const styles = StyleSheet.create({
     paddingVertical: theme.spacing.medium,
     borderBottomColor: theme.colors.border.main,
     borderBottomWidth: 0.5,
+    backgroundColor: theme.colors.background.default,
   },
   mediaContainer: {
     width: squareSize,
