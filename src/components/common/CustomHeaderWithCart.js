@@ -25,7 +25,7 @@ const CustomHeaderWithCart = ({title}) => {
       <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
         <Ionicons
           name="cart"
-          size={30}
+          size={36}
           color={theme.colors.primary.main}
           style={styles.cartIcon}
         />
