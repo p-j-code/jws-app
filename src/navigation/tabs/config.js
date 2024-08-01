@@ -2,10 +2,10 @@
 import HomeScreen from '../../screens/Home/HomeScreen';
 import ProfileScreen from '../../screens/Profile/ProfileScreen';
 import OrdersScreen from '../../screens/Orders/OrdersScreen';
-import CartScreen from '../../screens/Cart/CartScreen';
 import ContactScreen from '../../screens/Contact/ContactScreen';
 import {APP_NAME} from '../../utils/constants';
 import SimpleHeader from '../../components/common/SimpleHeader';
+import CustomHeaderWithCart from '../../components/common/CustomHeaderWithCart';
 
 export const bottomTabConfig = [
   {
@@ -15,7 +15,7 @@ export const bottomTabConfig = [
       tabBarLabel: APP_NAME,
       iconName: 'home-outline',
       iconNameFocused: 'home',
-      header: () => <SimpleHeader title="SG Gold" />, // Use the custom header
+      header: () => <CustomHeaderWithCart title="SG Gold" />, // Use the custom header
     },
   },
   {
@@ -38,16 +38,16 @@ export const bottomTabConfig = [
       header: () => <SimpleHeader title="Orders" />,
     },
   },
-  {
-    name: 'Cart',
-    component: CartScreen,
-    options: {
-      tabBarLabel: 'Cart',
-      iconName: 'cart-outline',
-      iconNameFocused: 'cart',
-      header: () => <SimpleHeader title="Cart" />,
-    },
-  },
+  // {
+  //   name: 'Cart',
+  //   component: CartScreen,
+  //   options: {
+  //     tabBarLabel: 'Cart',
+  //     iconName: 'cart-outline',
+  //     iconNameFocused: 'cart',
+  //     header: () => <SimpleHeader title="Cart" />,
+  //   },
+  // },
   {
     name: 'Contact',
     component: ContactScreen,
