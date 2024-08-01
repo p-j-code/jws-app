@@ -29,6 +29,7 @@ const ProductListingScreen = ({route}) => {
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: theme.colors.background.default,
     padding: theme.spacing.medium,
   },
 });

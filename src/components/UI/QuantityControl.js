@@ -154,7 +154,6 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'column',
     alignItems: 'center',
-    backgroundColor: theme.colors.background.default,
   },
   labelsContainer: {
     width: '100%',

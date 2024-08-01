@@ -73,7 +73,6 @@ const styles = StyleSheet.create({
     paddingVertical: theme.spacing.medium,
     borderBottomColor: theme.colors.border.main,
     borderBottomWidth: 0.5,
-    backgroundColor: theme.colors.background.default,
   },
   mediaContainer: {
     width: squareSize,
