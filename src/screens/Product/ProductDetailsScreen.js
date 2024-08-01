@@ -94,10 +94,10 @@ const ProductDetails = ({route}) => {
             </>
           )}
           <Text style={styles.productDetail}>
-            Categories: {product.categories.map(c => c.name).join(', ')}
+            Categories: {(product.categories || []).map(c => c.name).join(', ')}
           </Text>
           <Text style={styles.productDetail}>
-            Tags: {product.tags.join(', ')}
+            Tags: {(product.tags || []).join(', ')}
           </Text>
         </View>
       </ScrollView>

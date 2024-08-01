@@ -13,7 +13,7 @@ import Video from 'react-native-video';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import theme from '../../theme';
 
-const Carousel = ({data, width, height}) => {
+const Carousel = ({data = [], width, height}) => {
   const scrollX = useRef(new Animated.Value(0)).current;
   const flatListRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
@@ -35,7 +35,7 @@ const Carousel = ({data, width, height}) => {
       <Animated.FlatList
         ref={flatListRef}
         data={data}
-        keyExtractor={item => item._id.toString()}
+        keyExtractor={item => item._id?.toString()}
         horizontal
         showsHorizontalScrollIndicator={false}
         pagingEnabled
@@ -82,7 +82,8 @@ const Carousel = ({data, width, height}) => {
                     source={{uri: item.url}}
                     style={styles.video}
                     resizeMode="contain"
-                    paused={index !== Math.floor(scrollX._value / width)}
+                    paused={index !== selectedMedia || !isVideoVisible}
+                    controls={index === selectedMedia && isVideoVisible}
                   />
                 )}
               </View>
@@ -128,7 +129,9 @@ const Carousel = ({data, width, height}) => {
         transparent={true}
         onRequestClose={() => setIsVisible(false)}>
         <ImageViewer
-          imageUrls={data.map(item => ({url: item.url}))}
+          imageUrls={data
+            .filter(item => item.type === 'image')
+            .map(item => ({url: item.url}))}
           index={selectedMedia}
         />
       </Modal>

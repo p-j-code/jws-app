@@ -10,6 +10,7 @@ import {useNavigation} from '@react-navigation/native';
 import Carousel from '../../../components/common/Carousel'; // Import the custom Carousel component
 import Button from '../../../components/common/Button';
 import theme from '../../../theme';
+import {PRODUCT_DETAILS_SCREEN} from '../../../navigation/routeConfigurations/productRoutes';
 
 const {width} = Dimensions.get('window');
 const squareSize = width * 0.4;
@@ -19,8 +20,9 @@ const ProductItem = ({item}) => {
   const isSwipe = useRef(false);
 
   const handlePress = () => {
-    if (!isSwipe.current) {
-      navigation.navigate('ProductDetailsScreen', {productId: item.id});
+    console.log({_id: item._id});
+    if (!isSwipe.current && item._id) {
+      navigation.navigate(PRODUCT_DETAILS_SCREEN, {productId: item._id});
     }
   };
 
