@@ -12,9 +12,10 @@ import theme from '../../theme';
 import {getProductByIdRequest} from '../../store/actions/productActions';
 import Carousel from '../../components/common/Carousel';
 import QuantityControl from '../../components/UI/QuantityControl';
+import withScreenshotProtection from '../../HOC/withScreenshotProtection';
 
 const {width} = Dimensions.get('window');
-const squareSize = width * 0.8;
+const squareSize = width * 0.9;
 
 const ProductDetails = ({route}) => {
   const {productId} = route.params;
@@ -58,23 +59,23 @@ const ProductDetails = ({route}) => {
           {paddingBottom: quantityControlHeight + 10},
         ]}>
         <View style={styles.mediaContainer}>
-          <Carousel data={product.media} />
+          <Carousel data={product.media} width={width} height={width * 0.75} />
         </View>
         <View style={styles.detailsContainer}>
-          <Text style={styles.productName}>{product.name || 'No Name'}</Text>
-          <Text style={styles.productNarration}>
-            {product.narration || 'No Narration'}
-          </Text>
-          <Text style={styles.productDescription}>
-            {product.description || 'No Description'}
-          </Text>
+          {product.name && (
+            <Text style={styles.productName}>{product.name || 'No Name'}</Text>
+          )}
+          {product.narration && (
+            <Text style={styles.productNarration}>
+              {product.narration || 'No Narration'}
+            </Text>
+          )}
+          {product.description && (
+            <Text style={styles.productDescription}>
+              {product.description || 'No Description'}
+            </Text>
+          )}
           <Text style={styles.productDetail}>Type: {product.type}</Text>
-          <Text style={styles.productDetail}>
-            Karigar Code: {product.karigarCode}
-          </Text>
-          <Text style={styles.productDetail}>Gender: {product.gender}</Text>
-          <Text style={styles.productDetail}>Status: {product.status}</Text>
-          <Text style={styles.productDetail}>Stock: {product.stock}</Text>
           <Text style={styles.productDetail}>
             Gross Weight: {product.grossWeight}
           </Text>
@@ -85,10 +86,10 @@ const ProductDetails = ({route}) => {
           {product.isStone && (
             <>
               <Text style={styles.productDetail}>
-                Stone Weight: {product.stoneWeight}
+                Stone Weight: {product.stoneWeight || 'N/A'}
               </Text>
               <Text style={styles.productDetail}>
-                Stone Charges: {product.stoneCharges}
+                Stone Charges: {product.stoneCharges || 'N/A'}
               </Text>
             </>
           )}
@@ -125,7 +126,11 @@ const styles = StyleSheet.create({
   scrollViewContent: {
     padding: theme.spacing.medium,
   },
-  mediaContainer: {},
+  mediaContainer: {
+    width: '100%',
+    alignItems: 'center',
+    marginBottom: theme.spacing.medium,
+  },
   detailsContainer: {
     padding: theme.spacing.medium,
     backgroundColor: '#fff',
@@ -172,4 +177,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProductDetails;
+export default withScreenshotProtection(ProductDetails);

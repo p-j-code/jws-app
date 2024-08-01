@@ -126,7 +126,7 @@ const QuantityControl = ({
           </>
         ) : (
           <Button
-            title="Add"
+            title="Add To Cart"
             onPress={onIncrement}
             variant="primary"
             size="sm"

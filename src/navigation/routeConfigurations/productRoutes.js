@@ -18,7 +18,7 @@ export const productRoutes = {
   },
   [PRODUCT_DETAILS_SCREEN]: {
     screen: ProductDetailsScreen,
-    navigationOptions: {headerShown: false},
+    navigationOptions: {headerShown: true, title: 'Product Details'},
   },
   [CATEGORY_LISTING_SCREEN]: {
     screen: CategoryListingScreen,

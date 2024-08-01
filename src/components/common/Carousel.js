@@ -13,11 +13,7 @@ import Video from 'react-native-video';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import theme from '../../theme';
 
-const {width} = Dimensions.get('window');
-const ITEM_WIDTH = width;
-const ITEM_HEIGHT = ITEM_WIDTH * 0.75;
-
-const Carousel = ({data}) => {
+const Carousel = ({data, width, height}) => {
   const scrollX = useRef(new Animated.Value(0)).current;
   const flatListRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
@@ -35,7 +31,7 @@ const Carousel = ({data}) => {
   };
 
   return (
-    <View style={styles(theme).container}>
+    <View style={[styles.container, {width, height}]}>
       <Animated.FlatList
         ref={flatListRef}
         data={data}
@@ -43,7 +39,7 @@ const Carousel = ({data}) => {
         horizontal
         showsHorizontalScrollIndicator={false}
         pagingEnabled
-        snapToInterval={ITEM_WIDTH} // Ensures each item snaps correctly
+        snapToInterval={width} // Ensures each item snaps correctly
         snapToAlignment="center"
         decelerationRate="fast"
         onScroll={Animated.event(
@@ -52,9 +48,9 @@ const Carousel = ({data}) => {
         )}
         renderItem={({item, index}) => {
           const inputRange = [
-            (index - 1) * ITEM_WIDTH,
-            index * ITEM_WIDTH,
-            (index + 1) * ITEM_WIDTH,
+            (index - 1) * width,
+            index * width,
+            (index + 1) * width,
           ];
           const scale = scrollX.interpolate({
             inputRange,
@@ -74,16 +70,19 @@ const Carousel = ({data}) => {
                   ? handleImagePress(index)
                   : handleVideoPress(index)
               }
-              style={[styles(theme).item, {transform: [{scale}], opacity}]}>
-              <View style={styles(theme).mediaContainer}>
+              style={[
+                styles.item,
+                {width, height, transform: [{scale}], opacity},
+              ]}>
+              <View style={styles.mediaContainer}>
                 {item.type === 'image' ? (
-                  <Image source={{uri: item.url}} style={styles(theme).image} />
+                  <Image source={{uri: item.url}} style={styles.image} />
                 ) : (
                   <Video
                     source={{uri: item.url}}
-                    style={styles(theme).video}
+                    style={styles.video}
                     resizeMode="contain"
-                    paused={index !== Math.floor(scrollX._value / ITEM_WIDTH)}
+                    paused={index !== Math.floor(scrollX._value / width)}
                   />
                 )}
               </View>
@@ -92,12 +91,12 @@ const Carousel = ({data}) => {
         }}
         contentContainerStyle={{alignItems: 'center'}}
       />
-      <View style={styles(theme).pagination}>
+      <View style={styles.pagination}>
         {data.map((_, index) => {
           const inputRange = [
-            (index - 1) * ITEM_WIDTH,
-            index * ITEM_WIDTH,
-            (index + 1) * ITEM_WIDTH,
+            (index - 1) * width,
+            index * width,
+            (index + 1) * width,
           ];
           const dotOpacity = scrollX.interpolate({
             inputRange,
@@ -113,7 +112,7 @@ const Carousel = ({data}) => {
             <Animated.View
               key={`dot-${index}`}
               style={[
-                styles(theme).dot,
+                styles.dot,
                 {
                   opacity: dotOpacity,
                   transform: [{scale: dotScale}],
@@ -138,15 +137,15 @@ const Carousel = ({data}) => {
         visible={isVideoVisible}
         transparent={true}
         onRequestClose={() => setIsVideoVisible(false)}>
-        <View style={styles(theme).videoModal}>
+        <View style={styles.videoModal}>
           <TouchableOpacity
-            style={styles(theme).closeButton}
+            style={styles.closeButton}
             onPress={() => setIsVideoVisible(false)}>
-            <Text style={styles(theme).closeButtonText}>Close</Text>
+            <Text style={styles.closeButtonText}>Close</Text>
           </TouchableOpacity>
           <Video
             source={{uri: data[selectedMedia]?.url}}
-            style={styles(theme).fullScreenVideo}
+            style={styles.fullScreenVideo}
             resizeMode="contain"
             controls
           />
@@ -156,77 +155,73 @@ const Carousel = ({data}) => {
   );
 };
 
-const styles = theme =>
-  StyleSheet.create({
-    container: {
-      flex: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    item: {
-      width: ITEM_WIDTH,
-      height: ITEM_HEIGHT,
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: theme.colors.background.subtle,
-      borderRadius: theme.shape.borderRadius,
-      shadowColor: theme.colors.border.main,
-      shadowOffset: {width: 0, height: 2},
-      shadowOpacity: 0.8,
-      shadowRadius: 2,
-      elevation: 5,
-    },
-    mediaContainer: {
-      width: '100%',
-      height: '100%',
-      borderRadius: theme.shape.borderRadius,
-      overflow: 'hidden',
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: theme.colors.background.default,
-    },
-    image: {
-      width: '100%',
-      height: '100%',
-      resizeMode: 'contain',
-    },
-    video: {
-      width: '100%',
-      height: '100%',
-      resizeMode: 'contain',
-    },
-    pagination: {
-      flexDirection: 'row',
-      position: 'absolute',
-      bottom: 20,
-    },
-    dot: {
-      height: 10,
-      width: 10,
-      borderRadius: 5,
-      backgroundColor: theme.colors.primary.main,
-      margin: 8,
-    },
-    videoModal: {
-      flex: 1,
-      backgroundColor: 'black',
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    fullScreenVideo: {
-      width: '100%',
-      height: '100%',
-    },
-    closeButton: {
-      position: 'absolute',
-      top: 30,
-      right: 20,
-      zIndex: 1,
-    },
-    closeButtonText: {
-      color: 'white',
-      fontSize: 18,
-    },
-  });
+const styles = StyleSheet.create({
+  container: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  item: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: theme.colors.background.subtle,
+    borderRadius: theme.shape.borderRadius,
+    shadowColor: theme.colors.border.main,
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    elevation: 5,
+  },
+  mediaContainer: {
+    width: '100%',
+    height: '100%',
+    borderRadius: theme.shape.borderRadius,
+    overflow: 'hidden',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: theme.colors.background.default,
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'contain',
+  },
+  video: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'contain',
+  },
+  pagination: {
+    flexDirection: 'row',
+    position: 'absolute',
+    bottom: 10,
+  },
+  dot: {
+    height: 10,
+    width: 10,
+    borderRadius: 5,
+    backgroundColor: theme.colors.primary.main,
+    margin: 8,
+  },
+  videoModal: {
+    flex: 1,
+    backgroundColor: 'black',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  fullScreenVideo: {
+    width: '100%',
+    height: '100%',
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 30,
+    right: 20,
+    zIndex: 1,
+  },
+  closeButtonText: {
+    color: 'white',
+    fontSize: 18,
+  },
+});
 
 export default Carousel;
