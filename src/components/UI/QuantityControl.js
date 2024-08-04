@@ -1,207 +1,156 @@
-import React, {useEffect, useState} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-} from 'react-native';
+// QuantityControl.js
+
+import React, {useEffect, useState, useCallback} from 'react';
+import {View, StyleSheet, TouchableOpacity, TextInput} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import Slider from '@react-native-community/slider';
 import Button from '../../components/common/Button';
 import theme from '../../theme';
 import {
   modifyCartRequest,
   getCartRequest,
 } from '../../store/actions/cartActions';
+import {debounce} from 'lodash';
+import SliderWithLabels from './SliderWithLabels';
 
-const generateSnapValues = (max, labelsCount) => {
-  const step = max / (labelsCount - 1); // Adjusted to account for the zero index
-  const snapValues = [];
-  for (let i = 0; i < labelsCount; i++) {
-    snapValues.push(step * i);
-  }
-  return snapValues;
-};
+const QuantityControl = React.memo(
+  ({
+    productId,
+    initialQuantity = 0,
+    max = 100,
+    labelsCount = 2,
+    snapThreshold = 5,
+    showSlider = true,
+    size = 'sm',
+    style,
+  }) => {
+    const dispatch = useDispatch();
+    const cartItem = useSelector(
+      state => state.cart.cart?.items.find(item => item.product === productId),
+      (left, right) => left?.quantity === right?.quantity,
+    );
 
-const getClosestSnapValue = (value, snapValues) => {
-  const closestValue = snapValues.reduce((prev, curr) =>
-    Math.abs(curr - value) < Math.abs(prev - value) ? curr : prev,
-  );
-  return closestValue;
-};
+    const [quantity, setQuantity] = useState(initialQuantity);
+    const [isInputFocused, setIsInputFocused] = useState(false);
 
-const QuantityControl = ({
-  productId,
-  initialQuantity = 0,
-  max = 100,
-  labelsCount = 5,
-  snapThreshold = 5, // Threshold for snapping
-  showSlider = true,
-  size = 'sm',
-  style,
-}) => {
-  const dispatch = useDispatch();
-  const cart = useSelector(state => state.cart.cart);
-  const [quantity, setQuantity] = useState(initialQuantity);
-  const [snapValues, setSnapValues] = useState([]);
-  const [sliderWidth, setSliderWidth] = useState(0);
-  const [isInputFocused, setIsInputFocused] = useState(false);
+    useEffect(() => {
+      dispatch(getCartRequest());
+    }, [dispatch]);
 
-  useEffect(() => {
-    setSnapValues(generateSnapValues(max, labelsCount));
-    dispatch(getCartRequest()); // Fetch cart when component mounts
-  }, [max, labelsCount, dispatch]);
-
-  console.log({cart});
-  useEffect(() => {
-    if (cart) {
-      const cartItem = cart.items.find(item => item.product === productId);
+    useEffect(() => {
       if (cartItem) {
         setQuantity(cartItem.quantity);
       }
-    }
-  }, [cart, productId]);
+    }, [cartItem]);
 
-  const handleSliderChangeComplete = value => {
-    const snappedValue = getClosestSnapValue(value, snapValues);
-    handleQuantityChange(snappedValue);
-  };
+    const debouncedModifyCart = useCallback(
+      debounce((productId, quantityChange) => {
+        dispatch(modifyCartRequest({productId, quantityChange}));
+      }, 300),
+      [dispatch],
+    );
 
-  const handleQuantityChange = newQuantity => {
-    const quantityChange = newQuantity - quantity;
-    console.log({quantityChange, newQuantity, productId});
-    if (quantityChange !== 0) {
-      dispatch(modifyCartRequest({productId, quantityChange}));
-      setQuantity(newQuantity);
-    }
-  };
+    const handleQuantityChange = useCallback(
+      newQuantity => {
+        setQuantity(prevQuantity => {
+          const quantityChange = newQuantity - prevQuantity;
+          if (quantityChange !== 0) {
+            debouncedModifyCart(productId, quantityChange);
+          }
+          return newQuantity;
+        });
+      },
+      [debouncedModifyCart, productId],
+    );
 
-  const handleInputChange = value => {
-    const intValue = parseInt(value, 10);
-    if (!isNaN(intValue)) {
-      handleQuantityChange(intValue);
-    }
-  };
+    const handleInputChange = useCallback(
+      value => {
+        const intValue = parseInt(value, 10);
+        if (!isNaN(intValue)) {
+          handleQuantityChange(intValue);
+        }
+      },
+      [handleQuantityChange],
+    );
 
-  return (
-    <View style={[styles.container, style]}>
-      {showSlider && (
-        <>
-          <View style={styles.labelsContainer}>
-            {snapValues.map((value, index) => (
-              <Text
-                key={index}
-                style={[
-                  styles.label,
-                  {
-                    left:
-                      (sliderWidth - 20) * (index / (snapValues.length - 1)) +
-                      10, // Adjusting the position to fit within the slider's width
-                  },
-                ]}>
-                {value}
-              </Text>
-            ))}
-          </View>
-          <View
-            onLayout={event => {
-              const {width} = event.nativeEvent.layout;
-              setSliderWidth(width);
-            }}
-            style={styles.sliderContainer}>
-            <Slider
-              style={styles.slider}
-              minimumValue={0}
-              maximumValue={max}
-              step={1} // Keep it 1 for smooth sliding
-              value={quantity}
-              onSlidingComplete={handleSliderChangeComplete}
-              onValueChange={handleQuantityChange} // Keep updating value as it changes
-              minimumTrackTintColor={theme.colors.primary.main}
-              maximumTrackTintColor={theme.colors.background.subtle}
-              thumbTintColor={theme.colors.primary.main}
-            />
-          </View>
-        </>
-      )}
-      <View style={styles.buttonContainer}>
-        {quantity > 0 ? (
-          <>
-            <Button
-              title="-"
-              onPress={() => handleQuantityChange(quantity - 1)}
-              variant="primary"
-              size={size}
-              type="contained"
-              style={styles.button}
-            />
-            <TouchableOpacity
-              onPress={() => setIsInputFocused(true)}
-              style={styles.inputWrapper}>
-              <TextInput
-                style={[
-                  styles.quantityInput,
-                  size === 'xsm' && styles.xsmQuantityInput,
-                ]}
-                value={String(quantity)}
-                onChangeText={handleInputChange}
-                keyboardType="numeric"
-                editable={isInputFocused}
-                onBlur={() => setIsInputFocused(false)}
-              />
-            </TouchableOpacity>
-            <Button
-              title="+"
-              onPress={() => handleQuantityChange(quantity + 1)}
-              variant="primary"
-              size={size}
-              type="contained"
-              style={styles.button}
-            />
-          </>
-        ) : (
-          <Button
-            title="Add To Cart"
-            onPress={() => handleQuantityChange(1)}
-            variant="primary"
-            size={size}
-            type="contained"
-            style={styles.button}
+    return (
+      <View style={[styles.container, style]}>
+        {showSlider && (
+          <SliderWithLabels
+            value={quantity}
+            max={max}
+            labelsCount={labelsCount}
+            onSlidingComplete={handleQuantityChange}
+            onValueChange={handleQuantityChange}
           />
         )}
+        <View style={styles.buttonContainer}>
+          {quantity > 0 ? (
+            <>
+              <Button
+                title="-"
+                onPress={() => handleQuantityChange(quantity - 1)}
+                variant="primary"
+                size={size}
+                type="contained"
+                style={styles.button}
+              />
+              <QuantityInput
+                quantity={quantity}
+                isInputFocused={isInputFocused}
+                setIsInputFocused={setIsInputFocused}
+                handleInputChange={handleInputChange}
+                size={size}
+              />
+              <Button
+                title="+"
+                onPress={() => handleQuantityChange(quantity + 1)}
+                variant="primary"
+                size={size}
+                type="contained"
+                style={styles.button}
+              />
+            </>
+          ) : (
+            <Button
+              title="Add To Cart"
+              onPress={() => handleQuantityChange(1)}
+              variant="primary"
+              size={size}
+              type="contained"
+              style={styles.button}
+            />
+          )}
+        </View>
       </View>
-    </View>
-  );
-};
+    );
+  },
+);
+
+const QuantityInput = React.memo(
+  ({quantity, isInputFocused, setIsInputFocused, handleInputChange, size}) => (
+    <TouchableOpacity
+      onPress={() => setIsInputFocused(true)}
+      style={styles.inputWrapper}>
+      <TextInput
+        style={[
+          styles.quantityInput,
+          size === 'xsm' && styles.xsmQuantityInput,
+        ]}
+        value={String(quantity)}
+        onChangeText={handleInputChange}
+        keyboardType="numeric"
+        editable={isInputFocused}
+        onBlur={() => setIsInputFocused(false)}
+      />
+    </TouchableOpacity>
+  ),
+);
 
 const styles = StyleSheet.create({
   container: {
     width: '100%',
     flexDirection: 'column',
     alignItems: 'center',
-  },
-  labelsContainer: {
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    position: 'relative',
-    marginBottom: theme.spacing.xsmall,
-  },
-  label: {
-    position: 'absolute',
-    top: 0,
-    fontSize: theme.typography.caption.fontSize,
-    color: theme.colors.text.primary,
-    transform: [{translateX: -10}],
-  },
-  sliderContainer: {
-    width: '100%',
-  },
-  slider: {
-    width: '100%',
-    height: 40,
-    marginBottom: theme.spacing.small,
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -222,7 +171,7 @@ const styles = StyleSheet.create({
   },
   quantityInput: {
     paddingHorizontal: theme.spacing.medium,
-    paddingVertical: theme.spacing.small, // Add default vertical padding
+    paddingVertical: theme.spacing.small,
     textAlign: 'center',
     fontSize: theme.typography.h4.fontSize,
     color: theme.colors.primary.main,
@@ -230,7 +179,7 @@ const styles = StyleSheet.create({
   xsmQuantityInput: {
     fontSize: theme.typography.body1.fontSize,
     paddingHorizontal: theme.spacing.small,
-    paddingVertical: theme.spacing.xsmall, // Reduce vertical padding for xsm
+    paddingVertical: theme.spacing.xsmall,
   },
 });
 

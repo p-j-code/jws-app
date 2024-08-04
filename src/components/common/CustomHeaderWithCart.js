@@ -4,6 +4,10 @@ import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import theme from '../../theme';
+import {
+  CART_SCREEN,
+  ROOT_CART_STACK_NAME,
+} from '../../navigation/routeConfigurations/cartRoutes';
 
 const CustomHeaderWithCart = ({title}) => {
   const navigation = useNavigation();
@@ -22,7 +26,10 @@ const CustomHeaderWithCart = ({title}) => {
         )}
         <Text style={styles.headerText}>{title}</Text>
       </View>
-      <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate(ROOT_CART_STACK_NAME, {screen: CART_SCREEN})
+        }>
         <Ionicons
           name="cart"
           size={36}

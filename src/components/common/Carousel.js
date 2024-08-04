@@ -13,7 +13,7 @@ import Video from 'react-native-video';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import theme from '../../theme';
 
-const Carousel = ({data = [], width, height}) => {
+const Carousel = ({data = [], width, height, style = {}}) => {
   const scrollX = useRef(new Animated.Value(0)).current;
   const flatListRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
@@ -31,7 +31,7 @@ const Carousel = ({data = [], width, height}) => {
   };
 
   return (
-    <View style={[styles.container, {width, height}]}>
+    <View style={[styles.container, style, {width, height}]}>
       <Animated.FlatList
         ref={flatListRef}
         data={data}
