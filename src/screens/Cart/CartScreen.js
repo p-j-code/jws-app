@@ -4,16 +4,15 @@ import {
   Text,
   StyleSheet,
   FlatList,
-  ActivityIndicator,
 } from 'react-native';
 import {useDispatch, useSelector, shallowEqual} from 'react-redux';
 import {getCartRequest} from '../../store/actions/cartActions';
 import CartItem from './components/CartItem';
+import Button from '../../components/common/Button'; // Import the Button component
 import theme from '../../theme';
 import {
   selectCartItems,
   selectCartTotals,
-  selectCartLoading,
 } from '../../store/selectors/cartSelectors';
 
 const CartScreen = () => {
@@ -27,6 +26,11 @@ const CartScreen = () => {
 
   const renderItem = useCallback(({item}) => <CartItem item={item} />, []);
 
+  const handlePlaceOrder = () => {
+    // Implement place order functionality here
+    console.log('Place Order button pressed');
+  };
+
   return (
     <View style={styles.container}>
       {cartItems && cartItems.length > 0 ? (
@@ -38,18 +42,33 @@ const CartScreen = () => {
             contentContainerStyle={styles.listContainer}
           />
           <View style={styles.totalsContainer}>
-            <Text style={styles.totalText}>
-              Total Items: {cartTotals.totalItems}
-            </Text>
-            <Text style={styles.totalText}>
-              Total Gross Weight: {cartTotals.totalGrossWeight}
-            </Text>
-            <Text style={styles.totalText}>
-              Total Net Weight: {cartTotals.totalNetWeight}
-            </Text>
-            <Text style={styles.totalText}>
-              Total Stone Charges: {cartTotals.totalStoneCharges}
-            </Text>
+            <View style={styles.totalsRow}>
+              <View style={styles.column}>
+                <Text style={styles.totalText}>
+                  Total Items: {cartTotals.totalItems}
+                </Text>
+                {cartTotals.totalStoneCharges === 0 && (
+                  <Text style={styles.totalText}>
+                    Stone Charges: {cartTotals.totalStoneCharges}
+                  </Text>
+                )}
+              </View>
+              <View style={styles.column}>
+                <Text style={styles.totalText}>
+                  Net Weight: {cartTotals.totalNetWeight}
+                </Text>
+                <Text style={styles.totalText}>
+                  Gross Weight: {cartTotals.totalGrossWeight}
+                </Text>
+              </View>
+            </View>
+            <Button
+              title="Place Order"
+              onPress={handlePlaceOrder}
+              disabled={cartItems.length === 0}
+              size="sm"
+              style={styles.placeOrderButton}
+            />
           </View>
         </>
       ) : (
@@ -82,16 +101,35 @@ const styles = StyleSheet.create({
     padding: theme.spacing.medium,
     borderTopColor: theme.colors.border.main,
     borderTopWidth: 0.5,
+    shadowColor: '#000', // Shadow properties
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5, // For Android shadow
+    backgroundColor: theme.colors.background.default, // To ensure background color is not transparent
+  },
+  totalsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  column: {
+    flex: 1,
   },
   totalText: {
     ...theme.typography.body1,
     color: theme.colors.text.primary,
     marginBottom: theme.spacing.small,
+    textAlign: 'left',
   },
   loaderContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  placeOrderButton: {
+    marginTop: theme.spacing.medium,
+    alignSelf: 'center',
+    width: '100%',
   },
 });
 
