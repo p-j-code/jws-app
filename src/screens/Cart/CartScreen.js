@@ -18,25 +18,14 @@ import {
 
 const CartScreen = () => {
   const dispatch = useDispatch();
-  const {cart} = useSelector(state => state.cart);
   const cartItems = useSelector(selectCartItems, shallowEqual);
   const cartTotals = useSelector(selectCartTotals, shallowEqual);
-  const cartLoading = useSelector(selectCartLoading, shallowEqual);
 
-  console.log({cartItems});
   useEffect(() => {
     dispatch(getCartRequest());
   }, [dispatch]);
 
   const renderItem = useCallback(({item}) => <CartItem item={item} />, []);
-
-  if (cartLoading) {
-    return (
-      <View style={styles.loaderContainer}>
-        <ActivityIndicator size="large" color={theme.colors.primary.main} />
-      </View>
-    );
-  }
 
   return (
     <View style={styles.container}>

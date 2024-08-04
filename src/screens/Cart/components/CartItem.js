@@ -24,11 +24,11 @@ const CartItem = ({item}) => {
   const isSwipe = useRef(false);
 
   const handlePress = useCallback(() => {
-    // if (!isSwipe.current && item.product._id) {
-    //   navigation.navigate(PRODUCT_DETAILS_SCREEN, {
-    //     productId: item.product._id,
-    //   });
-    // }
+    if (!isSwipe.current && item.product._id) {
+      navigation.navigate(PRODUCT_DETAILS_SCREEN, {
+        productId: item.product._id,
+      });
+    }
   }, [navigation, item.product._id]);
 
   const handleQuantityChange = useCallback(
