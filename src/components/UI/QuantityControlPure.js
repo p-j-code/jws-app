@@ -103,6 +103,7 @@ const QuantityControlPure = ({
               size={size}
               type="contained"
               style={styles.button}
+              disabled={quantity === max}
             />
           </>
         ) : (

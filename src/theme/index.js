@@ -14,6 +14,7 @@ export const colors = {
     default: '#FFF', // Linen
     subtle: '#FFE4C4', // Bisque
     interactive: '#FFDEAD', // Navajo White
+    disabled: '#E0E0E0', // Light Grey
   },
   text: {
     primary: '#2F4F4F', // Dark Slate Gray

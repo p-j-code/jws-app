@@ -9,6 +9,8 @@ const Button = ({
   size = 'md',
   type = 'contained',
   style,
+  accessibilityLabel,
+  disabled = false,
 }) => {
   return (
     <TouchableOpacity
@@ -18,9 +20,14 @@ const Button = ({
         styles[`${type}Button`],
         type === 'contained' && styles[variant],
         type === 'outline' && styles[`${variant}Outline`],
+        disabled && styles.disabledButton,
         style,
       ]}
-      onPress={onPress}>
+      onPress={!disabled ? onPress : null}
+      accessibilityLabel={accessibilityLabel || title}
+      accessibilityRole="button"
+      accessible={true}
+      disabled={disabled}>
       <Text
         style={[
           styles.buttonText,
@@ -30,6 +37,7 @@ const Button = ({
           type === 'outline' && styles[`${variant}OutlineText`],
           type === 'text' && styles[`${variant}TextText`],
           size === 'xsm' && styles.xsmText,
+          disabled && styles.disabledText,
         ]}>
         {title}
       </Text>
@@ -140,6 +148,12 @@ const styles = StyleSheet.create({
   },
   right: {
     textAlign: 'right',
+  },
+  disabledButton: {
+    backgroundColor: theme.colors.background.disabled,
+  },
+  disabledText: {
+    color: theme.colors.text.disabled,
   },
 });
 
