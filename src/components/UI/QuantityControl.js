@@ -1,186 +1,65 @@
-// QuantityControl.js
-
-import React, {useEffect, useState, useCallback} from 'react';
-import {View, StyleSheet, TouchableOpacity, TextInput} from 'react-native';
+import React, {useEffect, useCallback} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import Button from '../../components/common/Button';
-import theme from '../../theme';
-import {
-  modifyCartRequest,
-  getCartRequest,
-} from '../../store/actions/cartActions';
 import {debounce} from 'lodash';
-import SliderWithLabels from './SliderWithLabels';
+import {
+  getCartRequest,
+  modifyCartRequest,
+} from '../../store/actions/cartActions';
+import QuantityControlPure from './QuantityControlPure';
 
-const QuantityControl = React.memo(
-  ({
-    productId,
-    initialQuantity = 0,
-    max = 100,
-    labelsCount = 2,
-    snapThreshold = 5,
-    showSlider = true,
-    size = 'sm',
-    style,
-  }) => {
-    const dispatch = useDispatch();
-    const cartItem = useSelector(
-      state => state.cart.cart?.items.find(item => item.product === productId),
-      (left, right) => left?.quantity === right?.quantity,
-    );
+const QuantityControl = ({
+  productId,
+  initialQuantity = 0,
+  max = 100,
+  labelsCount = 2,
+  snapThreshold = 5,
+  showSlider = true,
+  size = 'sm',
+  style,
+}) => {
+  const dispatch = useDispatch();
+  const cartItem = useSelector(
+    state =>
+      state.cart.cart?.items?.find(item => item.product._id === productId),
+    (left, right) => left?.quantity === right?.quantity,
+  );
 
-    const [quantity, setQuantity] = useState(initialQuantity);
-    const [isInputFocused, setIsInputFocused] = useState(false);
+  useEffect(() => {
+    dispatch(getCartRequest());
+  }, [dispatch]);
 
-    useEffect(() => {
-      dispatch(getCartRequest());
-    }, [dispatch]);
+  const debouncedModifyCart = useCallback(
+    debounce((productId, quantityChange) => {
+      dispatch(modifyCartRequest({productId, quantityChange}));
+    }, 300),
+    [dispatch],
+  );
 
-    useEffect(() => {
-      if (cartItem) {
-        setQuantity(cartItem.quantity);
+  const handleQuantityChange = useCallback(
+    newQuantity => {
+      if (newQuantity > max) {
+        newQuantity = max;
       }
-    }, [cartItem]);
+      const quantityChange = newQuantity - (cartItem?.quantity || 0);
+      if (quantityChange !== 0) {
+        debouncedModifyCart(productId, quantityChange);
+      }
+    },
+    [debouncedModifyCart, productId, cartItem, max],
+  );
 
-    const debouncedModifyCart = useCallback(
-      debounce((productId, quantityChange) => {
-        dispatch(modifyCartRequest({productId, quantityChange}));
-      }, 300),
-      [dispatch],
-    );
+  return (
+    <QuantityControlPure
+      initialQuantity={cartItem ? cartItem.quantity : initialQuantity}
+      max={max}
+      labelsCount={labelsCount}
+      snapThreshold={snapThreshold}
+      showSlider={showSlider}
+      size={size}
+      style={style}
+      onQuantityChange={handleQuantityChange}
+    />
+  );
+};
 
-    const handleQuantityChange = useCallback(
-      newQuantity => {
-        setQuantity(prevQuantity => {
-          const quantityChange = newQuantity - prevQuantity;
-          if (quantityChange !== 0) {
-            debouncedModifyCart(productId, quantityChange);
-          }
-          return newQuantity;
-        });
-      },
-      [debouncedModifyCart, productId],
-    );
-
-    const handleInputChange = useCallback(
-      value => {
-        const intValue = parseInt(value, 10);
-        if (!isNaN(intValue)) {
-          handleQuantityChange(intValue);
-        }
-      },
-      [handleQuantityChange],
-    );
-
-    return (
-      <View style={[styles.container, style]}>
-        {showSlider && (
-          <SliderWithLabels
-            value={quantity}
-            max={max}
-            labelsCount={labelsCount}
-            onSlidingComplete={handleQuantityChange}
-            onValueChange={handleQuantityChange}
-          />
-        )}
-        <View style={styles.buttonContainer}>
-          {quantity > 0 ? (
-            <>
-              <Button
-                title="-"
-                onPress={() => handleQuantityChange(quantity - 1)}
-                variant="primary"
-                size={size}
-                type="contained"
-                style={styles.button}
-              />
-              <QuantityInput
-                quantity={quantity}
-                isInputFocused={isInputFocused}
-                setIsInputFocused={setIsInputFocused}
-                handleInputChange={handleInputChange}
-                size={size}
-              />
-              <Button
-                title="+"
-                onPress={() => handleQuantityChange(quantity + 1)}
-                variant="primary"
-                size={size}
-                type="contained"
-                style={styles.button}
-              />
-            </>
-          ) : (
-            <Button
-              title="Add To Cart"
-              onPress={() => handleQuantityChange(1)}
-              variant="primary"
-              size={size}
-              type="contained"
-              style={styles.button}
-            />
-          )}
-        </View>
-      </View>
-    );
-  },
-);
-
-const QuantityInput = React.memo(
-  ({quantity, isInputFocused, setIsInputFocused, handleInputChange, size}) => (
-    <TouchableOpacity
-      onPress={() => setIsInputFocused(true)}
-      style={styles.inputWrapper}>
-      <TextInput
-        style={[
-          styles.quantityInput,
-          size === 'xsm' && styles.xsmQuantityInput,
-        ]}
-        value={String(quantity)}
-        onChangeText={handleInputChange}
-        keyboardType="numeric"
-        editable={isInputFocused}
-        onBlur={() => setIsInputFocused(false)}
-      />
-    </TouchableOpacity>
-  ),
-);
-
-const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
-  },
-  button: {
-    flex: 1,
-    marginHorizontal: 10,
-  },
-  inputWrapper: {
-    borderColor: theme.colors.border.main,
-    borderWidth: 1,
-    borderRadius: theme.shape.borderRadius,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  quantityInput: {
-    paddingHorizontal: theme.spacing.medium,
-    paddingVertical: theme.spacing.small,
-    textAlign: 'center',
-    fontSize: theme.typography.h4.fontSize,
-    color: theme.colors.primary.main,
-  },
-  xsmQuantityInput: {
-    fontSize: theme.typography.body1.fontSize,
-    paddingHorizontal: theme.spacing.small,
-    paddingVertical: theme.spacing.xsmall,
-  },
-});
-
-export default QuantityControl;
+export default React.memo(QuantityControl);

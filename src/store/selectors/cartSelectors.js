@@ -4,6 +4,8 @@ const selectCart = state => state.cart.cart;
 
 export const selectCartItems = createSelector([selectCart], cart => cart.items);
 
+export const selectCartLoading = state => state.cart.loading;
+
 export const selectCartTotals = createSelector([selectCart], cart => ({
   totalItems: cart.totalItems,
   totalGrossWeight: parseFloat(cart.totalGrossWeight).toFixed(2),

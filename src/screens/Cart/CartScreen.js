@@ -1,5 +1,11 @@
 import React, {useEffect, useCallback} from 'react';
-import {View, Text, StyleSheet, FlatList} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  ActivityIndicator,
+} from 'react-native';
 import {useDispatch, useSelector, shallowEqual} from 'react-redux';
 import {getCartRequest} from '../../store/actions/cartActions';
 import CartItem from './components/CartItem';
@@ -7,18 +13,30 @@ import theme from '../../theme';
 import {
   selectCartItems,
   selectCartTotals,
+  selectCartLoading,
 } from '../../store/selectors/cartSelectors';
 
 const CartScreen = () => {
   const dispatch = useDispatch();
+  const {cart} = useSelector(state => state.cart);
   const cartItems = useSelector(selectCartItems, shallowEqual);
   const cartTotals = useSelector(selectCartTotals, shallowEqual);
+  const cartLoading = useSelector(selectCartLoading, shallowEqual);
 
+  console.log({cartItems});
   useEffect(() => {
     dispatch(getCartRequest());
   }, [dispatch]);
 
   const renderItem = useCallback(({item}) => <CartItem item={item} />, []);
+
+  if (cartLoading) {
+    return (
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator size="large" color={theme.colors.primary.main} />
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -80,6 +98,11 @@ const styles = StyleSheet.create({
     ...theme.typography.body1,
     color: theme.colors.text.primary,
     marginBottom: theme.spacing.small,
+  },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

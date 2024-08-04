@@ -1,4 +1,4 @@
-import React, {useRef, useCallback, memo} from 'react';
+import React, {useRef, useCallback, useEffect} from 'react';
 import {
   View,
   Text,
@@ -7,16 +7,20 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import {useDispatch} from 'react-redux';
 import Carousel from '../../../components/common/Carousel';
-import QuantityControl from '../../../components/UI/QuantityControl';
 import theme from '../../../theme';
 import {PRODUCT_DETAILS_SCREEN} from '../../../navigation/routeConfigurations/productRoutes';
+import {modifyCartRequest} from '../../../store/actions/cartActions';
+import QuantityControlPure from '../../../components/UI/QuantityControlPure';
+import {debounce} from 'lodash';
 
 const {width} = Dimensions.get('window');
 const squareSize = width * 0.3;
 
-const CartItem = memo(({item}) => {
+const CartItem = ({item}) => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const isSwipe = useRef(false);
 
   const handlePress = useCallback(() => {
@@ -27,19 +31,52 @@ const CartItem = memo(({item}) => {
     // }
   }, [navigation, item.product._id]);
 
+  const handleQuantityChange = useCallback(
+    newQuantity => {
+      if (newQuantity > item.product.stock) {
+        newQuantity = item.product.stock;
+      }
+      const quantityChange = newQuantity - item.quantity;
+      console.log(
+        'Changing quantity:',
+        newQuantity,
+        'Quantity change:',
+        quantityChange,
+      );
+
+      console.log({product: item?.product, quantityChange});
+      console.log({item});
+      dispatch(
+        modifyCartRequest({productId: item.product._id, quantityChange}),
+      );
+    },
+    [dispatch, item.product._id, item.quantity, item.product.stock],
+  );
+
+  const debouncedHandleQuantityChange = useCallback(
+    debounce(handleQuantityChange, 300),
+    [handleQuantityChange],
+  );
+
   const formatValue = useCallback(value => parseFloat(value).toFixed(2), []);
+
+  useEffect(() => {
+    console.log('CartItem item updated:', item);
+  }, [item]);
 
   return (
     <TouchableWithoutFeedback onPress={handlePress}>
       <View style={styles.productContainer}>
         <View style={styles.row}>
           <View style={styles.mediaContainer}>
-            <Carousel
-              data={item.product.media}
-              width={squareSize}
-              height={squareSize}
-              style={{margin: theme.spacing.medium}}
-            />
+            {item.product.media && (
+              <Carousel
+                data={item.product.media}
+                width={squareSize}
+                height={squareSize}
+                style={{margin: theme.spacing.medium}}
+              />
+            )}
           </View>
           <View style={styles.detailsContainer}>
             {item.product.name && (
@@ -69,17 +106,17 @@ const CartItem = memo(({item}) => {
           </View>
         </View>
         <View style={styles.quantityControlContainer}>
-          <QuantityControl
-            productId={item.product._id}
+          <QuantityControlPure
             initialQuantity={item.quantity}
             max={item.product.stock}
             size="xsm"
+            onQuantityChange={debouncedHandleQuantityChange}
           />
         </View>
       </View>
     </TouchableWithoutFeedback>
   );
-});
+};
 
 const styles = StyleSheet.create({
   productContainer: {
