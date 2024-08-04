@@ -10,7 +10,10 @@ import {useNavigation} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
 import Carousel from '../../../components/common/Carousel';
 import theme from '../../../theme';
-import {PRODUCT_DETAILS_SCREEN} from '../../../navigation/routeConfigurations/productRoutes';
+import {
+  PRODUCT_DETAILS_SCREEN,
+  ROOT_PRODUCT_STACK_NAME,
+} from '../../../navigation/routeConfigurations/productRoutes';
 import {modifyCartRequest} from '../../../store/actions/cartActions';
 import QuantityControlPure from '../../../components/UI/QuantityControlPure';
 import {debounce} from 'lodash';
@@ -25,8 +28,11 @@ const CartItem = ({item}) => {
 
   const handlePress = useCallback(() => {
     if (!isSwipe.current && item.product._id) {
-      navigation.navigate(PRODUCT_DETAILS_SCREEN, {
-        productId: item.product._id,
+      navigation.navigate(ROOT_PRODUCT_STACK_NAME, {
+        screen: PRODUCT_DETAILS_SCREEN,
+        params: {
+          productId: item.product._id,
+        },
       });
     }
   }, [navigation, item.product._id]);

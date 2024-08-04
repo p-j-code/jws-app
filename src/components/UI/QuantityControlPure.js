@@ -83,7 +83,7 @@ const QuantityControlPure = ({
             <Button
               title="-"
               onPress={() => handleQuantityChange(quantity - 1)}
-              variant="primary"
+              variant="secondary"
               size={size}
               type="contained"
               style={styles.button}
@@ -99,7 +99,7 @@ const QuantityControlPure = ({
             <Button
               title="+"
               onPress={() => handleQuantityChange(quantity + 1)}
-              variant="primary"
+              variant="secondary"
               size={size}
               type="contained"
               style={styles.button}
@@ -110,7 +110,7 @@ const QuantityControlPure = ({
           <Button
             title="Add To Cart"
             onPress={() => handleQuantityChange(1)}
-            variant="primary"
+            variant="secondary"
             size={size}
             type="contained"
             style={styles.button}

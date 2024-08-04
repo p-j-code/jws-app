@@ -4,21 +4,29 @@ import {
   Text,
   StyleSheet,
   FlatList,
+  ActivityIndicator,
 } from 'react-native';
 import {useDispatch, useSelector, shallowEqual} from 'react-redux';
 import {getCartRequest} from '../../store/actions/cartActions';
+import {createOrderFromCartRequest} from '../../store/actions/orderActions';
 import CartItem from './components/CartItem';
-import Button from '../../components/common/Button'; // Import the Button component
+import Button from '../../components/common/Button';
 import theme from '../../theme';
 import {
   selectCartItems,
   selectCartTotals,
 } from '../../store/selectors/cartSelectors';
+import {
+  selectOrderLoading,
+  selectOrderError,
+} from '../../store/selectors/orderSelectors';
 
 const CartScreen = () => {
   const dispatch = useDispatch();
   const cartItems = useSelector(selectCartItems, shallowEqual);
   const cartTotals = useSelector(selectCartTotals, shallowEqual);
+  const orderLoading = useSelector(selectOrderLoading);
+  const orderError = useSelector(selectOrderError);
 
   useEffect(() => {
     dispatch(getCartRequest());
@@ -27,8 +35,7 @@ const CartScreen = () => {
   const renderItem = useCallback(({item}) => <CartItem item={item} />, []);
 
   const handlePlaceOrder = () => {
-    // Implement place order functionality here
-    console.log('Place Order button pressed');
+    dispatch(createOrderFromCartRequest());
   };
 
   return (
@@ -47,7 +54,7 @@ const CartScreen = () => {
                 <Text style={styles.totalText}>
                   Total Items: {cartTotals.totalItems}
                 </Text>
-                {cartTotals.totalStoneCharges === 0 && (
+                {cartTotals.totalStoneCharges !== 0 && (
                   <Text style={styles.totalText}>
                     Stone Charges: {cartTotals.totalStoneCharges}
                   </Text>
@@ -65,10 +72,14 @@ const CartScreen = () => {
             <Button
               title="Place Order"
               onPress={handlePlaceOrder}
-              disabled={cartItems.length === 0}
+              disabled={cartItems.length === 0 || orderLoading}
               size="sm"
               style={styles.placeOrderButton}
             />
+            {orderLoading && (
+              <ActivityIndicator size="large" color={theme.colors.primary} />
+            )}
+            {orderError && <Text style={styles.errorText}>{orderError}</Text>}
           </View>
         </>
       ) : (
@@ -101,12 +112,12 @@ const styles = StyleSheet.create({
     padding: theme.spacing.medium,
     borderTopColor: theme.colors.border.main,
     borderTopWidth: 0.5,
-    shadowColor: '#000', // Shadow properties
+    shadowColor: '#000',
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5, // For Android shadow
-    backgroundColor: theme.colors.background.default, // To ensure background color is not transparent
+    elevation: 5,
+    backgroundColor: theme.colors.background.default,
   },
   totalsRow: {
     flexDirection: 'row',
@@ -130,6 +141,12 @@ const styles = StyleSheet.create({
     marginTop: theme.spacing.medium,
     alignSelf: 'center',
     width: '100%',
+  },
+  errorText: {
+    ...theme.typography.body2,
+    color: theme.colors.error,
+    textAlign: 'center',
+    marginTop: theme.spacing.small,
   },
 });
 

@@ -33,7 +33,7 @@ const CustomHeaderWithCart = ({title}) => {
         <Ionicons
           name="cart"
           size={36}
-          color={theme.colors.primary.main}
+          color={theme.colors.text.primary}
           style={styles.cartIcon}
         />
       </TouchableOpacity>
