@@ -21,7 +21,6 @@ const ProductItem = ({item}) => {
   const isSwipe = useRef(false);
 
   const handlePress = () => {
-    console.log({_id: item._id});
     if (!isSwipe.current && item._id) {
       navigation.navigate(PRODUCT_DETAILS_SCREEN, {productId: item._id});
     }
@@ -59,7 +58,11 @@ const ProductItem = ({item}) => {
             </Text>
           )}
           <View style={styles.cartControls}>
-            <QuantityControl showSlider={false} size="xsm" />
+            <QuantityControl
+              productId={item._id}
+              showSlider={false}
+              size="xsm"
+            />
           </View>
         </View>
       </View>

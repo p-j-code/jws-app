@@ -15,14 +15,12 @@ import QuantityControl from '../../components/UI/QuantityControl';
 import withScreenshotProtection from '../../HOC/withScreenshotProtection';
 
 const {width} = Dimensions.get('window');
-const squareSize = width * 0.9;
 
 const ProductDetails = ({route}) => {
   const {productId} = route.params;
   const dispatch = useDispatch();
   const product = useSelector(state => state.product.productDetails);
   const loading = useSelector(state => state.product.loading);
-  const [quantity, setQuantity] = useState(0);
   const [quantityControlHeight, setQuantityControlHeight] = useState(0);
 
   useEffect(() => {
@@ -36,20 +34,6 @@ const ProductDetails = ({route}) => {
       </View>
     );
   }
-
-  const incrementQuantity = () => {
-    setQuantity(prevQuantity => prevQuantity + 1);
-  };
-
-  const decrementQuantity = () => {
-    if (quantity > 0) {
-      setQuantity(prevQuantity => prevQuantity - 1);
-    }
-  };
-
-  const handleSliderChange = value => {
-    setQuantity(value);
-  };
 
   return (
     <View style={styles.container}>
@@ -107,12 +91,7 @@ const ProductDetails = ({route}) => {
           const {height} = event.nativeEvent.layout;
           setQuantityControlHeight(height);
         }}>
-        <QuantityControl
-          quantity={quantity}
-          onIncrement={incrementQuantity}
-          onDecrement={decrementQuantity}
-          onSliderChange={handleSliderChange}
-        />
+        <QuantityControl productId={productId} />
       </View>
     </View>
   );

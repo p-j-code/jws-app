@@ -9,6 +9,10 @@ import {ROOT_PRODUCT_STACK_NAME} from '../routeConfigurations/productRoutes';
 import ProductStack from './ProductStack';
 import BottomTabNavigator from '../tabs/BottomTabNavigator';
 import theme from '../../theme';
+import {ROOT_CART_STACK_NAME} from '../routeConfigurations/cartRoutes';
+import CartStack from './CartStack';
+import {ROOT_ORDER_STACK_NAME} from '../routeConfigurations/orderRoutes';
+import OrderStack from './OrderStack';
 
 const Stack = createNativeStackNavigator();
 
@@ -34,6 +38,16 @@ const MainStack = () => {
       <Stack.Screen
         name={ROOT_PRODUCT_STACK_NAME}
         component={ProductStack}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name={ROOT_CART_STACK_NAME}
+        component={CartStack}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name={ROOT_ORDER_STACK_NAME}
+        component={OrderStack}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

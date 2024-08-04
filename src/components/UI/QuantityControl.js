@@ -6,9 +6,14 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
 import Slider from '@react-native-community/slider';
 import Button from '../../components/common/Button';
 import theme from '../../theme';
+import {
+  modifyCartRequest,
+  getCartRequest,
+} from '../../store/actions/cartActions';
 
 const generateSnapValues = (max, labelsCount) => {
   const step = max / (labelsCount - 1); // Adjusted to account for the zero index
@@ -27,10 +32,8 @@ const getClosestSnapValue = (value, snapValues) => {
 };
 
 const QuantityControl = ({
-  quantity = 10,
-  onIncrement,
-  onDecrement,
-  onSliderChange,
+  productId,
+  initialQuantity = 0,
   max = 100,
   labelsCount = 5,
   snapThreshold = 5, // Threshold for snapping
@@ -38,23 +41,46 @@ const QuantityControl = ({
   size = 'sm',
   style,
 }) => {
+  const dispatch = useDispatch();
+  const cart = useSelector(state => state.cart.cart);
+  const [quantity, setQuantity] = useState(initialQuantity);
   const [snapValues, setSnapValues] = useState([]);
   const [sliderWidth, setSliderWidth] = useState(0);
   const [isInputFocused, setIsInputFocused] = useState(false);
 
   useEffect(() => {
     setSnapValues(generateSnapValues(max, labelsCount));
-  }, [max, labelsCount]);
+    dispatch(getCartRequest()); // Fetch cart when component mounts
+  }, [max, labelsCount, dispatch]);
+
+  console.log({cart});
+  useEffect(() => {
+    if (cart) {
+      const cartItem = cart.items.find(item => item.product === productId);
+      if (cartItem) {
+        setQuantity(cartItem.quantity);
+      }
+    }
+  }, [cart, productId]);
 
   const handleSliderChangeComplete = value => {
     const snappedValue = getClosestSnapValue(value, snapValues);
-    onSliderChange(snappedValue);
+    handleQuantityChange(snappedValue);
+  };
+
+  const handleQuantityChange = newQuantity => {
+    const quantityChange = newQuantity - quantity;
+    console.log({quantityChange, newQuantity, productId});
+    if (quantityChange !== 0) {
+      dispatch(modifyCartRequest({productId, quantityChange}));
+      setQuantity(newQuantity);
+    }
   };
 
   const handleInputChange = value => {
     const intValue = parseInt(value, 10);
     if (!isNaN(intValue)) {
-      onSliderChange(intValue);
+      handleQuantityChange(intValue);
     }
   };
 
@@ -91,7 +117,7 @@ const QuantityControl = ({
               step={1} // Keep it 1 for smooth sliding
               value={quantity}
               onSlidingComplete={handleSliderChangeComplete}
-              onValueChange={onSliderChange} // Keep updating value as it changes
+              onValueChange={handleQuantityChange} // Keep updating value as it changes
               minimumTrackTintColor={theme.colors.primary.main}
               maximumTrackTintColor={theme.colors.background.subtle}
               thumbTintColor={theme.colors.primary.main}
@@ -104,7 +130,7 @@ const QuantityControl = ({
           <>
             <Button
               title="-"
-              onPress={onDecrement}
+              onPress={() => handleQuantityChange(quantity - 1)}
               variant="primary"
               size={size}
               type="contained"
@@ -127,7 +153,7 @@ const QuantityControl = ({
             </TouchableOpacity>
             <Button
               title="+"
-              onPress={onIncrement}
+              onPress={() => handleQuantityChange(quantity + 1)}
               variant="primary"
               size={size}
               type="contained"
@@ -137,7 +163,7 @@ const QuantityControl = ({
         ) : (
           <Button
             title="Add To Cart"
-            onPress={onIncrement}
+            onPress={() => handleQuantityChange(1)}
             variant="primary"
             size={size}
             type="contained"
