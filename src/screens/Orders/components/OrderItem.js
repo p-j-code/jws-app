@@ -1,0 +1,129 @@
+import React, {useState, useCallback} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  TouchableOpacity,
+} from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import Carousel from '../../../components/common/Carousel';
+import {colors, typography, spacing, shape} from '../../../theme';
+import {
+  PRODUCT_DETAILS_SCREEN,
+  ROOT_PRODUCT_STACK_NAME,
+} from '../../../navigation/routeConfigurations/productRoutes';
+
+const OrderItem = ({item, navigation}) => {
+  const [showDetails, setShowDetails] = useState(false);
+
+  const handleToggleDetails = useCallback(() => {
+    setShowDetails(prevShowDetails => !prevShowDetails);
+  }, []);
+
+  const handleNavigateToProduct = useCallback(() => {
+    navigation.navigate(ROOT_PRODUCT_STACK_NAME, {
+      screen: PRODUCT_DETAILS_SCREEN,
+      params: {productId: item.product._id},
+    });
+  }, [navigation, item.product._id]);
+
+  return (
+    <View style={styles.itemContainer}>
+      <TouchableWithoutFeedback onPress={handleNavigateToProduct}>
+        <View style={styles.row}>
+          <View style={styles.mediaContainer}>
+            {item.product.media && (
+              <Carousel
+                data={item.product.media}
+                width={squareSize}
+                height={squareSize}
+                style={{marginHorizontal: spacing.medium}}
+              />
+            )}
+          </View>
+          <View style={styles.detailsContainer}>
+            {item.product.name && (
+              <Text style={styles.itemName}>
+                {item.product.name || 'Unnamed Product'}
+              </Text>
+            )}
+            <Text style={styles.itemDetail}>Quantity: {item.quantity}</Text>
+            <Text style={styles.itemDetail}>
+              Gross Weight: {item.grossWeight}g
+            </Text>
+            <Text style={styles.itemDetail}>Net Weight: {item.netWeight}g</Text>
+            {showDetails && (
+              <>
+                <Text style={styles.itemDetail}>
+                  Stone Charges: ₹{item.stoneCharges}
+                </Text>
+                {item.product.narration && (
+                  <Text style={styles.itemNarration}>
+                    {item.product.narration}
+                  </Text>
+                )}
+              </>
+            )}
+          </View>
+          <TouchableOpacity
+            onPress={handleToggleDetails}
+            style={styles.toggleDetailsButton}>
+            <Icon
+              name={showDetails ? 'keyboard-arrow-up' : 'keyboard-arrow-down'}
+              size={24}
+              color={colors.text.primary}
+            />
+          </TouchableOpacity>
+        </View>
+      </TouchableWithoutFeedback>
+    </View>
+  );
+};
+
+const squareSize = Dimensions.get('window').width * 0.2;
+
+const styles = StyleSheet.create({
+  itemContainer: {
+    paddingVertical: spacing.medium,
+    borderBottomColor: colors.border.main,
+    borderBottomWidth: 0.5,
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  mediaContainer: {
+    width: squareSize + spacing.medium * 2,
+    marginRight: spacing.medium,
+  },
+  detailsContainer: {
+    flex: 1,
+    justifyContent: 'space-between',
+  },
+  itemName: {
+    ...typography.h4,
+    marginBottom: spacing.xsmall,
+  },
+  itemDetail: {
+    ...typography.body1,
+    fontSize: typography.body2.fontSize,
+    marginBottom: spacing.xsmall,
+  },
+  itemNarration: {
+    ...typography.body2,
+    marginBottom: spacing.small,
+  },
+  toggleDetailsButton: {
+    marginLeft: spacing.small,
+    borderWidth: 1,
+    borderColor: colors.border.main,
+    borderRadius: shape.borderRadiusSmall,
+    backgroundColor: colors.secondary.light,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: spacing.small,
+  },
+});
+
+export default OrderItem;
