@@ -88,6 +88,7 @@ const styles = StyleSheet.create({
   productName: {
     ...theme.typography.h4,
     marginBottom: theme.spacing.xsmall,
+    color: theme.colors.text.primary,
   },
   productNarration: {
     ...theme.typography.body2,

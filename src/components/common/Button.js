@@ -17,9 +17,10 @@ const Button = ({
       style={[
         styles.button,
         styles[size],
-        styles[`${type}Button`],
-        type === 'contained' && styles[variant],
+        type === 'contained' && styles[`${variant}Contained`],
+        type === 'outline' && styles.outlineButton,
         type === 'outline' && styles[`${variant}Outline`],
+        type === 'text' && styles.textButton,
         disabled && styles.disabledButton,
         style,
       ]}
@@ -31,12 +32,10 @@ const Button = ({
       <Text
         style={[
           styles.buttonText,
-          styles[`${type}Text`],
-          styles[`${variant}Text`],
+          size === 'xsm' && styles.xsmText,
           type === 'contained' && styles.containedText,
           type === 'outline' && styles[`${variant}OutlineText`],
           type === 'text' && styles[`${variant}TextText`],
-          size === 'xsm' && styles.xsmText,
           disabled && styles.disabledText,
         ]}>
         {title}
@@ -51,7 +50,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  containedButton: {},
   outlineButton: {
     borderWidth: 1,
     backgroundColor: 'transparent',
@@ -59,16 +57,16 @@ const styles = StyleSheet.create({
   textButton: {
     backgroundColor: 'transparent',
   },
-  primary: {
+  primaryContained: {
     backgroundColor: theme.colors.primary.main,
   },
-  secondary: {
+  secondaryContained: {
     backgroundColor: theme.colors.secondary.main,
   },
-  success: {
+  successContained: {
     backgroundColor: theme.colors.status.success,
   },
-  error: {
+  errorContained: {
     backgroundColor: theme.colors.status.error,
   },
   primaryOutline: {

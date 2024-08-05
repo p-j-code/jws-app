@@ -28,6 +28,9 @@ export const colors = {
   status: {
     success: '#32CD32', // Lime Green
     error: '#FF6347', // Tomato
+    warning: '#FFA500', // Orange
+    cancelled: '#FF4500', // OrangeRed
+    completed: '#4682B4', // SteelBlue
   },
   highlight: '#CD853F', // Peru
   gradient: {
