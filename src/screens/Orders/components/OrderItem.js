@@ -14,21 +14,23 @@ import {
   PRODUCT_DETAILS_SCREEN,
   ROOT_PRODUCT_STACK_NAME,
 } from '../../../navigation/routeConfigurations/productRoutes';
+import {useNavigation} from '@react-navigation/native';
 
-const OrderItem = ({item, navigation}) => {
+const OrderItem = ({item}) => {
   const [showDetails, setShowDetails] = useState(false);
+  const navigation = useNavigation();
 
   console.log({Prod: item.product});
   const handleToggleDetails = useCallback(() => {
     setShowDetails(prevShowDetails => !prevShowDetails);
   }, []);
 
-  const handleNavigateToProduct = useCallback(() => {
+  const handleNavigateToProduct = () => {
     navigation.navigate(ROOT_PRODUCT_STACK_NAME, {
       screen: PRODUCT_DETAILS_SCREEN,
       params: {productId: item.product._id},
     });
-  }, [navigation, item.product._id]);
+  };
 
   return (
     <View style={styles.itemContainer}>
@@ -92,9 +94,11 @@ const OrderItem = ({item, navigation}) => {
                     {item.product?.categories}
                   </Text>
                 )}
-                <Text style={styles.itemDetail}>
-                  Tags: {(item.product.tags || []).join(', ')}
-                </Text>
+                {item.product?.tags?.length ? (
+                  <Text style={styles.itemDetail}>
+                    Tags: {(item.product.tags || []).join(', ')}
+                  </Text>
+                ) : null}
               </>
             )}
           </View>

@@ -42,18 +42,22 @@ export const typography = {
   h1: {
     fontSize: 32,
     fontWeight: 'bold',
+    color: colors.text.primary,
   },
   h2: {
     fontSize: 28,
     fontWeight: 'bold',
+    color: colors.text.primary,
   },
   h3: {
     fontSize: 24,
     fontWeight: 'bold',
+    color: colors.text.primary,
   },
   h4: {
     fontSize: 20,
     fontWeight: 'bold',
+    color: colors.text.primary,
   },
   body1: {
     fontSize: 16,

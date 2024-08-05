@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     padding: spacing.medium,
   },
   orderContainer: {
-    backgroundColor: colors.background.subtle,
+    backgroundColor: colors.primary.light,
     padding: spacing.medium,
     borderRadius: shape.borderRadius,
     marginBottom: spacing.medium,
