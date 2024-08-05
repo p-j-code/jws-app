@@ -7,7 +7,6 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {useNavigation} from '@react-navigation/native';
 import {
   getOrdersByUserRequest,
   updateOrderStatusByUserRequest,
@@ -18,7 +17,6 @@ import OrderItem from './components/OrderItem';
 
 const OrderScreen = () => {
   const dispatch = useDispatch();
-  const navigation = useNavigation();
   const {orders, loading, error} = useSelector(state => state.order);
 
   useEffect(() => {
@@ -82,9 +80,7 @@ const OrderScreen = () => {
       </Text>
       <FlatList
         data={item.items}
-        renderItem={({item}) => (
-          <OrderItem item={item} navigation={navigation} />
-        )}
+        renderItem={({item}) => <OrderItem item={item} />}
         keyExtractor={item => item._id}
       />
       <Text style={styles.totalItems}>Total Items: {item.totalItems}</Text>

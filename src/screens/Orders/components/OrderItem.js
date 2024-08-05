@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableWithoutFeedback,
   TouchableOpacity,
+  Dimensions,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Carousel from '../../../components/common/Carousel';
@@ -17,6 +18,7 @@ import {
 const OrderItem = ({item, navigation}) => {
   const [showDetails, setShowDetails] = useState(false);
 
+  console.log({Prod: item.product});
   const handleToggleDetails = useCallback(() => {
     setShowDetails(prevShowDetails => !prevShowDetails);
   }, []);
@@ -55,6 +57,11 @@ const OrderItem = ({item, navigation}) => {
             <Text style={styles.itemDetail}>Net Weight: {item.netWeight}g</Text>
             {showDetails && (
               <>
+                {item.product.description && (
+                  <Text style={styles.itemDetail}>
+                    Description: {item.product.description || 'No Description'}
+                  </Text>
+                )}
                 <Text style={styles.itemDetail}>
                   Stone Charges: ₹{item.stoneCharges}
                 </Text>
@@ -63,6 +70,31 @@ const OrderItem = ({item, navigation}) => {
                     {item.product.narration}
                   </Text>
                 )}
+                <Text style={styles.itemDetail}>Type: {item.product.type}</Text>
+                {item.product.purity && (
+                  <Text style={styles.itemDetail}>
+                    Purity: {item.product.purity}
+                  </Text>
+                )}
+                {item.product.isStone && (
+                  <>
+                    <Text style={styles.itemDetail}>
+                      Stone Weight: {item.product.stoneWeight || 'N/A'}
+                    </Text>
+                    <Text style={styles.itemDetail}>
+                      Stone Charges: {item.product.stoneCharges || 'N/A'}
+                    </Text>
+                  </>
+                )}
+                {item.product?.categories && (
+                  <Text style={styles.itemDetail}>
+                    Category:
+                    {item.product?.categories}
+                  </Text>
+                )}
+                <Text style={styles.itemDetail}>
+                  Tags: {(item.product.tags || []).join(', ')}
+                </Text>
               </>
             )}
           </View>
