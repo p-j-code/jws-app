@@ -145,9 +145,9 @@ export const getUserFailure = (error, user) => ({
   payload: {error, user},
 });
 
-export const changePasswordRequest = passwords => ({
+export const changePasswordRequest = (passwords, successCallback) => ({
   type: CHANGE_PASSWORD_REQUEST,
-  payload: passwords,
+  payload: {passwords, successCallback},
 });
 
 export const changePasswordSuccess = message => ({
@@ -160,9 +160,9 @@ export const changePasswordFailure = error => ({
   payload: error,
 });
 
-export const updateProfileRequest = updateFields => ({
+export const updateProfileRequest = (updateFields, successCallback) => ({
   type: UPDATE_PROFILE_REQUEST,
-  payload: updateFields,
+  payload: {updateFields, successCallback},
 });
 
 export const updateProfileSuccess = (message, user) => ({

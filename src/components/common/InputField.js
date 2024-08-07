@@ -10,6 +10,7 @@ const InputField = ({
   error,
   variant = 'filled', // default variant
   placeholder,
+  disabled = false, // new disabled prop
   ...restProps
 }) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -58,6 +59,8 @@ const InputField = ({
           styles.input,
           error && styles.errorInput,
           variantStyles[variant],
+          disabled && styles.disabledInput, // apply disabled style
+          disabled && styles.disabledText, // apply disabled text color
         ]}
         value={value}
         onChangeText={onChangeText}
@@ -65,6 +68,7 @@ const InputField = ({
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         placeholder={placeholder}
+        editable={!disabled} // make input non-editable if disabled
         {...restProps}
       />
       {error && <Text style={styles.errorText}>{error}</Text>}
@@ -135,6 +139,13 @@ const styles = StyleSheet.create({
     ...theme.typography.caption,
     color: theme.colors.status.error,
     marginTop: theme.spacing.xsmall,
+  },
+  disabledInput: {
+    backgroundColor: theme.colors.background.disabled,
+    borderColor: theme.colors.border.light,
+  },
+  disabledText: {
+    color: theme.colors.text.primary, // Ensure text is visible
   },
 });
 

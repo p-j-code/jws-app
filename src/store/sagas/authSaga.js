@@ -123,12 +123,16 @@ function* getUserSaga() {
 
 function* changePasswordSaga(action) {
   try {
-    const data = yield call(authService.changePassword, action.payload);
+    const data = yield call(
+      authService.changePassword,
+      action.payload.passwords,
+    );
     if (data.error) {
       yield put(changePasswordFailure(data.error));
     } else {
       yield put(changePasswordSuccess(data.message));
-      yield put(setMessage('Password changed successfully', 'success'));
+      action.payload.successCallback && action.payload.successCallback();
+      yield put(setMessage('Password Updated successfully', 'success'));
     }
   } catch (error) {
     yield put(changePasswordFailure(error.message));
@@ -138,12 +142,17 @@ function* changePasswordSaga(action) {
 
 function* updateProfileSaga(action) {
   try {
-    const data = yield call(authService.updateProfile, action.payload);
+    const data = yield call(
+      authService.updateProfile,
+      action.payload.updateFields,
+    );
 
     if (data.error) {
       yield put(updateProfileFailure(data.error));
     } else {
+      console.log({user: data.user});
       yield put(updateProfileSuccess(data.message, data.user));
+      action.payload.successCallback && action.payload.successCallback();
       yield put(setMessage('Profile updated successfully', 'success'));
     }
   } catch (error) {

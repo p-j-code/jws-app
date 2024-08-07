@@ -5,7 +5,10 @@ import theme from '../../theme';
 import {STATUS_ERROR_CODES} from '../../utils/constants';
 import Button from '../../components/common/Button';
 import {logoutUser} from '../../store/actions/authActions';
-import {LOGIN_SCREEN} from '../../navigation/routeConfigurations/authRoutes';
+import {
+  EDIT_PROFILE_SCREEN_AUTH,
+  LOGIN_SCREEN,
+} from '../../navigation/routeConfigurations/authRoutes';
 
 const AdminMessageScreen = ({navigation}) => {
   const {
@@ -71,7 +74,14 @@ const AdminMessageScreen = ({navigation}) => {
         {user?.adminMessage || getDefaultMessage()}
       </Text>
 
-      {user?.canUpdateProfile && <Button title="Update Profile" />}
+      {user?.canUpdateProfile && (
+        <Button
+          title="Update Profile"
+          onPress={() => navigation.navigate(EDIT_PROFILE_SCREEN_AUTH)}
+          type="outline"
+          size="sm"
+        />
+      )}
 
       <View style={styles.buttonContainer}>
         <Button title="Logout" type="text" onPress={handleLogout} />

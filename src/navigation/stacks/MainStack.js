@@ -1,10 +1,8 @@
 // src/navigation/MainStack.js
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import WelcomeStack from './WelcomeStack';
-import UserStack from './UserStack';
-import {ROOT_USER_STACK_NAME} from '../routeConfigurations/userRoutes';
-import {ROOT_WELCOME_STACK_NAME} from '../routeConfigurations/welcomeRoutes';
+import ProfileStack from './ProfileStack';
+import {ROOT_PROFILE_STACK_NAME} from '../routeConfigurations/profileRoutes';
 import {ROOT_PRODUCT_STACK_NAME} from '../routeConfigurations/productRoutes';
 import ProductStack from './ProductStack';
 import BottomTabNavigator from '../tabs/BottomTabNavigator';
@@ -31,8 +29,8 @@ const MainStack = () => {
         options={{headerShown: false}}
       />
       <Stack.Screen
-        name={ROOT_USER_STACK_NAME}
-        component={UserStack}
+        name={ROOT_PROFILE_STACK_NAME}
+        component={ProfileStack}
         options={{headerShown: false}}
       />
       <Stack.Screen
