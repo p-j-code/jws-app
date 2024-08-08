@@ -7,6 +7,11 @@ import {APP_NAME} from '../../utils/constants';
 import SimpleHeader from '../../components/common/SimpleHeader';
 import CustomHeaderWithCart from '../../components/common/CustomHeaderWithCart';
 
+export const ORDER_TAB = 'Orders';
+export const PROFILE_TAB = 'Profile';
+export const HOME_TAB = APP_NAME;
+export const CONTACT_TAB = 'Contact';
+
 export const bottomTabConfig = [
   {
     name: APP_NAME,
@@ -19,7 +24,7 @@ export const bottomTabConfig = [
     },
   },
   {
-    name: 'Profile',
+    name: PROFILE_TAB,
     component: ProfileScreen,
     options: {
       tabBarLabel: 'Profile',
@@ -29,7 +34,7 @@ export const bottomTabConfig = [
     },
   },
   {
-    name: 'Orders',
+    name: ORDER_TAB,
     component: OrdersScreen,
     options: {
       tabBarLabel: 'Orders',
@@ -49,7 +54,7 @@ export const bottomTabConfig = [
   //   },
   // },
   {
-    name: 'Contact',
+    name: CONTACT_TAB,
     component: ContactScreen,
     options: {
       tabBarLabel: 'Contact',

@@ -20,8 +20,9 @@ import {
   selectOrderLoading,
   selectOrderError,
 } from '../../store/selectors/orderSelectors';
+import { ORDER_TAB } from '../../navigation/tabs/config';
 
-const CartScreen = () => {
+const CartScreen = ({navigation}) => {
   const dispatch = useDispatch();
   const cartItems = useSelector(selectCartItems, shallowEqual);
   const cartTotals = useSelector(selectCartTotals, shallowEqual);
@@ -38,6 +39,7 @@ const CartScreen = () => {
     dispatch(
       createOrderFromCartRequest(() => {
         dispatch(getCartRequest());
+        navigation.navigate(ORDER_TAB)
       }),
     );
   };

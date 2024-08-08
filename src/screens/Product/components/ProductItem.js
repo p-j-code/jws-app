@@ -61,6 +61,7 @@ const ProductItem = ({item}) => {
             <QuantityControl
               productId={item._id}
               showSlider={false}
+              max={item.stock}
               size="xsm"
             />
           </View>
