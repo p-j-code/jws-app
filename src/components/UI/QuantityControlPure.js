@@ -45,7 +45,7 @@ const QuantityControlPure = ({
         setTimer(
           setTimeout(() => {
             handleQuantityChange(intValue);
-          }, 2000),
+          }, 1000),
         );
       }
     },

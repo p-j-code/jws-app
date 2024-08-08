@@ -131,7 +131,7 @@ function* changePasswordSaga(action) {
       yield put(changePasswordFailure(data.error));
     } else {
       yield put(changePasswordSuccess(data.message));
-      action.payload.successCallback && action.payload.successCallback();
+      action.payload?.successCallback && action.payload.successCallback();
       yield put(setMessage('Password Updated successfully', 'success'));
     }
   } catch (error) {

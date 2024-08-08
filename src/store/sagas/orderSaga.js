@@ -15,9 +15,11 @@ import {
   updateOrderStatusByUserSuccess,
 } from '../actions/orderActions';
 
-function* createOrderFromCartSaga() {
+function* createOrderFromCartSaga(action) {
   try {
     const data = yield call(orderService.createOrderFromCart);
+
+    action.payload.successCallback && action.payload.successCallback();
     yield put(createOrderFromCartSuccess(data));
   } catch (error) {
     yield put(createOrderFromCartFailure(error.message));

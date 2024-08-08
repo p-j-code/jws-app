@@ -14,9 +14,7 @@ import {
   PRODUCT_DETAILS_SCREEN,
   ROOT_PRODUCT_STACK_NAME,
 } from '../../../navigation/routeConfigurations/productRoutes';
-import {modifyCartRequest} from '../../../store/actions/cartActions';
-import QuantityControlPure from '../../../components/UI/QuantityControlPure';
-import {debounce} from 'lodash';
+import QuantityControl from '../../../components/UI/QuantityControl';
 
 const {width} = Dimensions.get('window');
 const squareSize = width * 0.3;
@@ -36,33 +34,6 @@ const CartItem = ({item}) => {
       });
     }
   }, [navigation, item.product._id]);
-
-  const handleQuantityChange = useCallback(
-    newQuantity => {
-      if (newQuantity > item.product.stock) {
-        newQuantity = item.product.stock;
-      }
-      const quantityChange = newQuantity - item.quantity;
-      console.log(
-        'Changing quantity:',
-        newQuantity,
-        'Quantity change:',
-        quantityChange,
-      );
-
-      console.log({product: item?.product, quantityChange});
-      console.log({item});
-      dispatch(
-        modifyCartRequest({productId: item.product._id, quantityChange}),
-      );
-    },
-    [dispatch, item.product._id, item.quantity, item.product.stock],
-  );
-
-  const debouncedHandleQuantityChange = useCallback(
-    debounce(handleQuantityChange, 300),
-    [handleQuantityChange],
-  );
 
   const formatValue = useCallback(value => parseFloat(value).toFixed(2), []);
 
@@ -112,11 +83,10 @@ const CartItem = ({item}) => {
           </View>
         </View>
         <View style={styles.quantityControlContainer}>
-          <QuantityControlPure
-            initialQuantity={item.quantity}
+          <QuantityControl
+            productId={item.product._id}
             max={item.product.stock}
             size="xsm"
-            onQuantityChange={debouncedHandleQuantityChange}
           />
         </View>
       </View>

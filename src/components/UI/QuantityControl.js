@@ -31,7 +31,7 @@ const QuantityControl = ({
   const debouncedModifyCart = useCallback(
     debounce((productId, quantityChange) => {
       dispatch(modifyCartRequest({productId, quantityChange}));
-    }, 300),
+    }, 400),
     [dispatch],
   );
 

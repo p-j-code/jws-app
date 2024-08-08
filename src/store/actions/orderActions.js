@@ -18,8 +18,9 @@ export const UPDATE_ORDER_STATUS_BY_USER_FAILURE =
   'UPDATE_ORDER_STATUS_BY_USER_FAILURE';
 
 // Action Creators
-export const createOrderFromCartRequest = () => ({
+export const createOrderFromCartRequest = (successCallback) => ({
   type: CREATE_ORDER_FROM_CART_REQUEST,
+  payload: {successCallback}
 });
 
 export const createOrderFromCartSuccess = order => ({

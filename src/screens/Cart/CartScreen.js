@@ -35,7 +35,11 @@ const CartScreen = () => {
   const renderItem = useCallback(({item}) => <CartItem item={item} />, []);
 
   const handlePlaceOrder = () => {
-    dispatch(createOrderFromCartRequest());
+    dispatch(
+      createOrderFromCartRequest(() => {
+        dispatch(getCartRequest());
+      }),
+    );
   };
 
   return (
