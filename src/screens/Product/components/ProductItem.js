@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useRef} from 'react';
 import {
   View,
   Text,
@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Carousel from '../../../components/common/Carousel'; // Import the custom Carousel component
-import Button from '../../../components/common/Button';
 import theme from '../../../theme';
 import {PRODUCT_DETAILS_SCREEN} from '../../../navigation/routeConfigurations/productRoutes';
 import QuantityControl from '../../../components/UI/QuantityControl';
