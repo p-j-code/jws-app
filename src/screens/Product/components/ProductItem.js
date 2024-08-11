@@ -61,6 +61,7 @@ const ProductItem = ({item}) => {
               productId={item._id}
               showSlider={false}
               max={item.stock}
+              onlyOne
               size="xsm"
             />
           </View>

@@ -4,7 +4,7 @@ import {debounce} from 'lodash';
 import {
   getCartRequest,
   modifyCartRequest,
-} from '../../store/actions/cartActions';
+} from '../../../store/actions/cartActions';
 import QuantityControlPure from './QuantityControlPure';
 
 const QuantityControl = ({
@@ -16,12 +16,12 @@ const QuantityControl = ({
   showSlider = true,
   size = 'sm',
   style,
+  onlyOne = false, // Add this if using the `onlyOne` feature
+  ...restProps
 }) => {
   const dispatch = useDispatch();
-  const cartItem = useSelector(
-    state =>
-      state.cart.cart?.items?.find(item => item.product._id === productId),
-    (left, right) => left?.quantity === right?.quantity,
+  const cartItem = useSelector(state =>
+    state.cart.cart?.items?.find(item => item.product._id === productId),
   );
 
   useEffect(() => {
@@ -40,12 +40,13 @@ const QuantityControl = ({
       if (newQuantity > max) {
         newQuantity = max;
       }
-      const quantityChange = newQuantity - (cartItem?.quantity || 0);
+      const currentQuantity = cartItem ? cartItem.quantity : initialQuantity;
+      const quantityChange = newQuantity - currentQuantity;
       if (quantityChange !== 0) {
         debouncedModifyCart(productId, quantityChange);
       }
     },
-    [debouncedModifyCart, productId, cartItem, max],
+    [debouncedModifyCart, productId, cartItem, initialQuantity, max],
   );
 
   return (
@@ -57,7 +58,9 @@ const QuantityControl = ({
       showSlider={showSlider}
       size={size}
       style={style}
+      onlyOne={onlyOne} // Pass this if using the `onlyOne` feature
       onQuantityChange={handleQuantityChange}
+      {...restProps} // Pass any additional props
     />
   );
 };

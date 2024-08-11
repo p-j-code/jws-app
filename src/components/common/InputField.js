@@ -68,6 +68,9 @@ const InputField = ({
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         placeholder={placeholder}
+        placeholderTextColor={
+          disabled ? theme.colors.text.disabled : theme.colors.text.placeholder
+        } // set placeholder color
         editable={!disabled} // make input non-editable if disabled
         {...restProps}
       />

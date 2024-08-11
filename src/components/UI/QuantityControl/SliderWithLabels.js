@@ -3,7 +3,7 @@
 import React, {useEffect, useState, useCallback, useMemo} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import Slider from '@react-native-community/slider';
-import theme from '../../theme';
+import theme from '../../../theme';
 
 const generateSnapValues = (max, labelsCount) => {
   if (labelsCount > max) {

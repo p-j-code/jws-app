@@ -1,8 +1,9 @@
 import React, {useState, useCallback, useEffect} from 'react';
 import {View, StyleSheet, TouchableOpacity, TextInput} from 'react-native';
-import Button from '../../components/common/Button';
-import theme from '../../theme';
+import Button from '../../../components/common/Button';
+import theme from '../../../theme';
 import SliderWithLabels from './SliderWithLabels';
+import SingleItemCartControl from './SingleItemCartControl'; // Updated import
 
 const QuantityControlPure = ({
   initialQuantity = 0,
@@ -13,6 +14,7 @@ const QuantityControlPure = ({
   size = 'sm',
   style,
   onQuantityChange,
+  onlyOne = false,
 }) => {
   const [quantity, setQuantity] = useState(initialQuantity);
   const [tempQuantity, setTempQuantity] = useState(String(initialQuantity));
@@ -24,14 +26,9 @@ const QuantityControlPure = ({
       if (newQuantity > max) {
         newQuantity = max;
       }
-      setQuantity(prevQuantity => {
-        const quantityChange = newQuantity - prevQuantity;
-        if (quantityChange !== 0) {
-          onQuantityChange(newQuantity);
-        }
-        return newQuantity;
-      });
+      setQuantity(newQuantity);
       setTempQuantity(String(newQuantity));
+      onQuantityChange(newQuantity);
     },
     [onQuantityChange, max],
   );
@@ -66,6 +63,17 @@ const QuantityControlPure = ({
     return () => clearTimeout(timer);
   }, [timer]);
 
+  if (onlyOne) {
+    return (
+      <SingleItemCartControl
+        initialQuantity={quantity}
+        onQuantityChange={handleQuantityChange}
+        size={size}
+        style={style}
+      />
+    );
+  }
+
   return (
     <View style={[styles.container, style]}>
       {showSlider && (
@@ -87,6 +95,7 @@ const QuantityControlPure = ({
               size={size}
               type="contained"
               style={styles.button}
+              disabled={quantity === 0}
             />
             <QuantityInput
               tempQuantity={tempQuantity}

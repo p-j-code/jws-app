@@ -20,6 +20,7 @@ export const colors = {
     primary: '#2F4F4F', // Dark Slate Gray
     secondary: '#8B4513', // Saddle Brown
     disabled: '#D3D3D3', // Light Gray
+    placeholder: '#CD853F',
   },
   border: {
     main: '#CD853F', // Peru

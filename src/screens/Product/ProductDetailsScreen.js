@@ -91,7 +91,12 @@ const ProductDetails = ({route}) => {
           const {height} = event.nativeEvent.layout;
           setQuantityControlHeight(height);
         }}>
-        <QuantityControl productId={productId} max={product.stock} />
+        <QuantityControl
+          productId={productId}
+          max={product.stock}
+          showSlider={false}
+          onlyOne
+        />
       </View>
     </View>
   );

@@ -87,6 +87,7 @@ const CartItem = ({item}) => {
             productId={item.product._id}
             max={item.product.stock}
             size="xsm"
+            showSlider={false}
           />
         </View>
       </View>

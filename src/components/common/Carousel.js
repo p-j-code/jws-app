@@ -92,37 +92,39 @@ const Carousel = ({data = [], width, height, style = {}}) => {
         }}
         contentContainerStyle={{alignItems: 'center'}}
       />
-      <View style={styles.pagination}>
-        {data.map((_, index) => {
-          const inputRange = [
-            (index - 1) * width,
-            index * width,
-            (index + 1) * width,
-          ];
-          const dotOpacity = scrollX.interpolate({
-            inputRange,
-            outputRange: [0.3, 1, 0.3],
-            extrapolate: 'clamp',
-          });
-          const dotScale = scrollX.interpolate({
-            inputRange,
-            outputRange: [0.8, 1.2, 0.8],
-            extrapolate: 'clamp',
-          });
-          return (
-            <Animated.View
-              key={`dot-${index}`}
-              style={[
-                styles.dot,
-                {
-                  opacity: dotOpacity,
-                  transform: [{scale: dotScale}],
-                },
-              ]}
-            />
-          );
-        })}
-      </View>
+      {data.length > 1 && (
+        <View style={styles.pagination}>
+          {data.map((_, index) => {
+            const inputRange = [
+              (index - 1) * width,
+              index * width,
+              (index + 1) * width,
+            ];
+            const dotOpacity = scrollX.interpolate({
+              inputRange,
+              outputRange: [0.3, 1, 0.3],
+              extrapolate: 'clamp',
+            });
+            const dotScale = scrollX.interpolate({
+              inputRange,
+              outputRange: [0.8, 1.2, 0.8],
+              extrapolate: 'clamp',
+            });
+            return (
+              <Animated.View
+                key={`dot-${index}`}
+                style={[
+                  styles.dot,
+                  {
+                    opacity: dotOpacity,
+                    transform: [{scale: dotScale}],
+                  },
+                ]}
+              />
+            );
+          })}
+        </View>
+      )}
 
       <Modal
         visible={isVisible}
