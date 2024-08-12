@@ -52,9 +52,9 @@ const RegisterScreen = () => {
   const [errors, setErrors] = useState({});
   const [showAddressModal, setShowAddressModal] = useState(false);
 
-  useEffect(() => {
-    setFormData(mock);
-  }, []);
+  // useEffect(() => {
+  //   setFormData(mock);
+  // }, []);
 
   const handleInputChange = (name, value) => {
     setFormData({...formData, [name]: value});
