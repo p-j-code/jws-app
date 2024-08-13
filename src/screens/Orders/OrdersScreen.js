@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
   },
   noOrdersText: {
     ...typography.body1,
-    color: theme.colors.text.secondary,
+    color: colors.text.secondary,
   },
 });
 

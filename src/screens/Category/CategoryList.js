@@ -2,9 +2,11 @@ import React, {useEffect, useState, useCallback} from 'react';
 import {View, Text, StyleSheet, ScrollView, RefreshControl} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {getProductsGroupedByCategoriesRequest} from '../../store/actions/productActions';
+import {getAllCategoriesRequest} from '../../store/actions/categoryActions';
 import ProductGroup from './components/CategoryItem';
 import SearchInput from '../../components/common/SearchInput';
 import theme from '../../theme';
+import CategoryCardList from './components/CategoryCardList';
 
 const CategoryList = () => {
   const dispatch = useDispatch();
@@ -13,6 +15,11 @@ const CategoryList = () => {
     loading,
     error,
   } = useSelector(state => state.product);
+  const {
+    categories = [],
+    loading: categoriesLoading,
+    error: categoriesError,
+  } = useSelector(state => state.category);
   const [searchQuery, setSearchQuery] = useState('');
   const [refreshing, setRefreshing] = useState(false);
 
@@ -27,6 +34,8 @@ const CategoryList = () => {
         search: searchQuery,
       }),
     );
+
+    dispatch(getAllCategoriesRequest({name: searchQuery}));
   }, [dispatch, searchQuery]);
 
   useEffect(() => {
@@ -55,22 +64,27 @@ const CategoryList = () => {
             colors={[theme.colors.primary.main]}
           />
         }>
-        {loading ? (
+        {loading || categoriesLoading ? (
           <View style={styles.loadingContainer}>
             <Text style={styles.loadingText}>Loading...</Text>
           </View>
-        ) : error ? (
+        ) : error || categoriesError ? (
           <View style={styles.errorContainer}>
-            <Text style={styles.errorText}>Error: {error}</Text>
+            <Text style={styles.errorText}>
+              Error: {error || categoriesError}
+            </Text>
           </View>
         ) : (
-          Object.keys(products).map((key, idx) => (
-            <ProductGroup
-              key={key + idx}
-              parentCategories={products[key].parentCategories}
-              products={products[key].products}
-            />
-          ))
+          <>
+            <CategoryCardList categories={categories} />
+            {Object.keys(products).map((key, idx) => (
+              <ProductGroup
+                key={key + idx}
+                parentCategories={products[key].parentCategories}
+                products={products[key].products}
+              />
+            ))}
+          </>
         )}
       </ScrollView>
     </View>

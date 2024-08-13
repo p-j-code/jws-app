@@ -17,13 +17,10 @@ const ProductListingScreen = ({route}) => {
   const dispatch = useDispatch();
   const {products, loading} = useSelector(state => state.product);
   const [refreshing, setRefreshing] = useState(false);
-  const lastCategory = category[category.length - 1];
 
   const fetchProducts = useCallback(() => {
-    dispatch(
-      getAllProductsRequest({category: lastCategory.id || lastCategory._id}),
-    );
-  }, [dispatch, lastCategory]);
+    dispatch(getAllProductsRequest({category: category.id || category._id}));
+  }, [dispatch, category]);
 
   useEffect(() => {
     fetchProducts();

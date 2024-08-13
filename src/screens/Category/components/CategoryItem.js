@@ -32,7 +32,7 @@ const ProductGroup = ({parentCategories, products}) => {
   const handleCategoryPress = category => {
     navigation.navigate(ROOT_PRODUCT_STACK_NAME, {
       screen: PRODUCT_LISTING_SCREEN,
-      params: {category},
+      params: {category: category[category.length - 1]},
     });
   };
 

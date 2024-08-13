@@ -3,6 +3,7 @@ import authSaga from './authSaga';
 import watchProductSagas from './productSaga';
 import watchCartSagas from './cartSaga';
 import watchOrderSagas from './orderSaga';
+import watchCategorySagas from './categorySaga';
 
 export default function* rootSaga() {
   yield all([
@@ -10,5 +11,6 @@ export default function* rootSaga() {
     watchProductSagas(),
     watchCartSagas(),
     watchOrderSagas(),
+    watchCategorySagas(),
   ]);
 }
