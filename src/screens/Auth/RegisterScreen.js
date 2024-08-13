@@ -40,6 +40,7 @@ const RegisterScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const {loading, error} = useSelector(state => state.auth);
+
   const [formData, setFormData] = useState({
     email: '',
     name: '',
@@ -93,12 +94,6 @@ const RegisterScreen = () => {
     }
   }, [error]);
 
-  // useEffect(() => {
-  //   if (isOtpRequested) {
-  //     navigation.navigate(USER_REGISTRATION_OTP_SCREEN, { phoneNumber: formData.phoneNumber });
-  //   }
-  // }, [isOtpRequested, navigation, formData.phoneNumber]);
-
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.headerContainer}>
@@ -119,18 +114,21 @@ const RegisterScreen = () => {
         value={formData.email}
         onChangeText={value => handleInputChange('email', value)}
         error={errors.email}
+        placeholder="Enter your email"
       />
       <InputField
         label="Name"
         value={formData.name}
         onChangeText={value => handleInputChange('name', value)}
         error={errors.name}
+        placeholder="Enter your name"
       />
       <InputField
         label="Phone Number"
         value={formData.phoneNumber}
         onChangeText={value => handleInputChange('phoneNumber', value)}
         error={errors.phoneNumber}
+        placeholder="Enter your phone number"
       />
       <InputField
         label="Alternative Phone Number"
@@ -138,12 +136,14 @@ const RegisterScreen = () => {
         onChangeText={value =>
           handleInputChange('alternativePhoneNumber', value)
         }
+        placeholder="Enter alternative phone number (optional)"
       />
       <InputField
         label="GSTIN"
         value={formData.gstin}
         onChangeText={value => handleInputChange('gstin', value)}
         error={errors.gstin}
+        placeholder="Enter your GSTIN"
       />
       <InputField
         label="Password"
@@ -151,6 +151,7 @@ const RegisterScreen = () => {
         onChangeText={value => handleInputChange('password', value)}
         secureTextEntry
         error={errors.password}
+        placeholder="Enter your password"
       />
       <View style={styles.addressContainer}>
         <Text style={styles.addressLabel}>Address</Text>
