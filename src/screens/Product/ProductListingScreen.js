@@ -1,5 +1,11 @@
-import React, {useEffect} from 'react';
-import {FlatList, StyleSheet, View, ActivityIndicator} from 'react-native';
+import React, {useEffect, useState, useCallback} from 'react';
+import {
+  FlatList,
+  StyleSheet,
+  View,
+  ActivityIndicator,
+  RefreshControl,
+} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {getAllProductsRequest} from '../../store/actions/productActions';
 import theme from '../../theme';
@@ -10,17 +16,28 @@ const ProductListingScreen = ({route}) => {
   const {category} = route.params;
   const dispatch = useDispatch();
   const {products, loading} = useSelector(state => state.product);
+  const [refreshing, setRefreshing] = useState(false);
   const lastCategory = category[category.length - 1];
 
-  useEffect(() => {
+  const fetchProducts = useCallback(() => {
     dispatch(
       getAllProductsRequest({category: lastCategory.id || lastCategory._id}),
     );
-  }, [category, dispatch]);
+  }, [dispatch, lastCategory]);
+
+  useEffect(() => {
+    fetchProducts();
+  }, [fetchProducts]);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    fetchProducts();
+    setRefreshing(false);
+  }, [fetchProducts]);
 
   const renderProduct = ({item}) => <ProductItem item={item} />;
 
-  if (loading) {
+  if (loading && !refreshing) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color={theme.colors.primary.main} />
@@ -34,6 +51,13 @@ const ProductListingScreen = ({route}) => {
       keyExtractor={item => item._id}
       renderItem={renderProduct}
       contentContainerStyle={styles.container}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          colors={[theme.colors.primary.main]} // Use theme color for the spinner
+        />
+      }
     />
   );
 };

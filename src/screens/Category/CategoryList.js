@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useCallback} from 'react';
-import {View, Text, StyleSheet, ScrollView} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, RefreshControl} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {getProductsGroupedByCategoriesRequest} from '../../store/actions/productActions';
 import ProductGroup from './components/CategoryItem';
@@ -14,21 +14,30 @@ const CategoryList = () => {
     error,
   } = useSelector(state => state.product);
   const [searchQuery, setSearchQuery] = useState('');
+  const [refreshing, setRefreshing] = useState(false);
 
   const handleSearch = useCallback(query => {
     setSearchQuery(query);
   }, []);
 
-  useEffect(() => {
+  const fetchProducts = useCallback(() => {
     dispatch(
       getProductsGroupedByCategoriesRequest({
         groupByParentCategories: true,
         search: searchQuery,
       }),
     );
-
-    console.log(JSON.stringify({products}));
   }, [dispatch, searchQuery]);
+
+  useEffect(() => {
+    fetchProducts();
+  }, [fetchProducts]);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    fetchProducts();
+    setRefreshing(false);
+  }, [fetchProducts]);
 
   return (
     <View style={styles.container}>
@@ -38,7 +47,14 @@ const CategoryList = () => {
         placeholder="Type to search..."
         value={searchQuery}
       />
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={[theme.colors.primary.main]}
+          />
+        }>
         {loading ? (
           <View style={styles.loadingContainer}>
             <Text style={styles.loadingText}>Loading...</Text>
@@ -72,7 +88,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   loadingText: {
-    ...theme.typography.h2,
+    ...theme.typography.h4,
     color: theme.colors.text.primary,
   },
   errorContainer: {
