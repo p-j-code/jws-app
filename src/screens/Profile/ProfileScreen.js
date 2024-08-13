@@ -38,6 +38,26 @@ const ProfileScreen = ({navigation}) => {
     );
   };
 
+  const handleLogout = () => {
+    Alert.alert(
+      'Confirm Logout',
+      'Are you sure you want to log out?',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {
+          text: 'Logout',
+          onPress: () => dispatch(logoutUser()),
+          style: 'destructive',
+        },
+      ],
+      {cancelable: false},
+    );
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.detailContainer}>
@@ -93,7 +113,7 @@ const ProfileScreen = ({navigation}) => {
 
       <Button
         title={'Logout'}
-        onPress={() => dispatch(logoutUser())}
+        onPress={handleLogout}
         type="outline"
         size="sm"
         variant="error"
