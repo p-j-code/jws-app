@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {
   USER_REGISTRATION_OTP_SCREEN,
@@ -18,27 +18,29 @@ const withAuth = WrappedComponent => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
 
-    const redirect = () => {
-      if (!user) return navigation.navigate(LOGIN_SCREEN);
-      if (!user.isOtpVerified) {
-        navigation.navigate(USER_REGISTRATION_OTP_SCREEN);
-      } else if (user.adminMessage) {
-        navigation.navigate(ADMIN_MESSAGE_SCREEN, {
-          message: user.adminMessage,
-        });
-      } else if (STATUS_ERROR_CODES[user.status]) {
-        navigation.navigate(ADMIN_MESSAGE_SCREEN);
-      } else {
-        dispatch(setMainAccess(user && user.status === 'accepted'));
-      }
-    };
-  
+    const redirect = useMemo(() => {
+      return () => {
+        if (!user) return navigation.navigate(LOGIN_SCREEN);
+        if (!user.isOtpVerified) {
+          navigation.navigate(USER_REGISTRATION_OTP_SCREEN);
+        } else if (user.adminMessage) {
+          navigation.navigate(ADMIN_MESSAGE_SCREEN, {
+            message: user.adminMessage,
+          });
+        } else if (STATUS_ERROR_CODES[user.status]) {
+          navigation.navigate(ADMIN_MESSAGE_SCREEN);
+        } else {
+          dispatch(setMainAccess(user && user.status === 'accepted'));
+        }
+      };
+    }, [user, navigation, dispatch]);
+
     useEffect(() => {
       console.log('withAuth useEffect', {loading, user});
       if (!loading && user) {
         redirect();
       }
-    }, [loading, user]);
+    }, [loading, user, redirect]);
 
     if (loading) {
       return (

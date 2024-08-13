@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {registerUserRequest} from '../../store/actions/authActions';
+import {updateForm, clearForm} from '../../store/actions/formActions';
 import InputField from '../../components/common/InputField';
 import Button from '../../components/common/Button';
 import AddEditAddressModal from '../../components/UI/AddEditAddressModal';
@@ -19,46 +20,17 @@ import {useNavigation} from '@react-navigation/native';
 import {LOGIN_SCREEN} from '../../navigation/routeConfigurations/authRoutes';
 import withAuth from '../../navigation/components/withAuth';
 
-const mock = {
-  address: {
-    label: 'Home',
-    line1: '123',
-    line2: '123',
-    city: '123',
-    pinCode: '123123',
-    state: '123',
-  },
-  alternativePhoneNumber: '',
-  email: 'prem@gmail.com',
-  gstin: '22AAAAA0000A1Z5',
-  name: 'Prem',
-  password: '123',
-  phoneNumber: '1231231231',
-};
-
 const RegisterScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const {loading, error} = useSelector(state => state.auth);
+  const formData = useSelector(state => state.form.registerForm || {});
 
-  const [formData, setFormData] = useState({
-    email: '',
-    name: '',
-    phoneNumber: '',
-    alternativePhoneNumber: '',
-    address: null,
-    gstin: '',
-    password: '',
-  });
   const [errors, setErrors] = useState({});
   const [showAddressModal, setShowAddressModal] = useState(false);
 
-  // useEffect(() => {
-  //   setFormData(mock);
-  // }, []);
-
   const handleInputChange = (name, value) => {
-    setFormData({...formData, [name]: value});
+    dispatch(updateForm('registerForm', {[name]: value}));
     if (errors[name]) {
       setErrors({...errors, [name]: ''});
     }
@@ -84,7 +56,7 @@ const RegisterScreen = () => {
   };
 
   const handleAddressSubmit = address => {
-    setFormData({...formData, address});
+    dispatch(updateForm('registerForm', {address}));
     setShowAddressModal(false);
   };
 
@@ -93,6 +65,13 @@ const RegisterScreen = () => {
       setErrors({general: error.error});
     }
   }, [error]);
+
+  // useEffect(() => {
+  //   // Cleanup the form when the component unmounts
+  //   return () => {
+  //     dispatch(clearForm('registerForm'));
+  //   };
+  // }, [dispatch]);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -111,28 +90,28 @@ const RegisterScreen = () => {
       )}
       <InputField
         label="Email"
-        value={formData.email}
+        value={formData.email || ''}
         onChangeText={value => handleInputChange('email', value)}
         error={errors.email}
         placeholder="Enter your email"
       />
       <InputField
         label="Name"
-        value={formData.name}
+        value={formData.name || ''}
         onChangeText={value => handleInputChange('name', value)}
         error={errors.name}
         placeholder="Enter your name"
       />
       <InputField
         label="Phone Number"
-        value={formData.phoneNumber}
+        value={formData.phoneNumber || ''}
         onChangeText={value => handleInputChange('phoneNumber', value)}
         error={errors.phoneNumber}
         placeholder="Enter your phone number"
       />
       <InputField
         label="Alternative Phone Number"
-        value={formData.alternativePhoneNumber}
+        value={formData.alternativePhoneNumber || ''}
         onChangeText={value =>
           handleInputChange('alternativePhoneNumber', value)
         }
@@ -140,14 +119,14 @@ const RegisterScreen = () => {
       />
       <InputField
         label="GSTIN"
-        value={formData.gstin}
+        value={formData.gstin || ''}
         onChangeText={value => handleInputChange('gstin', value)}
         error={errors.gstin}
         placeholder="Enter your GSTIN"
       />
       <InputField
         label="Password"
-        value={formData.password}
+        value={formData.password || ''}
         onChangeText={value => handleInputChange('password', value)}
         secureTextEntry
         error={errors.password}
