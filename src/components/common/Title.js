@@ -4,7 +4,7 @@ import theme from '../../theme';
 
 const Title = ({
   children,
-  variant = 'h1',
+  variant = 'h2',
   color = 'primary',
   position = 'left',
   style,

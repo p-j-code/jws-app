@@ -12,6 +12,7 @@ import CustomModal from '../../components/common/CustomModal';
 import theme from '../../theme';
 import withAuth from '../../navigation/components/withAuth';
 import {STATUS_ERROR_CODES} from '../../utils/constants';
+import Title from '../../components/common/Title';
 
 const UserRegistrationOTPScreen = ({checkAuth}) => {
   const dispatch = useDispatch();
@@ -63,9 +64,9 @@ const UserRegistrationOTPScreen = ({checkAuth}) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Enter OTP</Text>
+      <Title position="center">Enter OTP</Title>
       <View style={styles.phoneNumberContainer}>
-        <Text>Phone Number: {newPhoneNumber}</Text>
+        <Text style={styles.text}>Phone Number: {newPhoneNumber}</Text>
         <TouchableOpacity onPress={() => setModalVisible(true)}>
           <Text style={styles.editText}>Edit</Text>
         </TouchableOpacity>
@@ -107,19 +108,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 16,
   },
-  title: {
-    fontSize: 24,
-    marginBottom: 16,
-    textAlign: 'center',
-  },
   phoneNumberContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: 16,
     fontSize: theme.typography.body1.fontSize,
   },
+  text: {
+    color: theme.colors.text.primary, // Replace with an explicit color code
+    fontSize: theme.typography.body1.fontSize,
+  },
   editText: {
-    color: theme.colors.primary,
+    color: theme.colors.primary.main, // Replace with an explicit color code
     textDecorationLine: 'underline',
     marginLeft: 5,
     fontSize: theme.typography.body1.fontSize,

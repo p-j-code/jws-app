@@ -20,6 +20,23 @@ import {useNavigation} from '@react-navigation/native';
 import {LOGIN_SCREEN} from '../../navigation/routeConfigurations/authRoutes';
 import withAuth from '../../navigation/components/withAuth';
 
+const mock = {
+  address: {
+    label: 'Home',
+    line1: '123',
+    line2: '123',
+    city: '123',
+    pinCode: '123123',
+    state: '123',
+  },
+  alternativePhoneNumber: '',
+  email: 'prem@gmail.com',
+  gstin: '22AAAAA0000A1Z5',
+  name: 'Prem',
+  password: '123',
+  phoneNumber: '1231231231',
+};
+
 const RegisterScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -28,6 +45,10 @@ const RegisterScreen = () => {
 
   const [errors, setErrors] = useState({});
   const [showAddressModal, setShowAddressModal] = useState(false);
+
+  // useEffect(() => {
+  //   dispatch(updateForm('registerForm', mock));
+  // }, []);
 
   const handleInputChange = (name, value) => {
     dispatch(updateForm('registerForm', {[name]: value}));

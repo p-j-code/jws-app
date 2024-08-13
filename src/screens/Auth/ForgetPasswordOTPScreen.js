@@ -8,6 +8,7 @@ import {
   resetPasswordWithOtpRequest,
 } from '../../store/actions/authActions';
 import {LOGIN_SCREEN} from '../../navigation/routeConfigurations/authRoutes';
+import Title from '../../components/common/Title';
 
 const ForgetPasswordOTPScreen = ({route, navigation}) => {
   const {phoneNumber} = route.params;
@@ -57,7 +58,7 @@ const ForgetPasswordOTPScreen = ({route, navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Reset Password</Text>
+      <Title position="center">Reset Password</Title>
       <InputField
         label="OTP"
         placeholder="Enter the OTP"
@@ -85,11 +86,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     padding: 16,
-  },
-  title: {
-    fontSize: 24,
-    marginBottom: 16,
-    textAlign: 'center',
   },
   error: {
     color: 'red',

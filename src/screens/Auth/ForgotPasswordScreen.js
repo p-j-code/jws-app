@@ -10,6 +10,7 @@ import {
 } from '../../store/actions/authActions';
 import OtpModal from '../../components/UI/OtpModal';
 import theme from '../../theme';
+import Title from '../../components/common/Title';
 
 const ForgotPasswordScreen = ({navigation}) => {
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -75,7 +76,7 @@ const ForgotPasswordScreen = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Forgot Password</Text>
+      <Title position="center">Forgot Password</Title>
       <InputField
         label="Phone Number"
         placeholder="Enter Your Phone Number"

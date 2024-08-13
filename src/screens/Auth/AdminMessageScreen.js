@@ -1,5 +1,12 @@
-import React from 'react';
-import {View, Text, StyleSheet, ActivityIndicator} from 'react-native';
+import React, {useCallback} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ActivityIndicator,
+  BackHandler,
+} from 'react-native';
+import {useFocusEffect} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import theme from '../../theme';
 import {STATUS_ERROR_CODES} from '../../utils/constants';
@@ -17,6 +24,20 @@ const AdminMessageScreen = ({navigation}) => {
     error: errorCode,
   } = useSelector(state => state.auth);
   const dispatch = useDispatch();
+
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        return true; // Prevent default back action
+      };
+
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+      return () => {
+        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+      };
+    }, []),
+  );
 
   const handleLogout = () => {
     dispatch(logoutUser());

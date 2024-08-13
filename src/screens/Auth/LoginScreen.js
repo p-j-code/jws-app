@@ -12,6 +12,7 @@ import theme from '../../theme';
 import Button from '../../components/common/Button';
 import InputField from '../../components/common/InputField';
 import withAuth from '../../navigation/components/withAuth';
+import Title from '../../components/common/Title';
 
 const LoginScreen = ({navigation}) => {
   const dispatch = useDispatch();
@@ -53,7 +54,7 @@ const LoginScreen = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
+      <Title position="center">Login</Title>
       {loading && (
         <ActivityIndicator size="large" color={theme.colors.primary.main} />
       )}
@@ -103,11 +104,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: theme.spacing.large,
     backgroundColor: theme.colors.background.default,
-  },
-  title: {
-    fontSize: 24,
-    marginBottom: theme.spacing.large,
-    textAlign: 'center',
   },
   errorText: {
     color: theme.colors.status.error,
