@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, ScrollView, Text} from 'react-native';
+import {View, StyleSheet, ScrollView, Text, Alert} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   logoutUser,
@@ -19,7 +19,23 @@ const ProfileScreen = ({navigation}) => {
   const {user} = useSelector(state => state.auth);
 
   const handleRequestAccountDelete = () => {
-    dispatch(requestAccountDeleteRequest());
+    Alert.alert(
+      'Confirm Account Deletion',
+      'Are you sure you want to delete your account? This action cannot be undone.',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {
+          text: 'Delete',
+          onPress: () => dispatch(requestAccountDeleteRequest()),
+          style: 'destructive',
+        },
+      ],
+      {cancelable: false},
+    );
   };
 
   return (

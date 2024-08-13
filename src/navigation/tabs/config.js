@@ -60,7 +60,7 @@ export const bottomTabConfig = [
       tabBarLabel: 'Contact',
       iconName: 'call-outline',
       iconNameFocused: 'call',
-      header: () => <SimpleHeader title="Cart" />,
+      header: () => <SimpleHeader title="Contact" />,
     },
   },
 ];

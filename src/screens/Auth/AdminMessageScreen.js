@@ -1,29 +1,33 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useState} from 'react';
 import {
   View,
   Text,
   StyleSheet,
   ActivityIndicator,
   BackHandler,
+  ScrollView,
+  RefreshControl,
 } from 'react-native';
 import {useFocusEffect} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import theme from '../../theme';
 import {STATUS_ERROR_CODES} from '../../utils/constants';
 import Button from '../../components/common/Button';
-import {logoutUser} from '../../store/actions/authActions';
+import {getUserRequest, logoutUser} from '../../store/actions/authActions';
 import {
   EDIT_PROFILE_SCREEN_AUTH,
   LOGIN_SCREEN,
 } from '../../navigation/routeConfigurations/authRoutes';
+import withAuth from '../../navigation/components/withAuth';
 
-const AdminMessageScreen = ({navigation}) => {
+const AdminMessageScreen = ({navigation, checkAuth}) => {
   const {
     loading,
     user = {},
     error: errorCode,
   } = useSelector(state => state.auth);
   const dispatch = useDispatch();
+  const [refreshing, setRefreshing] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -43,6 +47,17 @@ const AdminMessageScreen = ({navigation}) => {
     dispatch(logoutUser());
     navigation.navigate(LOGIN_SCREEN);
   };
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    // checkAuth &&
+    dispatch(getUserRequest());
+
+    // Simulating refresh action, set timeout to stop refreshing after 1 second
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
+  }, []);
 
   const getMessageStyle = () => {
     switch (errorCode) {
@@ -81,7 +96,7 @@ const AdminMessageScreen = ({navigation}) => {
     }
   };
 
-  if (loading) {
+  if (loading && !refreshing) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color={theme.colors.primary.main} />
@@ -90,7 +105,15 @@ const AdminMessageScreen = ({navigation}) => {
   }
 
   return (
-    <View style={styles.container}>
+    <ScrollView
+      contentContainerStyle={styles.container}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          colors={[theme.colors.primary.main]} // Use theme color for the spinner
+        />
+      }>
       <Text style={[styles.messageText, getMessageStyle()]}>
         {user?.adminMessage || getDefaultMessage()}
       </Text>
@@ -107,7 +130,7 @@ const AdminMessageScreen = ({navigation}) => {
       <View style={styles.buttonContainer}>
         <Button title="Logout" type="text" onPress={handleLogout} />
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -158,4 +181,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AdminMessageScreen;
+export default withAuth(AdminMessageScreen);

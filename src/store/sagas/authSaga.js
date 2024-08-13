@@ -2,7 +2,10 @@
 
 import {call, put, takeEvery} from 'redux-saga/effects';
 import * as authService from '../../services/authService';
-import {navigateToLogin} from '../../navigation/helpers/navigationHelpers';
+import {
+  navigate,
+  navigateToLogin,
+} from '../../navigation/helpers/navigationHelpers';
 import {removeToken} from '../../utils/storage';
 import {
   REGISTER_USER_REQUEST,
@@ -41,6 +44,7 @@ import {
   resendOtpFailure,
 } from '../actions/authActions';
 import {setMessage} from '../actions/messageActions';
+import {ADMIN_MESSAGE_SCREEN} from '../../navigation/routeConfigurations/authRoutes';
 
 function* registerUserSaga(action) {
   try {
@@ -220,6 +224,7 @@ function* requestAccountDeleteSaga() {
       yield put(requestAccountDeleteFailure(data.error));
     } else {
       yield put(requestAccountDeleteSuccess(data.message));
+      navigate(ADMIN_MESSAGE_SCREEN);
       yield put(
         setMessage('Account deletion requested successfully', 'success'),
       );

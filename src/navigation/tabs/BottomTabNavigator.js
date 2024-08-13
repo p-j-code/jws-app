@@ -24,7 +24,7 @@ const BottomTabNavigator = () => {
           backgroundColor: theme.colors.background.default,
           paddingBottom: theme.spacing.small,
           paddingTop: theme.spacing.small,
-          height: 65,
+          height: 60,
         },
         tabBarLabelStyle: {
           fontSize: theme.typography.caption.fontSize,
@@ -37,7 +37,7 @@ const BottomTabNavigator = () => {
           }
           return null;
         },
-      })}>                       
+      })}>
       {bottomTabConfig.map(tab => (
         <Tab.Screen
           key={tab.name}

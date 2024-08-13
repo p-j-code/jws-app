@@ -139,7 +139,12 @@ const authReducer = (state = initialState, action) => {
       };
 
     case REQUEST_ACCOUNT_DELETE_SUCCESS:
-      return {...state, loading: false, accountDeleteMessage: action.payload};
+      return {
+        ...state,
+        loading: false,
+        accountDeleteMessage: action.payload,
+        hasMainAccess: false,
+      };
 
     case RESEND_OTP_SUCCESS:
       return {...state, loading: false, resetOTPMessage: action.payload};

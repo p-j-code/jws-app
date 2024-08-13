@@ -1,10 +1,11 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {
   View,
   Text,
   FlatList,
   StyleSheet,
   ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {
@@ -18,6 +19,7 @@ import OrderItem from './components/OrderItem';
 const OrderScreen = () => {
   const dispatch = useDispatch();
   const {orders, loading, error} = useSelector(state => state.order);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     dispatch(getOrdersByUserRequest());
@@ -96,7 +98,12 @@ const OrderScreen = () => {
     </View>
   );
 
-  if (loading) {
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    dispatch(getOrdersByUserRequest()).finally(() => setRefreshing(false));
+  }, [dispatch]);
+
+  if (loading && !refreshing) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color={colors.primary.main} />
@@ -114,11 +121,24 @@ const OrderScreen = () => {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={orders}
-        renderItem={renderItem}
-        keyExtractor={item => item._id}
-      />
+      {orders.length === 0 ? (
+        <View style={styles.noOrdersContainer}>
+          <Text style={styles.noOrdersText}>No orders available</Text>
+        </View>
+      ) : (
+        <FlatList
+          data={orders}
+          renderItem={renderItem}
+          keyExtractor={item => item._id}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              colors={[colors.primary.main]}
+            />
+          }
+        />
+      )}
     </View>
   );
 };
@@ -169,16 +189,6 @@ const styles = StyleSheet.create({
   statusDefault: {
     color: colors.text.primary,
   },
-  cancelButton: {
-    backgroundColor: colors.status.error,
-    paddingVertical: spacing.small,
-    paddingHorizontal: spacing.medium,
-    borderRadius: shape.borderRadiusSmall,
-  },
-  cancelButtonText: {
-    ...typography.body2,
-    color: colors.background.default,
-  },
   totalItems: {
     ...typography.subtitle1,
     color: colors.text.primary,
@@ -205,6 +215,15 @@ const styles = StyleSheet.create({
   errorText: {
     ...typography.body1,
     color: colors.status.error,
+  },
+  noOrdersContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  noOrdersText: {
+    ...typography.body1,
+    color: theme.colors.text.secondary,
   },
 });
 
