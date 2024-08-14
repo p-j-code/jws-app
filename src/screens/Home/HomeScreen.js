@@ -2,6 +2,7 @@ import React from 'react';
 import {View, StyleSheet} from 'react-native';
 import theme from '../../theme';
 import CategoryList from '../Category/CategoryList';
+import withScreenshotProtection from '../../HOC/withScreenshotProtection';
 
 const HomeScreen = () => {
   return (
@@ -18,4 +19,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreen;
+export default withScreenshotProtection(HomeScreen);

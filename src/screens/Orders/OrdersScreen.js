@@ -15,6 +15,7 @@ import {
 import {colors, typography, spacing, shape} from '../../theme';
 import Button from '../../components/common/Button';
 import OrderItem from './components/OrderItem';
+import withScreenshotProtection from '../../HOC/withScreenshotProtection';
 
 const OrderScreen = () => {
   const dispatch = useDispatch();
@@ -228,4 +229,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default OrderScreen;
+export default withScreenshotProtection(OrderScreen);
