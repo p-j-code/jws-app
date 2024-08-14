@@ -100,7 +100,8 @@ const OrderScreen = () => {
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    dispatch(getOrdersByUserRequest()).finally(() => setRefreshing(false));
+    dispatch(getOrdersByUserRequest());
+    setRefreshing(false);
   }, [dispatch]);
 
   if (loading && !refreshing) {
@@ -150,7 +151,7 @@ const styles = StyleSheet.create({
     padding: spacing.medium,
   },
   orderContainer: {
-    backgroundColor: colors.primary.light,
+    backgroundColor: colors.text.light,
     padding: spacing.medium,
     borderRadius: shape.borderRadius,
     marginBottom: spacing.medium,
