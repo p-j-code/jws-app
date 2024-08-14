@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     paddingVertical: theme.spacing.small,
   },
   card: {
-    backgroundColor: theme.colors.background.subtle,
+    backgroundColor: theme.colors.background.interactive,
     padding: theme.spacing.medium,
     marginVertical: theme.spacing.small,
     borderRadius: theme.shape.borderRadius,
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   },
   categoryName: {
     ...theme.typography.body1,
-    color: theme.colors.text.primary,
+    color: theme.colors.text.light,
   },
 });
 

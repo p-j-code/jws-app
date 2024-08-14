@@ -145,3 +145,10 @@ const colors = {
 ```
 
 Each of these options provides a unique look and feel for your application, reflecting the elegance and sophistication of a jewelry store. You can choose the one that best aligns with your brand identity and user experience goals.
+
+
+#716f6e - A medium gray shade.
+#9a989a - A light gray shade.
+#1b241f - A very dark green shade, almost black. (primary)
+#2c3c34 - A dark green shade.
+#1c1404 - A very dark brown shade, almost black.

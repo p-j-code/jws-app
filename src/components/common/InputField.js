@@ -101,8 +101,8 @@ const variantStyles = StyleSheet.create({
     borderColor: theme.colors.border.main,
     padding: theme.spacing.small,
     paddingLeft: theme.spacing.medium, // Added left padding
-    backgroundColor: theme.colors.background.subtle,
-    borderRadius: theme.spacing.xsmall,
+    backgroundColor: theme.colors.background.inputField,
+    borderRadius: theme.spacing.small,
   },
   floating: {
     borderBottomWidth: 1,

@@ -1,41 +1,89 @@
 // src/theme/index.js
+
+// export const colors = {
+//   primary: {
+//     light: '#FFF5EE', // Seashell
+//     main: '#CD853F', // Peru
+//     dark: '#8B4513', // Saddle Brown
+//   },
+//   secondary: {
+//     light: '#F5DEB3', // Wheat
+//     main: '#DEB887', // Burlywood
+//     dark: '#A0522D', // Sienna
+//   },
+//   background: {
+//     default: '#FFF', // Linen
+//     subtle: '#FFE4C4', // Bisque
+//     interactive: '#FFDEAD', // Navajo White
+//     disabled: '#E0E0E0', // Light Grey
+//   },
+//   text: {
+//     primary: '#2F4F4F', // Dark Slate Gray
+//     secondary: '#8B4513', // Saddle Brown
+//     disabled: '#D3D3D3', // Light Gray
+//     placeholder: '#CD853F',
+//   },
+//   border: {
+//     main: '#CD853F', // Peru
+//     light: '#F5DEB3', // Wheat
+//   },
+//   status: {
+//     success: '#32CD32', // Lime Green
+//     error: '#FF6347', // Tomato
+//     warning: '#FFA500', // Orange
+//     cancelled: '#FF4500', // OrangeRed
+//     completed: '#4682B4', // SteelBlue
+//   },
+//   highlight: '#CD853F', // Peru
+//   gradient: {
+//     overlay: ['#8B4513', 'rgba(255, 245, 238, 0.1)'],
+//   },
+// };
+
 export const colors = {
   primary: {
-    light: '#FFF5EE', // Seashell
-    main: '#CD853F', // Peru
-    dark: '#8B4513', // Saddle Brown
+    light: '#6d7a71', // Lighter Green
+    main: '#2c3c34', // Dark Green
+    dark: '#1b241f', // Very Dark Green
   },
   secondary: {
-    light: '#F5DEB3', // Wheat
-    main: '#DEB887', // Burlywood
-    dark: '#A0522D', // Sienna
+    light: '#8a9d8f', // Soft Green (lighter green shade)
+    main: '#4d5a51', // Muted Green
+    dark: '#2c3c34', // Dark Green
+  },
+  tertiary: {
+    light: '#b8d8ba', // Light Mint Green
+    main: '#8fb593', // Mint Green
+    dark: '#67916e', // Dark Mint Green
   },
   background: {
-    default: '#FFF', // Linen
-    subtle: '#FFE4C4', // Bisque
-    interactive: '#FFDEAD', // Navajo White
-    disabled: '#E0E0E0', // Light Grey
+    inputField: '#E0EDE0',
+    default: '#F5F5F5', // Off-White (keeping a neutral background)
+    subtle: '#6d7a71', // Lighter Green (subtle background with more green)
+    interactive: '#4d5a51', // Muted Green (interactive background)
+    disabled: '#D3D3D3', // Light Grey (keeping the disabled state light)
   },
   text: {
-    primary: '#2F4F4F', // Dark Slate Gray
-    secondary: '#8B4513', // Saddle Brown
-    disabled: '#D3D3D3', // Light Gray
-    placeholder: '#CD853F',
+    light: '#E0EDE0',
+    primary: '#1b241f', // Very Dark Green (text primary)
+    secondary: '#2c3c34', // Dark Green (text secondary)
+    disabled: '#A9A9A9', // Dark Gray (keeping disabled text light for readability)
+    placeholder: '#4d5a51', // Muted Green (placeholder text)
   },
   border: {
-    main: '#CD853F', // Peru
-    light: '#F5DEB3', // Wheat
+    main: '#4d5a51', // Muted Green (border main)
+    light: '#6d7a71', // Lighter Green (border light)
   },
   status: {
-    success: '#32CD32', // Lime Green
-    error: '#FF6347', // Tomato
-    warning: '#FFA500', // Orange
-    cancelled: '#FF4500', // OrangeRed
-    completed: '#4682B4', // SteelBlue
+    success: '#32CD32', // Lime Green (unchanged)
+    error: '#FF6347', // Tomato (unchanged)
+    warning: '#FFA500', // Orange (unchanged)
+    cancelled: '#FF4500', // OrangeRed (unchanged)
+    completed: '#4682B4', // SteelBlue (unchanged)
   },
-  highlight: '#CD853F', // Peru
+  highlight: '#2c3c34', // Dark Green (highlight)
   gradient: {
-    overlay: ['#8B4513', 'rgba(255, 245, 238, 0.1)'],
+    overlay: ['#1b241f', 'rgba(109, 122, 113, 0.1)'], // Very Dark Green to Lighter Green
   },
 };
 

@@ -1,3 +1,4 @@
+import SimpleHeader from '../../components/common/SimpleHeader';
 import CartScreen from '../../screens/Cart/CartScreen';
 import CheckoutScreen from '../../screens/Cart/CheckoutScreen';
 
@@ -10,10 +11,12 @@ export const CHECKOUT_SCREEN = 'Checkout';
 export const cartRoutes = {
   [CART_SCREEN]: {
     screen: CartScreen,
-    navigationOptions: { headerShown: true, title: 'Cart' },
+    navigationOptions: {
+      header: () => <SimpleHeader title="Cart" showBack />,
+    },
   },
   [CHECKOUT_SCREEN]: {
     screen: CheckoutScreen,
-    navigationOptions: { headerShown: true, title: 'Checkout' },
+    navigationOptions: {headerShown: true, title: 'Checkout'},
   },
 };

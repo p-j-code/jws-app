@@ -62,6 +62,7 @@ const UpdatePasswordScreen = ({navigation}) => {
         )}
         <InputField
           label="Current Password"
+          placeholder="Enter your current password"
           value={formData.currentPassword}
           onChangeText={value => handleInputChange('currentPassword', value)}
           error={errors.currentPassword}
@@ -69,6 +70,7 @@ const UpdatePasswordScreen = ({navigation}) => {
         />
         <InputField
           label="New Password"
+          placeholder="Enter your new password"
           value={formData.newPassword}
           onChangeText={value => handleInputChange('newPassword', value)}
           error={errors.newPassword}

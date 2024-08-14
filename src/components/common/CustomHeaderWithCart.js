@@ -20,7 +20,7 @@ const CustomHeaderWithCart = ({title}) => {
             <Ionicons
               name="arrow-back-outline"
               size={28}
-              color={theme.colors.text.primary}
+              color={theme.colors.text.light}
             />
           </TouchableOpacity>
         )}
@@ -33,7 +33,7 @@ const CustomHeaderWithCart = ({title}) => {
         <Ionicons
           name="cart"
           size={36}
-          color={theme.colors.text.primary}
+          color={theme.colors.text.light}
           style={styles.cartIcon}
         />
       </TouchableOpacity>
@@ -43,7 +43,7 @@ const CustomHeaderWithCart = ({title}) => {
 
 const styles = StyleSheet.create({
   headerContainer: {
-    backgroundColor: theme.colors.background.subtle,
+    backgroundColor: theme.colors.background.interactive,
     paddingTop: theme.spacing.small,
     paddingBottom: theme.spacing.small,
     alignItems: 'center',
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headerText: {
-    color: theme.colors.text.primary,
+    color: theme.colors.text.light,
     fontSize: theme.typography.h3.fontSize,
     fontWeight: theme.typography.h3.fontWeight,
     marginLeft: theme.spacing.medium,

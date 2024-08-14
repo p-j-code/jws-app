@@ -20,10 +20,6 @@ import AddressPreview from '../../components/UI/AddressPreview';
 import theme from '../../theme';
 import Title from '../../components/common/Title';
 import {useNavigation} from '@react-navigation/native';
-import {
-  PROFILE_SCREEN,
-  ROOT_PROFILE_STACK_NAME,
-} from '../../navigation/routeConfigurations/profileRoutes';
 
 const EditProfileScreen = () => {
   const dispatch = useDispatch();
@@ -106,12 +102,14 @@ const EditProfileScreen = () => {
       )}
       <InputField
         label="Email"
+        placeholder="Enter your email"
         value={formData.email}
         onChangeText={value => handleInputChange('email', value)}
         error={errors.email}
       />
       <InputField
         label="Name"
+        placeholder="Enter your name"
         value={formData.name}
         onChangeText={value => handleInputChange('name', value)}
         error={errors.name}
@@ -124,6 +122,7 @@ const EditProfileScreen = () => {
       />
       <InputField
         label="Alternative Phone Number"
+        placeholder="Enter alternative phone number"
         value={formData.alternativePhoneNumber}
         onChangeText={value =>
           handleInputChange('alternativePhoneNumber', value)

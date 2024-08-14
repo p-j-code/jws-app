@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     color: theme.colors.text.primary,
   },
   containedText: {
-    color: theme.colors.text.primary,
+    color: theme.colors.text.light,
   },
   primaryOutlineText: {
     color: theme.colors.primary.main,
