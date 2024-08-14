@@ -43,7 +43,7 @@ const ProductDetails = ({route}) => {
           {paddingBottom: quantityControlHeight + 10},
         ]}>
         <View style={styles.mediaContainer}>
-          <Carousel data={product.media} width={width} height={width * 0.75} />
+          <Carousel data={product.media} width={width} height={width * 0.95} />
         </View>
         <View style={styles.detailsContainer}>
           {product.name && (
