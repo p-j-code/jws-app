@@ -1,5 +1,11 @@
 import React, {useState, useCallback, useEffect} from 'react';
-import {View, StyleSheet, TouchableOpacity, TextInput} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  TextInput,
+  Text,
+} from 'react-native';
 import Button from '../../../components/common/Button';
 import theme from '../../../theme';
 import SliderWithLabels from './SliderWithLabels';
@@ -62,6 +68,15 @@ const QuantityControlPure = ({
   useEffect(() => {
     return () => clearTimeout(timer);
   }, [timer]);
+
+  // Check if the item is out of stock
+  if (max <= 0) {
+    return (
+      <View style={[styles.container, style]}>
+        <Text style={styles.outOfStockText}>Out of Stock</Text>
+      </View>
+    );
+  }
 
   if (onlyOne) {
     return (
@@ -191,6 +206,11 @@ const styles = StyleSheet.create({
     fontSize: theme.typography.body1.fontSize,
     paddingHorizontal: theme.spacing.small,
     paddingVertical: theme.spacing.xsmall,
+  },
+  outOfStockText: {
+    fontSize: theme.typography.body1.fontSize,
+    color: theme.colors.status.error,
+    textAlign: 'center',
   },
 });
 

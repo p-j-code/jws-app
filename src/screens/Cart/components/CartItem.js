@@ -7,7 +7,6 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {useDispatch} from 'react-redux';
 import Carousel from '../../../components/common/Carousel';
 import theme from '../../../theme';
 import {
