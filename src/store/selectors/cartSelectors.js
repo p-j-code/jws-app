@@ -1,4 +1,5 @@
 import {createSelector} from 'reselect';
+import {formatValue} from '../../utils/commonUtils';
 
 const selectCart = state => state.cart.cart;
 
@@ -13,8 +14,9 @@ export const selectCartTotals = createSelector([selectCart], cart => {
   if (!cart) return {};
   return {
     totalItems: cart.totalItems,
-    totalGrossWeight: parseFloat(cart.totalGrossWeight).toFixed(2),
-    totalNetWeight: parseFloat(cart.totalNetWeight).toFixed(2),
-    totalStoneCharges: parseFloat(cart.totalStoneCharges).toFixed(2),
+    totalGrossWeight: formatValue(cart.totalGrossWeight),
+    totalNetWeight: formatValue(cart.totalNetWeight),
+    totalStoneCharges: formatValue(cart.totalStoneCharges),
+    totalStoneWeight: formatValue(cart.totalStoneWeight),
   };
 });

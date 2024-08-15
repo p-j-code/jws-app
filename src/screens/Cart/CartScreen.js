@@ -60,9 +60,9 @@ const CartScreen = ({navigation}) => {
                 <Text style={styles.totalText}>
                   Total Items: {cartTotals.totalItems}
                 </Text>
-                {cartTotals.totalStoneCharges !== 0 && (
+                {cartTotals.totalStoneWeight && (
                   <Text style={styles.totalText}>
-                    Stone Charges: {cartTotals.totalStoneCharges}
+                    Stone Weight: {cartTotals.totalStoneWeight}
                   </Text>
                 )}
               </View>

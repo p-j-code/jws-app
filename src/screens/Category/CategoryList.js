@@ -7,6 +7,7 @@ import ProductGroup from './components/CategoryItem';
 import SearchInput from '../../components/common/SearchInput';
 import theme from '../../theme';
 import CategoryCardList from './components/CategoryCardList';
+import withScreenshotProtection from '../../HOC/withScreenshotProtection';
 
 const CategoryList = () => {
   const dispatch = useDispatch();
@@ -116,4 +117,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CategoryList;
+export default withScreenshotProtection(CategoryList);

@@ -16,6 +16,7 @@ import {colors, typography, spacing, shape} from '../../theme';
 import Button from '../../components/common/Button';
 import OrderItem from './components/OrderItem';
 import withScreenshotProtection from '../../HOC/withScreenshotProtection';
+import {formatValue} from '../../utils/commonUtils';
 
 const OrderScreen = () => {
   const dispatch = useDispatch();
@@ -88,14 +89,16 @@ const OrderScreen = () => {
       />
       <Text style={styles.totalItems}>Total Items: {item.totalItems}</Text>
       <Text style={styles.totalWeight}>
-        Total Gross Weight: {item.totalGrossWeight}g
+        Total Gross Weight: {formatValue(item.totalGrossWeight)}
       </Text>
       <Text style={styles.totalWeight}>
-        Total Net Weight: {item.totalNetWeight}g
+        Total Net Weight: {formatValue(item.totalNetWeight)}
       </Text>
-      <Text style={styles.totalCharges}>
-        Total Stone Charges: ₹{item.totalStoneCharges}
-      </Text>
+      {item.totalStoneWeight !== 0 && item.totalStoneWeight && (
+        <Text style={styles.totalCharges}>
+          Total Stone Weight: {formatValue(item.totalStoneWeight)}
+        </Text>
+      )}
     </View>
   );
 

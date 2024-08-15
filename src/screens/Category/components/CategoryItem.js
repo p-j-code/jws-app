@@ -16,6 +16,7 @@ import {
   PRODUCT_LISTING_SCREEN,
   ROOT_PRODUCT_STACK_NAME,
 } from '../../../navigation/routeConfigurations/productRoutes';
+import withScreenshotProtection from '../../../HOC/withScreenshotProtection';
 
 const {width} = Dimensions.get('window');
 
@@ -156,4 +157,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProductGroup;
+export default withScreenshotProtection(ProductGroup);

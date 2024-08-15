@@ -1,19 +1,19 @@
 import React, {useState, useRef} from 'react';
 import {
   View,
-  Dimensions,
   Animated,
   StyleSheet,
   Image,
   Modal,
   TouchableOpacity,
   Text,
+  Dimensions,
 } from 'react-native';
 import Video from 'react-native-video';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import theme from '../../theme';
 
-const Carousel = ({data = [], width, height, style = {}}) => {
+const Carousel = ({data = [], width, height, style = {}, maxSlides}) => {
   const scrollX = useRef(new Animated.Value(0)).current;
   const flatListRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
@@ -30,11 +30,14 @@ const Carousel = ({data = [], width, height, style = {}}) => {
     setIsVideoVisible(true);
   };
 
+  // Limit the data based on maxSlides
+  const limitedData = maxSlides ? data.slice(0, maxSlides) : data;
+
   return (
     <View style={[styles.container, style, {width, height}]}>
       <Animated.FlatList
         ref={flatListRef}
-        data={data}
+        data={limitedData}
         keyExtractor={item => item._id?.toString()}
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -92,9 +95,9 @@ const Carousel = ({data = [], width, height, style = {}}) => {
         }}
         contentContainerStyle={{alignItems: 'center'}}
       />
-      {data.length > 1 && (
+      {limitedData.length > 1 && (
         <View style={styles.pagination}>
-          {data.map((_, index) => {
+          {limitedData.map((_, index) => {
             const inputRange = [
               (index - 1) * width,
               index * width,
@@ -110,6 +113,7 @@ const Carousel = ({data = [], width, height, style = {}}) => {
               outputRange: [0.8, 1.2, 0.8],
               extrapolate: 'clamp',
             });
+
             return (
               <Animated.View
                 key={`dot-${index}`}
@@ -131,7 +135,7 @@ const Carousel = ({data = [], width, height, style = {}}) => {
         transparent={true}
         onRequestClose={() => setIsVisible(false)}>
         <ImageViewer
-          imageUrls={data
+          imageUrls={limitedData
             .filter(item => item.type === 'image')
             .map(item => ({url: item.url}))}
           index={selectedMedia}
@@ -149,7 +153,7 @@ const Carousel = ({data = [], width, height, style = {}}) => {
             <Text style={styles.closeButtonText}>Close</Text>
           </TouchableOpacity>
           <Video
-            source={{uri: data[selectedMedia]?.url}}
+            source={{uri: limitedData[selectedMedia]?.url}}
             style={styles.fullScreenVideo}
             resizeMode="contain"
             controls
@@ -199,13 +203,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     position: 'absolute',
     bottom: 10,
+    alignSelf: 'center',
+    width: Dimensions.get('window').width, // Use full screen width for the pagination
+    justifyContent: 'center', // Center the pagination dots
+    flexWrap: 'wrap', // Allow dots to wrap to the next line if they overflow
   },
   dot: {
-    height: 10,
-    width: 10,
-    borderRadius: 5,
+    height: 8,
+    width: 8,
+    borderRadius: 4,
     backgroundColor: theme.colors.primary.main,
-    margin: 8,
+    marginHorizontal: 3,
   },
   videoModal: {
     flex: 1,

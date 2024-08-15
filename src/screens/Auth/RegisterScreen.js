@@ -30,11 +30,11 @@ const mock = {
     state: '123',
   },
   alternativePhoneNumber: '',
-  email: 'prem@gmail.com',
-  gstin: '22AAAAA0000A1Z5',
+  email: 'p7@gmail.com',
+  gstin: '22AAAAA0000A7Z1',
   name: 'Prem',
-  password: '123',
-  phoneNumber: '1231231231',
+  password: '123456789',
+  phoneNumber: '6231231247',
 };
 
 const RegisterScreen = () => {
@@ -46,9 +46,9 @@ const RegisterScreen = () => {
   const [errors, setErrors] = useState({});
   const [showAddressModal, setShowAddressModal] = useState(false);
 
-  // useEffect(() => {
-  //   dispatch(updateForm('registerForm', mock));
-  // }, []);
+  useEffect(() => {
+    dispatch(updateForm('registerForm', mock));
+  }, []);
 
   const handleInputChange = (name, value) => {
     dispatch(updateForm('registerForm', {[name]: value}));

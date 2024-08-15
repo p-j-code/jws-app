@@ -15,12 +15,13 @@ import {
   ROOT_PRODUCT_STACK_NAME,
 } from '../../../navigation/routeConfigurations/productRoutes';
 import {useNavigation} from '@react-navigation/native';
+import {formatValue} from '../../../utils/commonUtils';
+import withScreenshotProtection from '../../../HOC/withScreenshotProtection';
 
 const OrderItem = ({item}) => {
   const [showDetails, setShowDetails] = useState(false);
   const navigation = useNavigation();
 
-  console.log({Prod: item.product});
   const handleToggleDetails = useCallback(() => {
     setShowDetails(prevShowDetails => !prevShowDetails);
   }, []);
@@ -43,6 +44,7 @@ const OrderItem = ({item}) => {
                 width={squareSize}
                 height={squareSize}
                 style={{marginHorizontal: spacing.medium}}
+                maxSlides={3}
               />
             )}
           </View>
@@ -54,9 +56,11 @@ const OrderItem = ({item}) => {
             )}
             <Text style={styles.itemDetail}>Quantity: {item.quantity}</Text>
             <Text style={styles.itemDetail}>
-              Gross Weight: {item.grossWeight}g
+              Gross Weight: {formatValue(item.grossWeight)}
             </Text>
-            <Text style={styles.itemDetail}>Net Weight: {item.netWeight}g</Text>
+            <Text style={styles.itemDetail}>
+              Net Weight: {formatValue(item.netWeight)}
+            </Text>
             {showDetails && (
               <>
                 {item.product.description && (
@@ -65,7 +69,7 @@ const OrderItem = ({item}) => {
                   </Text>
                 )}
                 <Text style={styles.itemDetail}>
-                  Stone Charges: ₹{item.stoneCharges}
+                  Stone Weight: {formatValue(item.stoneWeight)}
                 </Text>
                 {item.product.narration && (
                   <Text style={styles.itemNarration}>
@@ -81,10 +85,12 @@ const OrderItem = ({item}) => {
                 {item.product.isStone && (
                   <>
                     <Text style={styles.itemDetail}>
-                      Stone Weight: {item.product.stoneWeight || 'N/A'}
+                      Stone Weight:{' '}
+                      {formatValue(item.product.stoneWeight) || 'N/A'}
                     </Text>
                     <Text style={styles.itemDetail}>
-                      Stone Charges: {item.product.stoneCharges || 'N/A'}
+                      Stone Charges:{' '}
+                      {formatValue(item.product.stoneCharges) || 'N/A'}
                     </Text>
                   </>
                 )}
@@ -162,4 +168,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default OrderItem;
+export default withScreenshotProtection(OrderItem);

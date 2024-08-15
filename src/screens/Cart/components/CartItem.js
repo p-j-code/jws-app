@@ -15,13 +15,14 @@ import {
   ROOT_PRODUCT_STACK_NAME,
 } from '../../../navigation/routeConfigurations/productRoutes';
 import QuantityControl from '../../../components/UI/QuantityControl';
+import {formatValue} from '../../../utils/commonUtils';
+import withScreenshotProtection from '../../../HOC/withScreenshotProtection';
 
 const {width} = Dimensions.get('window');
 const squareSize = width * 0.3;
 
 const CartItem = ({item}) => {
   const navigation = useNavigation();
-  const dispatch = useDispatch();
   const isSwipe = useRef(false);
 
   const handlePress = useCallback(() => {
@@ -35,15 +36,13 @@ const CartItem = ({item}) => {
     }
   }, [navigation, item.product._id]);
 
-  const formatValue = useCallback(value => parseFloat(value).toFixed(2), []);
-
   useEffect(() => {
     console.log('CartItem item updated:', item);
   }, [item]);
 
   return (
-    <TouchableWithoutFeedback onPress={handlePress}>
-      <View style={styles.productContainer}>
+    <View style={styles.productContainer}>
+      <TouchableWithoutFeedback onPress={handlePress}>
         <View style={styles.row}>
           <View style={styles.mediaContainer}>
             {item.product.media && (
@@ -82,16 +81,16 @@ const CartItem = ({item}) => {
             )}
           </View>
         </View>
-        <View style={styles.quantityControlContainer}>
-          <QuantityControl
-            productId={item.product._id}
-            max={item.product.stock}
-            size="xsm"
-            showSlider={false}
-          />
-        </View>
+      </TouchableWithoutFeedback>
+      <View style={styles.quantityControlContainer}>
+        <QuantityControl
+          productId={item.product._id}
+          max={item.product.stock}
+          size="xsm"
+          showSlider={false}
+        />
       </View>
-    </TouchableWithoutFeedback>
+    </View>
   );
 };
 
@@ -132,4 +131,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CartItem;
+export default withScreenshotProtection(CartItem);

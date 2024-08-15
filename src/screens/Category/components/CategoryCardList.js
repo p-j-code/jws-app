@@ -12,6 +12,7 @@ import {
   PRODUCT_LISTING_SCREEN,
   ROOT_PRODUCT_STACK_NAME,
 } from '../../../navigation/routeConfigurations/productRoutes';
+import withScreenshotProtection from '../../../HOC/withScreenshotProtection';
 
 const CategoryCard = ({category, onPress}) => {
   return (
@@ -69,4 +70,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CategoryCardList;
+export default withScreenshotProtection(CategoryCardList);
