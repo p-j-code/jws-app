@@ -46,9 +46,9 @@ const RegisterScreen = () => {
   const [errors, setErrors] = useState({});
   const [showAddressModal, setShowAddressModal] = useState(false);
 
-  useEffect(() => {
-    dispatch(updateForm('registerForm', mock));
-  }, []);
+  // useEffect(() => {
+  //   dispatch(updateForm('registerForm', mock));
+  // }, []);
 
   const handleInputChange = (name, value) => {
     dispatch(updateForm('registerForm', {[name]: value}));
