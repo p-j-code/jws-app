@@ -11,6 +11,8 @@ const InputField = ({
   variant = 'filled', // default variant
   placeholder,
   disabled = false, // new disabled prop
+  style,
+  inputContainerStyle,
   ...restProps
 }) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -25,7 +27,7 @@ const InputField = ({
   }, [isFocused, value]);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, inputContainerStyle]}>
       {label && variant === 'floating' && (
         <Animated.Text
           style={[
@@ -56,6 +58,7 @@ const InputField = ({
       )}
       <TextInput
         style={[
+          style,
           styles.input,
           error && styles.errorInput,
           variantStyles[variant],
@@ -129,7 +132,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   staticLabel: {
-    ...theme.typography.subtitle2,
+    ...theme.typography.body,
     marginBottom: theme.spacing.small,
   },
   input: {
