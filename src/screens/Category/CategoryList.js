@@ -2,7 +2,10 @@ import React, {useEffect, useState, useCallback} from 'react';
 import {View, Text, StyleSheet, ScrollView, RefreshControl} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {getProductsGroupedByCategoriesRequest} from '../../store/actions/productActions';
-import {getAllCategoriesRequest} from '../../store/actions/categoryActions';
+import {
+  getAllCategoriesRequest,
+  getCategoryOptionsRequest,
+} from '../../store/actions/categoryActions';
 import ProductGroup from './components/CategoryItem';
 import SearchInput from '../../components/common/SearchInput';
 import theme from '../../theme';
@@ -37,6 +40,7 @@ const CategoryList = () => {
     categories = [],
     loading: categoriesLoading,
     error: categoriesError,
+    categoryOptions,
   } = useSelector(state => state.category);
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -91,6 +95,7 @@ const CategoryList = () => {
 
   useEffect(() => {
     fetchProducts();
+    dispatch(getCategoryOptionsRequest({}));
   }, [fetchProducts]);
 
   const onRefresh = useCallback(() => {
@@ -108,7 +113,7 @@ const CategoryList = () => {
         onClear={handleClear} // Pass the handleClear function
         placeholder="Type to search..."
         value={searchQuery}
-        categoryOptions={convertToCategoryOptions(categories)}
+        categoryOptions={convertToCategoryOptions(categoryOptions)}
         caretOptions={caretOptions}
       />
 
