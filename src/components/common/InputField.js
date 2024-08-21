@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   staticLabel: {
-    ...theme.typography.body,
+    ...theme.typography.body2,
     marginBottom: theme.spacing.small,
   },
   input: {

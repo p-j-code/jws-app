@@ -16,6 +16,7 @@ const FilterModal = ({
   isVisible,
   onClose,
   onApply, // Add onApply prop to handle filter application
+  onClear,
   categoryOptions,
   caretOptions,
   initialSelectedCategory,
@@ -34,8 +35,8 @@ const FilterModal = ({
 
   useEffect(() => {
     // Update state when initial values change
-    setSelectedCategory(initialSelectedCategory || '');
-    setSelectedCaret(initialSelectedCaret || null);
+    setSelectedCategory(initialSelectedCategory?.length || '');
+    setSelectedCaret(initialSelectedCaret?.length || null);
     setMinWeight(initialMinWeight || '');
     setMaxWeight(initialMaxWeight || '');
   }, [
@@ -63,6 +64,7 @@ const FilterModal = ({
                   onChangeText={setMinWeight}
                   style={[styles.inputField, {marginRight: 10}]}
                   inputContainerStyle={styles.inputContainerStyle}
+                  keyboardType="numeric"
                 />
                 <InputField
                   label="Max Weight"
@@ -71,6 +73,7 @@ const FilterModal = ({
                   onChangeText={setMaxWeight}
                   style={styles.inputField}
                   inputContainerStyle={styles.inputContainerStyle}
+                  keyboardType="numeric"
                 />
               </View>
               {categoryOptions && (
@@ -110,6 +113,7 @@ const FilterModal = ({
                     setMaxWeight('');
                     setSelectedCategory('');
                     setSelectedCaret(null);
+                    onClear && onClear();
                   }}
                   variant="secondary"
                   type="text"
@@ -146,9 +150,9 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     backgroundColor: 'white',
-    padding: 20,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    padding: theme.spacing.large,
+    borderTopLeftRadius: theme.shape.borderRadiusLarge,
+    borderTopRightRadius: theme.shape.borderRadiusLarge,
     width: '100%', // Make sure modal content takes full width
   },
   inputContainer: {
@@ -163,7 +167,7 @@ const styles = StyleSheet.create({
   radioGroup: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginBottom: 20,
+    marginBottom: theme.spacing.large,
   },
   radioItem: {
     width: '48%', // Take up half the width of the container
@@ -172,7 +176,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 20,
+    marginTop: theme.spacing.large,
   },
   button: {
     width: '48%',

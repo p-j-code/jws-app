@@ -142,7 +142,7 @@ export const spacing = {
 export const shape = {
   borderRadius: 8,
   borderRadiusSmall: 4,
-  borderRadiusLarge: 12,
+  borderRadiusLarge: 20,
 };
 
 const theme = {

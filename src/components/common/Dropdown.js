@@ -18,7 +18,9 @@ const Dropdown = ({label, options, selectedValue, onValueChange}) => {
     setIsVisible(false);
   };
 
-  console.log({selectedValue, label});
+  const getLabel = () => {
+    return options?.find(opt => opt.value === selectedValue) || {};
+  };
 
   return (
     <View style={styles.container}>
@@ -27,7 +29,7 @@ const Dropdown = ({label, options, selectedValue, onValueChange}) => {
         style={styles.dropdownTrigger}
         onPress={() => setIsVisible(true)}>
         <Text style={styles.selectedValue}>
-          {selectedValue ? selectedValue : 'Select an option'}
+          {selectedValue ? getLabel().label : 'Select an option'}
         </Text>
       </TouchableOpacity>
 

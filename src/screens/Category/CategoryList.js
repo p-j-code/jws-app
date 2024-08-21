@@ -9,6 +9,23 @@ import theme from '../../theme';
 import CategoryCardList from './components/CategoryCardList';
 import withScreenshotProtection from '../../HOC/withScreenshotProtection';
 
+const caretOptions = [
+  {label: '14KT', value: 14},
+  {label: '18KT', value: 18},
+  {label: '20KT', value: 20},
+  {label: '21KT', value: 21},
+  {label: '22KT', value: 22},
+  {label: '23KT', value: 23},
+  {label: '24KT', value: 24},
+];
+
+const convertToCategoryOptions = categories => {
+  return categories.map(category => ({
+    label: category.name,
+    value: category._id,
+  }));
+};
+
 const CategoryList = () => {
   const dispatch = useDispatch();
   const {
@@ -34,6 +51,7 @@ const CategoryList = () => {
   }, []);
 
   const handleFilterChange = useCallback((categories, carats, minWt, maxWt) => {
+    console.log({categories, carats, minWt, maxWt});
     setSelectedCategories(categories);
     setSelectedCarats(carats);
     setMinWeight(minWt);
@@ -46,7 +64,7 @@ const CategoryList = () => {
         groupByParentCategories: true,
         search: searchQuery,
         categories: selectedCategories,
-        carats: selectedCarats,
+        purity: selectedCarats,
         minWeight: minWeight ? parseFloat(minWeight) : undefined,
         maxWeight: maxWeight ? parseFloat(maxWeight) : undefined,
       }),
@@ -62,6 +80,15 @@ const CategoryList = () => {
     maxWeight,
   ]);
 
+  const handleClear = useCallback(() => {
+    setSearchQuery('');
+    setSelectedCategories([]);
+    setSelectedCarats([]);
+    setMinWeight('');
+    setMaxWeight('');
+    fetchProducts(); // Fetch products without filters
+  }, [fetchProducts]);
+
   useEffect(() => {
     fetchProducts();
   }, [fetchProducts]);
@@ -72,31 +99,16 @@ const CategoryList = () => {
     setRefreshing(false);
   }, [fetchProducts]);
 
-  const categoryOptions = [
-    {label: 'Rings', value: 'rings'},
-    {label: 'Necklaces', value: 'necklaces'},
-    {label: 'Bracelets', value: 'bracelets'},
-  ];
-
-  const caretOptions = [
-    {label: '14KT', value: '14KT'},
-    {label: '18KT', value: '18KT'},
-    {label: '20KT', value: '20KT'},
-    {label: '21KT', value: '21KT'},
-    {label: '22KT', value: '22KT'},
-    {label: '23KT', value: '23KT'},
-    {label: '24KT', value: '24KT'},
-  ];
-
   return (
     <View style={styles.container}>
       <SearchInput
         variant="outlined"
         onSearch={handleSearch}
-        onFilterChange={handleFilterChange} // Pass the filter change handler
+        onApply={handleFilterChange}
+        onClear={handleClear} // Pass the handleClear function
         placeholder="Type to search..."
         value={searchQuery}
-        categoryOptions={categoryOptions}
+        categoryOptions={convertToCategoryOptions(categories)}
         caretOptions={caretOptions}
       />
 
@@ -124,8 +136,8 @@ const CategoryList = () => {
             {Object.keys(products).map((key, idx) => (
               <ProductGroup
                 key={key + idx}
-                parentCategories={products[key].parentCategories}
-                products={products[key].products}
+                parentCategories={products[key].parentCategories || []}
+                products={products[key].products || []}
               />
             ))}
           </>

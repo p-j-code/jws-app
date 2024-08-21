@@ -9,7 +9,8 @@ import theme from '../../theme';
 const SearchInput = ({
   label,
   onSearch,
-  onFilterChange, // New prop to handle filter changes
+  onApply, // New prop to handle filter changes
+  onClear,
   variant = 'filled',
   placeholder,
   categoryOptions,
@@ -59,7 +60,8 @@ const SearchInput = ({
       <FilterModal
         isVisible={isFilterModalVisible}
         onClose={() => setFilterModalVisible(false)}
-        onApply={onFilterChange} // Pass the handler to apply filters
+        onApply={onApply} // Pass the handler to apply filters
+        onClear={onClear}
         categoryOptions={categoryOptions}
         caretOptions={caretOptions}
       />
