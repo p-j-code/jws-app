@@ -19,7 +19,9 @@ const ProductListingScreen = ({route}) => {
   const [refreshing, setRefreshing] = useState(false);
 
   const fetchProducts = useCallback(() => {
-    dispatch(getAllProductsRequest({category: category.id || category._id}));
+    dispatch(
+      getAllProductsRequest({parentCategory: category.id || category._id}),
+    );
   }, [dispatch, category]);
 
   useEffect(() => {

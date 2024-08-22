@@ -74,7 +74,7 @@ const CategoryList = () => {
       }),
     );
 
-    dispatch(getAllCategoriesRequest({name: searchQuery}));
+    dispatch(getAllCategoriesRequest({onlyParents: true, name: searchQuery}));
   }, [
     dispatch,
     searchQuery,
@@ -141,7 +141,7 @@ const CategoryList = () => {
             {Object.keys(products).map((key, idx) => (
               <ProductGroup
                 key={key + idx}
-                parentCategories={products[key].parentCategories || []}
+                parentCategories={products[key].parentCategory || []}
                 products={products[key].products || []}
               />
             ))}
