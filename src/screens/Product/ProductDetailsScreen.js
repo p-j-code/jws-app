@@ -14,7 +14,7 @@ import Carousel from '../../components/common/Carousel';
 import QuantityControl from '../../components/UI/QuantityControl';
 import withScreenshotProtection from '../../HOC/withScreenshotProtection';
 
-const {width} = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 const ProductDetails = ({route}) => {
   const {productId} = route.params;
@@ -35,6 +35,9 @@ const ProductDetails = ({route}) => {
     );
   }
 
+  // Define the height of the carousel dynamically based on a larger fraction of the screen height
+  const carouselHeight = height * 0.7; // 50% of the screen height
+
   return (
     <View style={styles.container}>
       <ScrollView
@@ -43,7 +46,11 @@ const ProductDetails = ({route}) => {
           {paddingBottom: quantityControlHeight + 10},
         ]}>
         <View style={styles.mediaContainer}>
-          <Carousel data={product.media} width={width} height={width * 0.95} />
+          <Carousel
+            data={product.media}
+            width={width}
+            height={carouselHeight}
+          />
         </View>
         <View style={styles.detailsContainer}>
           {product.name && (

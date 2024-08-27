@@ -81,11 +81,16 @@ const ProductGroup = ({parentCategories, products}) => {
               />
               <View style={styles.productDetails}>
                 <Text style={styles.productDetail}>
-                  Gross Weight: {item.grossWeight}
+                  Gross: {item.grossWeight || 'N/A'}
                 </Text>
                 <Text style={styles.productDetail}>
-                  Net Weight: {item.netWeight}
+                  Net: {item.netWeight || 'N/A'}
                 </Text>
+                {item.isStone && (
+                  <Text style={styles.productDetail}>
+                    Stone: {item.stoneWeight || 'N/A'}
+                  </Text>
+                )}
               </View>
             </View>
           </TouchableOpacity>
@@ -122,7 +127,7 @@ const styles = StyleSheet.create({
     color: theme.colors.primary.main,
   },
   productCard: {
-    width: width * 0.4,
+    width: width * 0.35,
     marginRight: theme.spacing.small,
     borderRadius: theme.shape.borderRadius,
     overflow: 'hidden',
@@ -130,7 +135,7 @@ const styles = StyleSheet.create({
   },
   productImage: {
     width: '100%',
-    height: 100,
+    height: width * 0.4,
   },
   gradientOverlay: {
     position: 'absolute',

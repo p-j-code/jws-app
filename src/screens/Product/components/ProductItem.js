@@ -14,6 +14,7 @@ import QuantityControl from '../../../components/UI/QuantityControl';
 
 const {width} = Dimensions.get('window');
 const squareSize = width * 0.4;
+const carouselHeight = squareSize * 1;
 
 const ProductItem = ({item}) => {
   const navigation = useNavigation();
@@ -29,33 +30,39 @@ const ProductItem = ({item}) => {
     <TouchableWithoutFeedback onPress={handlePress}>
       <View style={styles.productContainer}>
         <View style={styles.mediaContainer}>
-          <Carousel data={item.media} width={squareSize} height={squareSize} />
+          <Carousel
+            data={item.media}
+            width={squareSize}
+            height={carouselHeight}
+          />
         </View>
         <View style={styles.detailsContainer}>
-          {item.name && (
-            <Text style={styles.productName}>{item.name || 'No Name'}</Text>
-          )}
-          {item.narration && (
-            <Text style={styles.productNarration}>
-              {item.narration || 'No Narration'}
-            </Text>
-          )}
-          <Text style={styles.productDetail}>
-            Gross: {item.grossWeight || 'N/A'}
-          </Text>
-          <Text style={styles.productDetail}>
-            Net: {item.netWeight || 'N/A'}
-          </Text>
-          {item.isStone && (
+          <View>
+            {item.name && (
+              <Text style={styles.productName}>{item.name || 'No Name'}</Text>
+            )}
+            {item.narration && (
+              <Text style={styles.productNarration}>
+                {item.narration || 'No Narration'}
+              </Text>
+            )}
             <Text style={styles.productDetail}>
-              Stone: {item.stoneWeight || 'N/A'}
+              Gross: {item.grossWeight || 'N/A'}
             </Text>
-          )}
-          {item.isStone && (
             <Text style={styles.productDetail}>
-              Charges: {item.stoneCharges || 'N/A'}
+              Net: {item.netWeight || 'N/A'}
             </Text>
-          )}
+            {item.isStone && (
+              <Text style={styles.productDetail}>
+                Stone: {item.stoneWeight || 'N/A'}
+              </Text>
+            )}
+            {item.isStone && (
+              <Text style={styles.productDetail}>
+                Charges: {item.stoneCharges || 'N/A'}
+              </Text>
+            )}
+          </View>
           <View style={styles.cartControls}>
             <QuantityControl
               productId={item._id}

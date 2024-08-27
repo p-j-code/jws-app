@@ -33,6 +33,9 @@ const OrderItem = ({item}) => {
     });
   };
 
+  // Define the height of the carousel dynamically based on a fraction of the available squareSize or any other logic
+  const carouselHeight = squareSize * 0.75;
+
   return (
     <View style={styles.itemContainer}>
       <TouchableWithoutFeedback onPress={handleNavigateToProduct}>
@@ -42,7 +45,7 @@ const OrderItem = ({item}) => {
               <Carousel
                 data={item.product.media}
                 width={squareSize}
-                height={squareSize}
+                height={carouselHeight} // Use the dynamically calculated height
                 style={{marginHorizontal: spacing.medium}}
                 maxSlides={3}
               />

@@ -53,14 +53,14 @@ export const bottomTabConfig = [
   //     header: () => <SimpleHeader title="Cart" />,
   //   },
   // },
-  {
-    name: CONTACT_TAB,
-    component: ContactScreen,
-    options: {
-      tabBarLabel: 'Contact',
-      iconName: 'call-outline',
-      iconNameFocused: 'call',
-      header: () => <SimpleHeader title="Contact" />,
-    },
-  },
+  // {
+  //   name: CONTACT_TAB,
+  //   component: ContactScreen,
+  //   options: {
+  //     tabBarLabel: 'Contact',
+  //     iconName: 'call-outline',
+  //     iconNameFocused: 'call',
+  //     header: () => <SimpleHeader title="Contact" />,
+  //   },
+  // },
 ];
