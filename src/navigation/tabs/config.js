@@ -17,10 +17,10 @@ export const bottomTabConfig = [
     name: APP_NAME,
     component: HomeScreen,
     options: {
-      tabBarLabel: APP_NAME,
+      tabBarLabel: 'Home',
       iconName: 'home-outline',
       iconNameFocused: 'home',
-      header: () => <CustomHeaderWithCart title="SG Gold" />, // Use the custom header
+      header: () => <CustomHeaderWithCart title="Sawarna Shahi" />, // Use the custom header
     },
   },
   {

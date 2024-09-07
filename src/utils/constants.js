@@ -1,4 +1,4 @@
-export const APP_NAME = 'SG Gold';
+export const APP_NAME = 'Sawarna';
 export const STATUS_ERROR_CODES = {
   pending: 'PROFILE_PENDING',
   rejected: 'PROFILE_REJECTED',
