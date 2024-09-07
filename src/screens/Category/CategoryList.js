@@ -1,16 +1,17 @@
 import React, {useEffect, useState, useCallback} from 'react';
 import {View, Text, StyleSheet, ScrollView, RefreshControl} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {getProductsGroupedByCategoriesRequest} from '../../store/actions/productActions';
-import {
-  getAllCategoriesRequest,
-  getCategoryOptionsRequest,
-} from '../../store/actions/categoryActions';
 import ProductGroup from './components/CategoryItem';
 import SearchInput from '../../components/common/SearchInput';
 import theme from '../../theme';
 import CategoryCardList from './components/CategoryCardList';
 import withScreenshotProtection from '../../HOC/withScreenshotProtection';
+import useSearchAndFilter from '../../hooks/useSearchAndFilter';
+import {getProductsGroupedByCategoriesRequest} from '../../store/actions/productActions';
+import {
+  getAllCategoriesRequest,
+  getCategoryOptionsRequest,
+} from '../../store/actions/categoryActions';
 
 const caretOptions = [
   {label: '14KT', value: 14},
@@ -32,6 +33,19 @@ const convertToCategoryOptions = categories => {
 const CategoryList = () => {
   const dispatch = useDispatch();
   const {
+    filters,
+    handleSearch,
+    handleFilterChange,
+    handleClear,
+    fetchProducts,
+    fetchCategoryOptions,
+  } = useSearchAndFilter(
+    getProductsGroupedByCategoriesRequest,
+    {groupByParentCategories: true},
+    getCategoryOptionsRequest,
+  );
+
+  const {
     groupedProducts: products,
     loading,
     error,
@@ -43,60 +57,7 @@ const CategoryList = () => {
     categoryOptions,
   } = useSelector(state => state.category);
 
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategories, setSelectedCategories] = useState([]);
-  const [selectedCarats, setSelectedCarats] = useState([]);
-  const [minWeight, setMinWeight] = useState('');
-  const [maxWeight, setMaxWeight] = useState('');
   const [refreshing, setRefreshing] = useState(false);
-
-  const handleSearch = useCallback(query => {
-    setSearchQuery(query);
-  }, []);
-
-  const handleFilterChange = useCallback((categories, carats, minWt, maxWt) => {
-    console.log({categories, carats, minWt, maxWt});
-    setSelectedCategories(categories);
-    setSelectedCarats(carats);
-    setMinWeight(minWt);
-    setMaxWeight(maxWt);
-  }, []);
-
-  const fetchProducts = useCallback(() => {
-    dispatch(
-      getProductsGroupedByCategoriesRequest({
-        groupByParentCategories: true,
-        search: searchQuery,
-        categories: selectedCategories,
-        purity: selectedCarats,
-        minWeight: minWeight ? parseFloat(minWeight) : undefined,
-        maxWeight: maxWeight ? parseFloat(maxWeight) : undefined,
-      }),
-    );
-
-    dispatch(getAllCategoriesRequest({onlyParents: true, name: searchQuery}));
-  }, [
-    dispatch,
-    searchQuery,
-    selectedCategories,
-    selectedCarats,
-    minWeight,
-    maxWeight,
-  ]);
-
-  const handleClear = useCallback(() => {
-    setSearchQuery('');
-    setSelectedCategories([]);
-    setSelectedCarats([]);
-    setMinWeight('');
-    setMaxWeight('');
-    fetchProducts(); // Fetch products without filters
-  }, [fetchProducts]);
-
-  useEffect(() => {
-    fetchProducts();
-    dispatch(getCategoryOptionsRequest({}));
-  }, [fetchProducts]);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -104,15 +65,28 @@ const CategoryList = () => {
     setRefreshing(false);
   }, [fetchProducts]);
 
+  // Trigger fetchProducts when any filter changes
+  useEffect(() => {
+    fetchProducts(); // Trigger fetch when filters change
+  }, [filters]); // Add filters as a dependency
+
+  // Fetch category options only once on mount
+  useEffect(() => {
+    fetchCategoryOptions();
+    dispatch(
+      getAllCategoriesRequest({onlyParents: true, name: filters.searchQuery}),
+    );
+  }, [dispatch, filters.searchQuery, fetchCategoryOptions]);
+
   return (
     <View style={styles.container}>
       <SearchInput
         variant="outlined"
         onSearch={handleSearch}
         onApply={handleFilterChange}
-        onClear={handleClear} // Pass the handleClear function
+        onClear={handleClear}
         placeholder="Type to search..."
-        value={searchQuery}
+        value={filters.searchQuery}
         categoryOptions={convertToCategoryOptions(categoryOptions)}
         caretOptions={caretOptions}
       />
