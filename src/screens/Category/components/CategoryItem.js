@@ -17,6 +17,7 @@ import {
   ROOT_PRODUCT_STACK_NAME,
 } from '../../../navigation/routeConfigurations/productRoutes';
 import withScreenshotProtection from '../../../HOC/withScreenshotProtection';
+import ProductFlags from '../../../components/UI/ProductFlags';
 
 const {width} = Dimensions.get('window');
 
@@ -69,6 +70,7 @@ const ProductGroup = ({parentCategories, products}) => {
         renderItem={({item}) => (
           <TouchableOpacity onPress={() => handleProductPress(item)}>
             <View style={styles.productCard}>
+              <ProductFlags flags={item.flags} />
               <Image
                 source={{uri: item.media[0].url}}
                 style={styles.productImage}

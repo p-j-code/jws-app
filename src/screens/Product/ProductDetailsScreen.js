@@ -13,6 +13,7 @@ import {getProductByIdRequest} from '../../store/actions/productActions';
 import Carousel from '../../components/common/Carousel';
 import QuantityControl from '../../components/UI/QuantityControl';
 import withScreenshotProtection from '../../HOC/withScreenshotProtection';
+import ProductFlags from '../../components/UI/ProductFlags'; // Import the new ProductFlags component
 
 const {width, height} = Dimensions.get('window');
 
@@ -35,8 +36,7 @@ const ProductDetails = ({route}) => {
     );
   }
 
-  // Define the height of the carousel dynamically based on a larger fraction of the screen height
-  const carouselHeight = height * 0.7; // 50% of the screen height
+  const carouselHeight = height * 0.7;
 
   return (
     <View style={styles.container}>
@@ -46,6 +46,9 @@ const ProductDetails = ({route}) => {
           {paddingBottom: quantityControlHeight + 10},
         ]}>
         <View style={styles.mediaContainer}>
+          {/* Pass the flags array to the ProductFlags component */}
+          <ProductFlags flags={product.flags} />
+
           <Carousel
             data={product.media}
             width={width}
@@ -121,6 +124,7 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     marginBottom: theme.spacing.medium,
+    position: 'relative', // For flag positioning
   },
   detailsContainer: {
     padding: theme.spacing.medium,

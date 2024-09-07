@@ -11,6 +11,7 @@ import Carousel from '../../../components/common/Carousel'; // Import the custom
 import theme from '../../../theme';
 import {PRODUCT_DETAILS_SCREEN} from '../../../navigation/routeConfigurations/productRoutes';
 import QuantityControl from '../../../components/UI/QuantityControl';
+import ProductFlags from '../../../components/UI/ProductFlags';
 
 const {width} = Dimensions.get('window');
 const squareSize = width * 0.4;
@@ -30,6 +31,9 @@ const ProductItem = ({item}) => {
     <TouchableWithoutFeedback onPress={handlePress}>
       <View style={styles.productContainer}>
         <View style={styles.mediaContainer}>
+          {/* Pass the flags array to the ProductFlags component */}
+          <ProductFlags flags={item.flags} />
+
           <Carousel
             data={item.media}
             width={squareSize}
@@ -88,6 +92,7 @@ const styles = StyleSheet.create({
   mediaContainer: {
     width: squareSize,
     marginRight: theme.spacing.medium,
+    position: 'relative', // Needed for absolute positioning of flags
   },
   detailsContainer: {
     flex: 1,
@@ -112,14 +117,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: theme.spacing.small,
     justifyContent: 'space-between',
-  },
-  cartButton: {
-    flex: 1,
-    marginHorizontal: theme.spacing.xsmall,
-  },
-  quantityLabel: {
-    ...theme.typography.body1,
-    marginHorizontal: theme.spacing.small,
   },
 });
 
