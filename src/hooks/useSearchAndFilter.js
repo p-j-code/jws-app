@@ -1,11 +1,7 @@
 import {useMemo, useState, useCallback} from 'react';
 import {useDispatch} from 'react-redux';
 
-const useSearchAndFilter = (
-  fetchProductsAction,
-  defaultParams = {},
-  fetchCategoryOptionsAction = null,
-) => {
+const useSearchAndFilter = (fetchProductsAction, defaultParams = {}) => {
   const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -48,7 +44,9 @@ const useSearchAndFilter = (
       fetchProductsAction({
         ...defaultParams,
         search: filters.searchQuery,
-        categories: filters.selectedCategories,
+        parentCategory: filters.selectedCategories.length
+          ? filters.selectedCategories
+          : defaultParams.parentCategory,
         purity: filters.selectedCarats,
         minWeight: filters.minWeight
           ? parseFloat(filters.minWeight)
@@ -60,19 +58,12 @@ const useSearchAndFilter = (
     );
   }, [dispatch, filters, defaultParams, fetchProductsAction]);
 
-  const fetchCategoryOptions = useCallback(() => {
-    if (fetchCategoryOptionsAction) {
-      dispatch(fetchCategoryOptionsAction());
-    }
-  }, [dispatch, fetchCategoryOptionsAction]);
-
   return {
     filters,
     handleSearch,
     handleFilterChange,
     handleClear,
     fetchProducts,
-    fetchCategoryOptions,
   };
 };
 

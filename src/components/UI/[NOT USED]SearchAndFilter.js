@@ -1,6 +1,6 @@
 import React, {useState, useCallback} from 'react';
 import {View, StyleSheet} from 'react-native';
-import SearchInput from '../../components/common/SearchInput';
+import SearchInput from '../common/SearchInput';
 import theme from '../../theme';
 
 const caretOptions = [

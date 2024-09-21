@@ -61,11 +61,11 @@ const ProductItem = ({item}) => {
                 Stone: {item.stoneWeight || 'N/A'}
               </Text>
             )}
-            {item.isStone && (
+            {/* {item.isStone && (
               <Text style={styles.productDetail}>
                 Charges: {item.stoneCharges || 'N/A'}
               </Text>
-            )}
+            )} */}
           </View>
           <View style={styles.cartControls}>
             <QuantityControl

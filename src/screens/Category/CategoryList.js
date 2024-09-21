@@ -1,6 +1,7 @@
 import React, {useEffect, useState, useCallback} from 'react';
 import {View, Text, StyleSheet, ScrollView, RefreshControl} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
+import {useFocusEffect} from '@react-navigation/native'; // Import useFocusEffect
 import ProductGroup from './components/CategoryItem';
 import SearchInput from '../../components/common/SearchInput';
 import theme from '../../theme';
@@ -14,13 +15,13 @@ import {
 } from '../../store/actions/categoryActions';
 
 const caretOptions = [
-  {label: '14KT', value: 14},
-  {label: '18KT', value: 18},
-  {label: '20KT', value: 20},
-  {label: '21KT', value: 21},
-  {label: '22KT', value: 22},
-  {label: '23KT', value: 23},
-  {label: '24KT', value: 24},
+  // {label: '14KT', value: 14},
+  // {label: '18KT', value: 18},
+  // {label: '20KT', value: 20},
+  // {label: '21KT', value: 21},
+  // {label: '22KT', value: 22},
+  // {label: '23KT', value: 23},
+  // {label: '24KT', value: 24},
 ];
 
 const convertToCategoryOptions = categories => {
@@ -38,12 +39,9 @@ const CategoryList = () => {
     handleFilterChange,
     handleClear,
     fetchProducts,
-    fetchCategoryOptions,
-  } = useSearchAndFilter(
-    getProductsGroupedByCategoriesRequest,
-    {groupByParentCategories: true},
-    getCategoryOptionsRequest,
-  );
+  } = useSearchAndFilter(getProductsGroupedByCategoriesRequest, {
+    groupByParentCategories: true,
+  });
 
   const {
     groupedProducts: products,
@@ -65,18 +63,27 @@ const CategoryList = () => {
     setRefreshing(false);
   }, [fetchProducts]);
 
+  const fetchCategoryOptions = useCallback(() => {
+    dispatch(
+      getCategoryOptionsRequest({onlyParents: true, name: filters.searchQuery}),
+    );
+  }, [dispatch, filters.searchQuery]);
+
+  // Fetch category options and reset filters when the screen comes into focus
+  useFocusEffect(
+    useCallback(() => {
+      handleClear(); // Reset filters
+      fetchCategoryOptions(); // Fetch category options
+      dispatch(
+        getAllCategoriesRequest({onlyParents: true, name: filters.searchQuery}),
+      );
+    }, [dispatch, filters.searchQuery, fetchCategoryOptions, handleClear]),
+  );
+
   // Trigger fetchProducts when any filter changes
   useEffect(() => {
     fetchProducts(); // Trigger fetch when filters change
   }, [filters]); // Add filters as a dependency
-
-  // Fetch category options only once on mount
-  useEffect(() => {
-    fetchCategoryOptions();
-    dispatch(
-      getAllCategoriesRequest({onlyParents: true, name: filters.searchQuery}),
-    );
-  }, [dispatch, filters.searchQuery, fetchCategoryOptions]);
 
   return (
     <View style={styles.container}>

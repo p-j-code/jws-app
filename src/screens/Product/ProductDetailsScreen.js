@@ -69,30 +69,34 @@ const ProductDetails = ({route}) => {
               {product.description || 'No Description'}
             </Text>
           )}
-          <Text style={styles.productDetail}>Type: {product.type}</Text>
+          {/* <Text style={styles.productDetail}>Type: {product.type}</Text> */}
           <Text style={styles.productDetail}>
             Gross Weight: {product.grossWeight}
           </Text>
           <Text style={styles.productDetail}>
             Net Weight: {product.netWeight}
           </Text>
-          <Text style={styles.productDetail}>Purity: {product.purity}</Text>
+          {/* <Text style={styles.productDetail}>Purity: {product.purity}</Text> */}
           {product.isStone && (
             <>
               <Text style={styles.productDetail}>
                 Stone Weight: {product.stoneWeight || 'N/A'}
               </Text>
-              <Text style={styles.productDetail}>
+              {/* <Text style={styles.productDetail}>
                 Stone Charges: {product.stoneCharges || 'N/A'}
-              </Text>
+              </Text> */}
             </>
           )}
           <Text style={styles.productDetail}>
             Categories: {(product.categories || []).map(c => c.name).join(', ')}
           </Text>
-          <Text style={styles.productDetail}>
-            Tags: {(product.tags || []).join(', ')}
-          </Text>
+          {product.tags && product.tags.filter(tag => !!tag)?.length ? (
+            <Text style={styles.productDetail}>
+              Tags: {(product.tags || []).join(', ')}
+            </Text>
+          ) : (
+            <></>
+          )}
         </View>
       </ScrollView>
       <View
