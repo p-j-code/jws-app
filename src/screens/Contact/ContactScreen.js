@@ -38,14 +38,14 @@ const ContactScreen = () => {
         <Text style={styles.label}>Address:</Text>
         <View style={styles.row}>
           <Text style={styles.value}>1234 Green Street, Mumbai, India</Text>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={() => handleCopy('1234 Green Street, Mumbai, India')}>
             <Icon
               name="copy-outline"
               size={24}
               color={theme.colors.text.primary}
             />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
 
@@ -56,13 +56,13 @@ const ContactScreen = () => {
           <TouchableOpacity onPress={() => handlePhonePress('+91 9004252561')}>
             <Text style={styles.value}>+91 9004252561</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleCopy('+91 9004252561')}>
+          {/* <TouchableOpacity onPress={() => handleCopy('+91 9004252561')}>
             <Icon
               name="copy-outline"
               size={24}
               color={theme.colors.text.primary}
             />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
 
@@ -74,13 +74,13 @@ const ContactScreen = () => {
             onPress={() => handleEmailPress('example@example.com')}>
             <Text style={styles.value}>example@example.com</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleCopy('example@example.com')}>
+          {/* <TouchableOpacity onPress={() => handleCopy('example@example.com')}>
             <Icon
               name="copy-outline"
               size={24}
               color={theme.colors.text.primary}
             />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
 
@@ -91,7 +91,7 @@ const ContactScreen = () => {
           <Text style={styles.value}>
             Account No: 1234567890, IFSC: ABCD0123456
           </Text>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={() =>
               handleCopy('Account No: 1234567890, IFSC: ABCD0123456')
             }>
@@ -100,7 +100,7 @@ const ContactScreen = () => {
               size={24}
               color={theme.colors.text.primary}
             />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
 
