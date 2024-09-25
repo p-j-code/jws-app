@@ -29,6 +29,15 @@ const ContactScreen = () => {
     Linking.openURL('https://sggold.co.in/public/privacy-policy');
   };
 
+  const bankDetailsText = `
+    Bank Name: Yes Bank Limited
+    Account Name: S G Gold
+    Account Number: 018984600003448
+    Branch: Worli
+    IFSC: YESB0000001
+    MICR: 40053200211Z
+  `;
+
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>Contact Information</Text>
@@ -37,15 +46,22 @@ const ContactScreen = () => {
       <View style={styles.contactItem}>
         <Text style={styles.label}>Address:</Text>
         <View style={styles.row}>
-          <Text style={styles.value}>1234 Green Street, Mumbai, India</Text>
-          {/* <TouchableOpacity
-            onPress={() => handleCopy('1234 Green Street, Mumbai, India')}>
+          <Text style={styles.value}>
+            47/51, Soni Bhavan, Opp Kansara Chawl, 1st Floor, Office No.1,
+            Kalbadevi, Mumbai-2
+          </Text>
+          <TouchableOpacity
+            onPress={() =>
+              handleCopy(
+                '47/51, Soni Bhavan, Opp Kansara Chawl, 1st Floor, Office No.1, Kalbadevi, Mumbai-2',
+              )
+            }>
             <Icon
               name="copy-outline"
               size={24}
               color={theme.colors.text.primary}
             />
-          </TouchableOpacity> */}
+          </TouchableOpacity>
         </View>
       </View>
 
@@ -53,16 +69,16 @@ const ContactScreen = () => {
       <View style={styles.contactItem}>
         <Text style={styles.label}>Phone Number:</Text>
         <View style={styles.row}>
-          <TouchableOpacity onPress={() => handlePhonePress('+91 9004252561')}>
-            <Text style={styles.value}>+91 9004252561</Text>
+          <TouchableOpacity onPress={() => handlePhonePress('+91 9029949030')}>
+            <Text style={styles.value}>+9 9029949030</Text>
           </TouchableOpacity>
-          {/* <TouchableOpacity onPress={() => handleCopy('+91 9004252561')}>
+          <TouchableOpacity onPress={() => handleCopy('+91 9029949030')}>
             <Icon
               name="copy-outline"
               size={24}
               color={theme.colors.text.primary}
             />
-          </TouchableOpacity> */}
+          </TouchableOpacity>
         </View>
       </View>
 
@@ -71,36 +87,56 @@ const ContactScreen = () => {
         <Text style={styles.label}>Email:</Text>
         <View style={styles.row}>
           <TouchableOpacity
-            onPress={() => handleEmailPress('example@example.com')}>
-            <Text style={styles.value}>example@example.com</Text>
+            onPress={() => handleEmailPress('swarnashahibysggold@gmail.com')}>
+            <Text style={styles.value}>swarnashahibysggold@gmail.com</Text>
           </TouchableOpacity>
-          {/* <TouchableOpacity onPress={() => handleCopy('example@example.com')}>
+          <TouchableOpacity
+            onPress={() => handleCopy('swarnashahibysggold@gmail.com')}>
             <Icon
               name="copy-outline"
               size={24}
               color={theme.colors.text.primary}
             />
-          </TouchableOpacity> */}
+          </TouchableOpacity>
         </View>
       </View>
 
-      {/* Bank Account */}
+      {/* Bank Details */}
       <View style={styles.contactItem}>
-        <Text style={styles.label}>Bank Account:</Text>
+        <Text style={styles.label}>S.G. Gold Banking Details:</Text>
         <View style={styles.row}>
-          <Text style={styles.value}>
-            Account No: 1234567890, IFSC: ABCD0123456
-          </Text>
-          {/* <TouchableOpacity
-            onPress={() =>
-              handleCopy('Account No: 1234567890, IFSC: ABCD0123456')
-            }>
+          <View>
+            <Text style={styles.value}>Bank Name: Yes Bank Limited</Text>
+            <Text style={styles.value}>Account Name: S G Gold</Text>
+            <Text style={styles.value}>Account Number: 018984600003448</Text>
+            <Text style={styles.value}>Branch: Worli</Text>
+            <Text style={styles.value}>IFSC: YESB0000001</Text>
+            <Text style={styles.value}>MICR: 40053200211Z</Text>
+          </View>
+          <TouchableOpacity onPress={() => handleCopy(bankDetailsText)}>
             <Icon
               name="copy-outline"
               size={24}
               color={theme.colors.text.primary}
             />
-          </TouchableOpacity> */}
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      {/* Google Pay */}
+      <View style={styles.contactItem}>
+        <Text style={styles.label}>Google Pay Number:</Text>
+        <View style={styles.row}>
+          <TouchableOpacity onPress={() => handlePhonePress('9029949030')}>
+            <Text style={styles.value}>9029949030</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => handleCopy('9029949030')}>
+            <Icon
+              name="copy-outline"
+              size={24}
+              color={theme.colors.text.primary}
+            />
+          </TouchableOpacity>
         </View>
       </View>
 
