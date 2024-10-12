@@ -72,7 +72,6 @@ const CategoryList = () => {
   // Fetch category options and reset filters when the screen comes into focus
   useFocusEffect(
     useCallback(() => {
-      handleClear(); // Reset filters
       fetchCategoryOptions(); // Fetch category options
       dispatch(
         getAllCategoriesRequest({onlyParents: true, name: filters.searchQuery}),
@@ -118,12 +117,16 @@ const CategoryList = () => {
           </View>
         ) : (
           <>
-            <CategoryCardList categories={categories} />
+            <CategoryCardList
+              categories={categories}
+              clearSearch={handleClear}
+            />
             {Object.keys(products).map((key, idx) => (
               <ProductGroup
                 key={key + idx}
                 parentCategories={products[key].parentCategory || []}
                 products={products[key].products || []}
+                clearSearch={handleClear}
               />
             ))}
           </>

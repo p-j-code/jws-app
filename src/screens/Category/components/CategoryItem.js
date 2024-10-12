@@ -24,7 +24,7 @@ const {width} = Dimensions.get('window');
 // Constant to control title trimming
 const TRIM_CATEGORY_TITLE = false;
 
-const ProductGroup = ({parentCategories, products}) => {
+const ProductGroup = ({parentCategories, products, clearSearch}) => {
   const navigation = useNavigation();
 
   const categoryPath = parentCategories
@@ -32,6 +32,7 @@ const ProductGroup = ({parentCategories, products}) => {
     .join(' > ');
 
   const handleCategoryPress = category => {
+    clearSearch && clearSearch();
     navigation.navigate(ROOT_PRODUCT_STACK_NAME, {
       screen: PRODUCT_LISTING_SCREEN,
       params: {category: category[category.length - 1]},
@@ -39,6 +40,7 @@ const ProductGroup = ({parentCategories, products}) => {
   };
 
   const handleProductPress = product => {
+    clearSearch && clearSearch();
     navigation.navigate(ROOT_PRODUCT_STACK_NAME, {
       screen: PRODUCT_DETAILS_SCREEN,
       params: {productId: product._id},

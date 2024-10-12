@@ -22,10 +22,11 @@ const CategoryCard = ({category, onPress}) => {
   );
 };
 
-const CategoryCardList = ({categories = []}) => {
+const CategoryCardList = ({categories = [], clearSearch}) => {
   const navigation = useNavigation();
 
   const handleCategoryPress = category => {
+    clearSearch && clearSearch();
     navigation.navigate(ROOT_PRODUCT_STACK_NAME, {
       screen: PRODUCT_LISTING_SCREEN,
       params: {category: category},
