@@ -6,7 +6,7 @@ import theme from '../../../theme';
 
 const {width} = Dimensions.get('window');
 const cardWidth = width * 0.35;
-const reducedCardHeight = width * 0.3; // Adjust the height to make it smaller
+const reducedCardHeight = width * 0.4; // Adjust the height to make it smaller
 
 const SkeletonProductGroup = () => {
   const shimmerAnimatedValue = useRef(new Animated.Value(0)).current;
