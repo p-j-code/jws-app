@@ -1,7 +1,7 @@
 import React, {useEffect, useState, useCallback, useMemo} from 'react';
 import {View, Text, StyleSheet, ScrollView, RefreshControl} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import ProductGroup from './components/CategoryItem';
+import ProductGroup from './components/CategoryItem'; // This is your product group component
 import SearchInput from '../../components/common/SearchInput';
 import theme from '../../theme';
 import CategoryCardList from './components/CategoryCardList';
@@ -92,6 +92,12 @@ const CategoryList = () => {
     fetchProducts(); // Trigger fetch when filters change
   }, [filters]); // Add filters as a dependency
 
+  // Sample skeleton data for loading state
+  const skeletonProducts = {
+    parentCategory: ['Loading Category'],
+    products: [{name: 'Loading Product...', id: 'loading'}],
+  };
+
   return (
     <View style={styles.container}>
       <SearchInput
@@ -126,15 +132,25 @@ const CategoryList = () => {
               categories={categories}
               clearSearch={handleClear}
             />
-            {Object.keys(products).map((key, idx) => (
-              <ProductGroup
-                loading={productsLoading}
-                key={`${key}-${idx}`}
-                parentCategories={products[key].parentCategory || []}
-                products={products[key].products || []}
-                clearSearch={handleClear}
-              />
-            ))}
+            {(productsLoading ? [skeletonProducts] : Object.keys(products)).map(
+              (key, idx) => (
+                <ProductGroup
+                  loading={productsLoading}
+                  key={`${key}-${idx}`}
+                  parentCategories={
+                    productsLoading
+                      ? skeletonProducts.parentCategory
+                      : products[key].parentCategory || []
+                  }
+                  products={
+                    productsLoading
+                      ? skeletonProducts.products
+                      : products[key].products || []
+                  }
+                  clearSearch={handleClear}
+                />
+              ),
+            )}
           </>
         )}
       </ScrollView>

@@ -38,12 +38,10 @@ function* getProductByIdSaga(action) {
 function* getProductsGroupedByCategoriesSaga(action) {
   try {
     const params = action.payload;
-    console.log('Fetching grouped products with params:', params); // Debug log
     const data = yield call(
       productService.getProductsGroupedByCategories,
       params,
     );
-    console.log('Grouped products fetched:', JSON.stringify(data)); // Debug log
     yield put(getProductsGroupedByCategoriesSuccess(data));
   } catch (error) {
     console.error('Error fetching grouped products:', error); // Debug log
