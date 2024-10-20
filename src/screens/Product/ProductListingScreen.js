@@ -13,7 +13,7 @@ import {useDispatch, useSelector, shallowEqual} from 'react-redux';
 import {getAllProductsRequest} from '../../store/actions/productActions';
 import theme from '../../theme';
 import ProductItem from './components/ProductItem';
-import SkeletonProductItem from './components/ProductItemSkeleton'; // Import the Skeleton component
+import SkeletonProductItem from './components/SkeletonProductItem'; // Import the Skeleton component
 import SearchInput from '../../components/common/SearchInput';
 import withScreenshotProtection from '../../HOC/withScreenshotProtection';
 import useSearchAndFilter from '../../hooks/useSearchAndFilter';
@@ -104,9 +104,6 @@ const ProductListingScreen = ({route}) => {
   // Memoize renderSkeleton to prevent re-creating the function on every render
   const renderSkeleton = useCallback(() => <SkeletonProductItem />, []);
 
-  // Memoize keyExtractor to prevent re-creating the function on every render
-  const keyExtractor = useCallback(item => item._id, []);
-
   // Memoize category options conversion
   const memoizedCategoryOptions = useMemo(
     () => convertToCategoryOptions(categoryOptions),
@@ -145,7 +142,7 @@ const ProductListingScreen = ({route}) => {
       <FlatList
         data={dataToRender}
         keyExtractor={(item, index) =>
-          loading ? `skeleton-${index}` : item._id
+          loading ? `skeleton-grouped-product-${index}` : item._id
         }
         renderItem={loading ? renderSkeleton : renderProduct}
         contentContainerStyle={styles.listContentContainer}
