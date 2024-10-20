@@ -18,13 +18,19 @@ import {
 } from '../../../navigation/routeConfigurations/productRoutes';
 import withScreenshotProtection from '../../../HOC/withScreenshotProtection';
 import ProductFlags from '../../../components/UI/ProductFlags';
+import SkeletonProductGroup from './SkeletonProductGroup'; // Import the skeleton component
 
 const {width} = Dimensions.get('window');
 
 // Constant to control title trimming
 const TRIM_CATEGORY_TITLE = false;
 
-const ProductGroup = ({parentCategories, products, clearSearch}) => {
+const ProductGroup = ({
+  parentCategories,
+  products,
+  clearSearch,
+  loading = false,
+}) => {
   const navigation = useNavigation();
 
   const categoryPath = parentCategories
@@ -46,6 +52,11 @@ const ProductGroup = ({parentCategories, products, clearSearch}) => {
       params: {productId: product._id},
     });
   };
+
+  // If loading, render the skeleton
+  if (loading) {
+    return <SkeletonProductGroup />;
+  }
 
   return (
     <View style={styles.container}>
@@ -107,8 +118,6 @@ const ProductGroup = ({parentCategories, products, clearSearch}) => {
 const styles = StyleSheet.create({
   container: {
     paddingVertical: theme.spacing.medium,
-    // borderBottomWidth: 1,
-    // borderBottomColor: theme.colors.secondary.main,
   },
   headerContainer: {
     flexDirection: 'row',
@@ -151,14 +160,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     padding: theme.spacing.small,
-  },
-  productName: {
-    ...theme.typography.caption,
-    color: theme.colors.text.primary,
-  },
-  productNarration: {
-    ...theme.typography.caption,
-    color: theme.colors.text.secondary,
   },
   productDetail: {
     ...theme.typography.caption,

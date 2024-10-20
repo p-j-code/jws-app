@@ -85,6 +85,13 @@ export const colors = {
   gradient: {
     overlay: ['#1b241f', 'rgba(109, 122, 113, 0.1)'], // Very Dark Green to Lighter Green
   },
+
+  // Colors for skeleton loading components
+  skeleton: {
+    primary: '#E0EDE0', // Light Greenish color for the base skeleton
+    secondary: '#D3D3D3', // A light grey for accent parts of the skeleton
+    shimmer: '#F5F5F5', // Slightly off-white for the shimmer effect
+  },
 };
 
 export const typography = {

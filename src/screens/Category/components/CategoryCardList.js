@@ -13,6 +13,7 @@ import {
   ROOT_PRODUCT_STACK_NAME,
 } from '../../../navigation/routeConfigurations/productRoutes';
 import withScreenshotProtection from '../../../HOC/withScreenshotProtection';
+import SkeletonCategoryCard from './SkeletonCategoryCard';
 
 const CategoryCard = ({category, onPress}) => {
   return (
@@ -22,7 +23,7 @@ const CategoryCard = ({category, onPress}) => {
   );
 };
 
-const CategoryCardList = ({categories = [], clearSearch}) => {
+const CategoryCardList = ({categories = [], clearSearch, loading = false}) => {
   const navigation = useNavigation();
 
   const handleCategoryPress = category => {
@@ -33,15 +34,27 @@ const CategoryCardList = ({categories = [], clearSearch}) => {
     });
   };
 
-  return (
-    <ScrollView contentContainerStyle={styles.cardListContainer}>
-      {categories?.map((category, idx) => (
+  const renderCategories = () => {
+    if (loading) {
+      // Show 4 skeleton cards when loading
+      return Array.from({length: 4}).map((_, idx) => (
+        <SkeletonCategoryCard key={`skeleton-CategoryCard-${idx}`} />
+      ));
+    } else {
+      // Render categories when not loading
+      return categories.map((category, idx) => (
         <CategoryCard
           key={category._id + idx}
           category={category}
           onPress={handleCategoryPress}
         />
-      ))}
+      ));
+    }
+  };
+
+  return (
+    <ScrollView contentContainerStyle={styles.cardListContainer}>
+      {renderCategories()}
     </ScrollView>
   );
 };
