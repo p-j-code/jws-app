@@ -1,28 +1,26 @@
-import React, {useEffect, useState, useCallback} from 'react';
+// screens/ProductListingScreen.js
+
+import React, {useEffect, useState, useCallback, useMemo} from 'react';
 import {
   FlatList,
   StyleSheet,
   View,
   ActivityIndicator,
   RefreshControl,
+  Text,
 } from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector, shallowEqual} from 'react-redux';
 import {getAllProductsRequest} from '../../store/actions/productActions';
 import theme from '../../theme';
 import ProductItem from './components/ProductItem';
+import SkeletonProductItem from './components/ProductItemSkeleton'; // Import the Skeleton component
 import SearchInput from '../../components/common/SearchInput';
 import withScreenshotProtection from '../../HOC/withScreenshotProtection';
-import useSearchAndFilter from '../../hooks/useSearchAndFilter'; // Import the hook
+import useSearchAndFilter from '../../hooks/useSearchAndFilter';
 import {getCategoryOptionsRequest} from '../../store/actions/categoryActions';
 
 const caretOptions = [
-  // {label: '14KT', value: 14},
-  // {label: '18KT', value: 18},
-  // {label: '20KT', value: 20},
-  // {label: '21KT', value: 21},
-  // {label: '22KT', value: 22},
-  // {label: '23KT', value: 23},
-  // {label: '24KT', value: 24},
+  // Define your caret options here if needed
 ];
 
 const convertToCategoryOptions = categories => {
@@ -35,47 +33,88 @@ const convertToCategoryOptions = categories => {
 const ProductListingScreen = ({route}) => {
   const dispatch = useDispatch();
   const {category} = route.params;
-  const {products, loading} = useSelector(state => state.product);
 
-  // Hook for managing search and filter functionality
+  // Memoize defaultParams to ensure stable reference
+  const defaultParams = useMemo(
+    () => ({
+      parentCategory: category.id || category._id,
+    }),
+    [category.id, category._id],
+  );
+
+  // Initialize the useSearchAndFilter hook
   const {
-    filters, // Single object for filters (searchQuery, selectedCategories, etc.)
+    filters,
     handleSearch,
     handleFilterChange,
     handleClear,
     fetchProducts,
-  } = useSearchAndFilter(
-    getAllProductsRequest,
-    {
-      parentCategory: category.id || category._id,
-    },
-    getCategoryOptionsRequest,
+  } = useSearchAndFilter(getAllProductsRequest, defaultParams);
+
+  // Selectors with shallowEqual to prevent unnecessary re-renders
+  const {products, loading, error} = useSelector(
+    state => ({
+      products: state.product.products,
+      loading: state.product.loading,
+      error: state.product.error,
+    }),
+    shallowEqual,
+  );
+
+  const {categoryOptions} = useSelector(
+    state => ({
+      categoryOptions: state.category.categoryOptions,
+    }),
+    shallowEqual,
   );
 
   const [refreshing, setRefreshing] = useState(false);
 
-  const {categoryOptions} = useSelector(state => state.category);
-
   // Refresh logic for pulling down to refresh products
-  const onRefresh = useCallback(() => {
+  const onRefresh = useCallback(async () => {
     setRefreshing(true);
-    fetchProducts();
-    setRefreshing(false);
+    try {
+      await fetchProducts();
+    } catch (err) {
+      // Handle error if needed
+      console.error('Refresh failed:', err);
+    } finally {
+      setRefreshing(false);
+    }
   }, [fetchProducts]);
 
-  // Trigger fetchProducts whenever filters change
-  useEffect(() => {
-    fetchProducts();
-  }, [filters]);
-
+  // Fetch category options once on mount
   useEffect(() => {
     dispatch(
       getCategoryOptionsRequest({parentId: category.id || category._id}),
     );
-  }, []);
+  }, [dispatch, category.id, category._id]);
 
-  // Render each product
-  const renderProduct = ({item}) => <ProductItem item={item} />;
+  // Fetch products once on mount
+  useEffect(() => {
+    fetchProducts();
+  }, [fetchProducts]);
+
+  // Memoize renderProduct to prevent re-creating the function on every render
+  const renderProduct = useCallback(
+    ({item}) => <ProductItem item={item} />,
+    [],
+  );
+
+  // Memoize renderSkeleton to prevent re-creating the function on every render
+  const renderSkeleton = useCallback(() => <SkeletonProductItem />, []);
+
+  // Memoize keyExtractor to prevent re-creating the function on every render
+  const keyExtractor = useCallback(item => item._id, []);
+
+  // Memoize category options conversion
+  const memoizedCategoryOptions = useMemo(
+    () => convertToCategoryOptions(categoryOptions),
+    [categoryOptions],
+  );
+
+  // Determine the data to render: skeletons or products
+  const dataToRender = loading ? Array.from({length: 5}) : products;
 
   return (
     <View style={styles.container}>
@@ -91,30 +130,48 @@ const ProductListingScreen = ({route}) => {
         selectedCarats={filters.selectedCarats} // Pass selected carats (purity)
         minWeight={filters.minWeight} // Pass minWeight to pre-populate
         maxWeight={filters.maxWeight} // Pass maxWeight to pre-populate
-        categoryOptions={convertToCategoryOptions(categoryOptions)}
+        categoryOptions={memoizedCategoryOptions}
         caretOptions={caretOptions}
       />
+
       {/* Display loading spinner as an overlay instead of blocking the content */}
-      {loading && !refreshing && (
+      {/* {loading && !refreshing && (
         <View style={styles.loadingOverlay}>
           <ActivityIndicator size="large" color={theme.colors.primary.main} />
         </View>
-      )}
+      )} */}
 
-      {/* List of products */}
+      {/* List of products or skeletons */}
       <FlatList
-        data={products}
-        keyExtractor={item => item._id}
-        renderItem={renderProduct}
-        contentContainerStyle={styles.listContentContainer} // Adjusted style for padding
+        data={dataToRender}
+        keyExtractor={(item, index) =>
+          loading ? `skeleton-${index}` : item._id
+        }
+        renderItem={loading ? renderSkeleton : renderProduct}
+        contentContainerStyle={styles.listContentContainer}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            colors={[theme.colors.primary.main]} // Use theme color for the spinner
+            colors={[theme.colors.primary.main]}
           />
         }
+        ListEmptyComponent={
+          !loading &&
+          !error && (
+            <View style={styles.emptyContainer}>
+              <Text style={styles.emptyText}>No products found.</Text>
+            </View>
+          )
+        }
       />
+
+      {/* Display error message if any */}
+      {error && (
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>Error: {error}</Text>
+        </View>
+      )}
     </View>
   );
 };
@@ -122,9 +179,9 @@ const ProductListingScreen = ({route}) => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: theme.colors.background.default,
-    paddingHorizontal: theme.spacing.medium, // Horizontal padding instead of general padding
+    paddingHorizontal: theme.spacing.medium,
     paddingTop: 0,
-    flex: 1, // Ensure the container takes the full height
+    flex: 1,
   },
 
   loadingOverlay: {
@@ -135,14 +192,35 @@ const styles = StyleSheet.create({
     right: 0,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.7)', // Slightly transparent overlay
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
     zIndex: 1,
   },
-  loadingContainer: {
+  emptyContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: theme.colors.background.default,
+    paddingVertical: theme.spacing.large,
+  },
+  emptyText: {
+    ...theme.typography.h4,
+    color: theme.colors.text.secondary,
+  },
+  errorContainer: {
+    position: 'absolute',
+    bottom: theme.spacing.medium,
+    left: theme.spacing.medium,
+    right: theme.spacing.medium,
+    padding: theme.spacing.small,
+    backgroundColor: theme.colors.status.errorLight,
+    borderRadius: theme.spacing.small,
+  },
+  errorText: {
+    ...theme.typography.body2,
+    color: theme.colors.status.errorDark,
+    textAlign: 'center',
+  },
+  listContentContainer: {
+    paddingVertical: theme.spacing.medium,
   },
 });
 

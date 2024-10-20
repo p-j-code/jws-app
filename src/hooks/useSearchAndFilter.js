@@ -1,52 +1,64 @@
-import {useMemo, useState, useCallback} from 'react';
+import {useReducer, useMemo, useCallback} from 'react';
 import {useDispatch} from 'react-redux';
 
-const useSearchAndFilter = (fetchProductsAction, defaultParams = {}) => {
-  const dispatch = useDispatch();
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategories, setSelectedCategories] = useState([]);
-  const [selectedCarats, setSelectedCarats] = useState([]);
-  const [minWeight, setMinWeight] = useState('');
-  const [maxWeight, setMaxWeight] = useState('');
+const initialState = {
+  searchQuery: '',
+  selectedCategories: [],
+  selectedCarats: [],
+  minWeight: '',
+  maxWeight: '',
+};
 
-  // Memoize the filters object to prevent unnecessary re-renders
-  const filters = useMemo(() => {
-    return {
-      searchQuery,
-      selectedCategories,
-      selectedCarats,
-      minWeight,
-      maxWeight,
-    };
-  }, [searchQuery, selectedCategories, selectedCarats, minWeight, maxWeight]);
+function reducer(state, action) {
+  switch (action.type) {
+    case 'SET_SEARCH_QUERY':
+      return {...state, searchQuery: action.payload};
+    case 'SET_FILTERS':
+      return {
+        ...state,
+        selectedCategories: action.payload.categories,
+        selectedCarats: action.payload.carats,
+        minWeight: action.payload.minWt,
+        maxWeight: action.payload.maxWt,
+      };
+    case 'CLEAR_FILTERS':
+      return initialState;
+    default:
+      return state;
+  }
+}
+
+const useSearchAndFilter = (fetchProductsAction, defaultParams = {}) => {
+  const dispatchRedux = useDispatch();
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  // Memoize the filters object
+  const filters = useMemo(() => ({...state}), [state]);
 
   const handleSearch = useCallback(query => {
-    setSearchQuery(query);
+    dispatch({type: 'SET_SEARCH_QUERY', payload: query});
   }, []);
 
   const handleFilterChange = useCallback((categories, carats, minWt, maxWt) => {
-    setSelectedCategories(categories);
-    setSelectedCarats(carats);
-    setMinWeight(minWt);
-    setMaxWeight(maxWt);
+    dispatch({
+      type: 'SET_FILTERS',
+      payload: {categories, carats, minWt, maxWt},
+    });
   }, []);
 
   const handleClear = useCallback(() => {
-    setSearchQuery('');
-    setSelectedCategories([]);
-    setSelectedCarats([]);
-    setMinWeight('');
-    setMaxWeight('');
+    dispatch({type: 'CLEAR_FILTERS'});
   }, []);
 
   const fetchProducts = useCallback(() => {
-    dispatch(
+    dispatchRedux(
       fetchProductsAction({
         ...defaultParams,
         search: filters.searchQuery,
-        parentCategory: filters.selectedCategories.length
-          ? filters.selectedCategories
-          : defaultParams.parentCategory,
+        parentCategory:
+          filters.selectedCategories.length > 0
+            ? filters.selectedCategories
+            : defaultParams.parentCategory,
         purity: filters.selectedCarats,
         minWeight: filters.minWeight
           ? parseFloat(filters.minWeight)
@@ -56,7 +68,7 @@ const useSearchAndFilter = (fetchProductsAction, defaultParams = {}) => {
           : undefined,
       }),
     );
-  }, [dispatch, filters, defaultParams, fetchProductsAction]);
+  }, [dispatchRedux, fetchProductsAction, defaultParams, filters]);
 
   return {
     filters,

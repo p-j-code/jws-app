@@ -1,7 +1,6 @@
-import React, {useEffect, useState, useCallback} from 'react';
+import React, {useEffect, useState, useCallback, useMemo} from 'react';
 import {View, Text, StyleSheet, ScrollView, RefreshControl} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {useFocusEffect} from '@react-navigation/native'; // Import useFocusEffect
 import ProductGroup from './components/CategoryItem';
 import SearchInput from '../../components/common/SearchInput';
 import theme from '../../theme';
@@ -33,21 +32,29 @@ const convertToCategoryOptions = categories => {
 
 const CategoryList = () => {
   const dispatch = useDispatch();
+
+  // Memoize defaultParams to ensure stable reference
+  const defaultParams = useMemo(
+    () => ({
+      groupByParentCategories: true,
+    }),
+    [],
+  );
+
   const {
     filters,
     handleSearch,
     handleFilterChange,
     handleClear,
     fetchProducts,
-  } = useSearchAndFilter(getProductsGroupedByCategoriesRequest, {
-    groupByParentCategories: true,
-  });
+  } = useSearchAndFilter(getProductsGroupedByCategoriesRequest, defaultParams);
 
   const {
     groupedProducts: products,
-    loading,
-    error,
+    loading: productsLoading,
+    error: productsError,
   } = useSelector(state => state.product);
+
   const {
     categories = [],
     loading: categoriesLoading,
@@ -57,12 +64,15 @@ const CategoryList = () => {
 
   const [refreshing, setRefreshing] = useState(false);
 
+  // Handle pull-to-refresh
   const onRefresh = useCallback(() => {
     setRefreshing(true);
+    fetchCategoryOptions();
     fetchProducts();
     setRefreshing(false);
   }, [fetchProducts]);
 
+  // Fetch category options based on search query
   const fetchCategoryOptions = useCallback(() => {
     dispatch(
       getCategoryOptionsRequest({onlyParents: true, name: filters.searchQuery}),
@@ -70,14 +80,12 @@ const CategoryList = () => {
   }, [dispatch, filters.searchQuery]);
 
   // Fetch category options and reset filters when the screen comes into focus
-  useFocusEffect(
-    useCallback(() => {
-      fetchCategoryOptions(); // Fetch category options
-      dispatch(
-        getAllCategoriesRequest({onlyParents: true, name: filters.searchQuery}),
-      );
-    }, [dispatch, filters.searchQuery, fetchCategoryOptions, handleClear]),
-  );
+  useEffect(() => {
+    fetchCategoryOptions(); // Fetch category options
+    dispatch(
+      getAllCategoriesRequest({onlyParents: true, name: filters.searchQuery}),
+    );
+  }, [dispatch, filters.searchQuery, fetchCategoryOptions, handleClear]);
 
   // Trigger fetchProducts when any filter changes
   useEffect(() => {
@@ -105,25 +113,23 @@ const CategoryList = () => {
             colors={[theme.colors.primary.main]}
           />
         }>
-        {loading || categoriesLoading ? (
-          <View style={styles.loadingContainer}>
-            <Text style={styles.loadingText}>Loading...</Text>
-          </View>
-        ) : error || categoriesError ? (
+        {productsError || categoriesError ? (
           <View style={styles.errorContainer}>
             <Text style={styles.errorText}>
-              Error: {error || categoriesError}
+              Error: {productsError || categoriesError}
             </Text>
           </View>
         ) : (
           <>
             <CategoryCardList
+              loading={categoriesLoading}
               categories={categories}
               clearSearch={handleClear}
             />
             {Object.keys(products).map((key, idx) => (
               <ProductGroup
-                key={key + idx}
+                loading={productsLoading}
+                key={`${key}-${idx}`}
                 parentCategories={products[key].parentCategory || []}
                 products={products[key].products || []}
                 clearSearch={handleClear}
